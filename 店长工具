@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>店长工具</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* 入口页面 */
+        .entry-page {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .entry-header {
+            margin-bottom: 50px;
+        }
+        
+        .entry-header h1 {
+            font-size: 2.5rem;
+            color: #1a6dff;
+            text-align: center;
+        }
+        
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .main-btn {
+            padding: 22px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            color: white;
+            background: linear-gradient(135deg, #1a6dff 0%, #0d4dc2 100%);
+        }
+        
+        .main-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(13, 92, 230, 0.3);
+        }
+        
+        .main-btn:nth-child(2) {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        }
+        
+        .main-btn:nth-child(2):hover {
+            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.3);
+        }
+        
+        /* 页面通用样式 */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .back-btn {
+            background: #f0f4ff;
+            color: #555;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .back-btn:hover {
+            background: #e1e8ff;
+        }
+        
+        /* 微信数据上报页面 */
+        .page-header {
+            background: linear-gradient(135deg, #1a6dff 0%, #0d4dc2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .page-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .form-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #444;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5eb;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        input:focus, select:focus {
+            border-color: #1a6dff;
+            outline: none;
+        }
+        
+        .date-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .date-group input {
+            flex: 1;
+        }
+        
+        .today-btn {
+            padding: 10px 15px;
+            background: #e8f4ff;
+            color: #1a6dff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-weight: 600;
+        }
+        
+        .today-btn:hover {
+            background: #d4e9ff;
+        }
+        
+        .number-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .number-input-wrapper {
+            position: relative;
+        }
+        
+        .number-input-wrapper input {
+            padding-left: 40px;
+        }
+        
+        .number-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+        
+        .form-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+        
+        .form-btn {
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #1a6dff 0%, #0d5ce6 100%);
+            color: white;
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #0d5ce6 0%, #0a4bc2 100%);
+        }
+        
+        .clear-btn {
+            background: #f0f4ff;
+            color: #555;
+        }
+        
+        .clear-btn:hover {
+            background: #e1e8ff;
+        }
+        
+        /* 小时段业绩跟踪页面 */
+        .performance-table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+        
+        .performance-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+        
+        .performance-table th {
+            background: #f8fafc;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            color: #444;
+            border: 1px solid #e1e5eb;
+        }
+        
+        .performance-table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #e1e5eb;
+        }
+        
+        .time-header {
+            background: #f0f7ff !important;
+            color: #1a6dff !important;
+        }
+        
+        .category-header {
+            background: #fff8f0 !important;
+            color: #ff9800 !important;
+        }
+        
+        .performance-table input {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #e1e5eb;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+        
+        .performance-table input:focus {
+            border-color: #1a6dff;
+            outline: none;
+        }
+        
+        .category-row {
+            background: #fafafa;
+        }
+        
+        .total-row {
+            background: #f0f7ff;
+            font-weight: 600;
+        }
+        
+        .total-cell {
+            background: #e8f4ff;
+            font-weight: 600;
+            color: #1a6dff;
+        }
+        
+        .performance-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        /* 通知 */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 14px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: #4CAF50;
+        }
+        
+        .notification.error {
+            background: #f44336;
+        }
+        
+        .notification.info {
+            background: #2196F3;
+        }
+        
+        /* 页面切换动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .page.active {
+            animation: fadeIn 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 入口页面 -->
+        <div id="entry-page" class="page active">
+            <div class="entry-page">
+                <div class="entry-header">
+                    <h1>店长工具</h1>
+                </div>
+                <div class="btn-group">
+                    <button class="main-btn" id="wechat-btn">
+                        <i class="fab fa-weixin"></i> 微信数据上报
+                    </button>
+                    <button class="main-btn" id="performance-btn">
+                        <i class="fas fa-chart-bar"></i> 小时段业绩跟踪
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 微信数据上报页面 -->
+        <div id="wechat-page" class="page">
+            <button class="back-btn" id="back-from-wechat">
+                <i class="fas fa-arrow-left"></i> 返回
+            </button>
+            
+            <div class="page-header">
+                <h1>微信数据上报</h1>
+            </div>
+            
+            <div class="form-card">
+                <form id="data-form">
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-calendar-alt"></i> 上报日期
+                        </label>
+                        <div class="date-group">
+                            <input type="date" id="report-date" required>
+                            <button type="button" class="today-btn">
+                                <i class="fas fa-calendar-check"></i> 今日
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-user-friends"></i> 微信好友个数
+                        </label>
+                        <div class="number-input-wrapper">
+                            <i class="fas fa-users number-icon"></i>
+                            <input type="number" id="friend-count" min="0" placeholder="好友数量" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-comments"></i> 微信群数据
+                        </label>
+                        <div class="number-inputs">
+                            <div class="number-input-wrapper">
+                                <i class="fas fa-layer-group number-icon"></i>
+                                <input type="number" id="group-count" min="0" placeholder="群个数" required>
+                            </div>
+                            <div class="number-input-wrapper">
+                                <i class="fas fa-users number-icon"></i>
+                                <input type="number" id="group-member-count" min="0" placeholder="群总人数" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-comment-dots"></i> 消息数
+                        </label>
+                        <div class="number-input-wrapper">
+                            <i class="fas fa-envelope number-icon"></i>
+                            <input type="number" id="message-count" min="0" placeholder="消息数量" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="submit" class="form-btn submit-btn">
+                            <i class="fas fa-paper-plane"></i> 提交
+                        </button>
+                        <button type="button" class="form-btn clear-btn">
+                            <i class="fas fa-eraser"></i> 清空
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- 小时段业绩跟踪页面 -->
+        <div id="performance-page" class="page">
+            <button class="back-btn" id="back-from-performance">
+                <i class="fas fa-arrow-left"></i> 返回
+            </button>
+            
+            <div class="page-header">
+                <h1>小时段业绩跟踪</h1>
+            </div>
+            
+            <div class="form-card">
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-calendar-alt"></i> 选择日期
+                    </label>
+                    <div class="date-group">
+                        <input type="date" id="performance-date" required>
+                        <button type="button" class="today-btn">
+                            <i class="fas fa-calendar-check"></i> 今日
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="performance-table-container">
+                <table class="performance-table" id="performance-table">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="category-header">项目</th>
+                            <th colspan="15" class="time-header">小时段 (8:00-22:00)</th>
+                            <th rowspan="2" class="time-header">当日合计</th>
+                        </tr>
+                        <tr>
+                            <!-- 小时段列头 -->
+                            <th class="time-header">8-9</th>
+                            <th class="time-header">9-10</th>
+                            <th class="time-header">10-11</th>
+                            <th class="time-header">11-12</th>
+                            <th class="time-header">12-13</th>
+                            <th class="time-header">13-14</th>
+                            <th class="time-header">14-15</th>
+                            <th class="time-header">15-16</th>
+                            <th class="time-header">16-17</th>
+                            <th class="time-header">17-18</th>
+                            <th class="time-header">18-19</th>
+                            <th class="time-header">19-20</th>
+                            <th class="time-header">20-21</th>
+                            <th class="time-header">21-22</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 目标销额行 -->
+                        <tr class="category-row">
+                            <td class="category-header">目标销额</td>
+                            <!-- 小时段输入框 -->
+                            <td><input type="number" min="0" class="target-input" data-hour="8"></td>
+                            <td><input type="number" min="0" class="target-input" data-hour="9"></td>
+                            <td><input type="number" min="0" class="target-input" data-hour="10"></td>
+                            <td><input type="number" min="0" class="target-input" data-hour="11"></td>
+                            <td><input type="number" min="0" class="target-input" data-hour="12"></td>
+                            <td><input type="number" min="0" class="target-input" data-hour="13"></td>
+                            <td><input type="number" min="0" class="target-input" data-hour="14"></td>
+                            <td><input type="number" min="0" class="target-input" data-hour="15"></td>
+                            <td><input type="number" min="0" class="target-input" data-hour="16"></td>
+                            <td><input type="number" min="0" class="target-input" data-hour="17"></td>
+                            <td><input type="number" min="0" class="target-input" data-hour="18"></td>
+                            <td><input type="number" min="0" class="target-input" data-hour="19"></td>
+                            <td><input type="number" min="0" class="target-input" data-hour="20"></td>
+                            <td><input type="number" min="0" class="target-input" data-hour="21"></td>
+                            <td class="total-cell" id="target-total">0</td>
+                        </tr>
+                        
+                        <!-- 实际达成行 -->
+                        <tr class="category-row">
+                            <td class="category-header">实际达成</td>
+                            <!-- 小时段输入框 -->
+                            <td><input type="number" min="0" class="actual-input" data-hour="8"></td>
+                            <td><input type="number" min="0" class="actual-input" data-hour="9"></td>
+                            <td><input type="number" min="0" class="actual-input" data-hour="10"></td>
+                            <td><input type="number" min="0" class="actual-input" data-hour="11"></td>
+                            <td><input type="number" min="0" class="actual-input" data-hour="12"></td>
+                            <td><input type="number" min="0" class="actual-input" data-hour="13"></td>
+                            <td><input type="number" min="0" class="actual-input" data-hour="14"></td>
+                            <td><input type="number" min="0" class="actual-input" data-hour="15"></td>
+                            <td><input type="number" min="0" class="actual-input" data-hour="16"></td>
+                            <td><input type="number" min="0" class="actual-input" data-hour="17"></td>
+                            <td><input type="number" min="0" class="actual-input" data-hour="18"></td>
+                            <td><input type="number" min="0" class="actual-input" data-hour="19"></td>
+                            <td><input type="number" min="0" class="actual-input" data-hour="20"></td>
+                            <td><input type="number" min="0" class="actual-input" data-hour="21"></td>
+                            <td class="total-cell" id="actual-total">0</td>
+                        </tr>
+                        
+                        <!-- 现烤销额行 -->
+                        <tr>
+                            <td>现烤销额</td>
+                            <!-- 小时段输入框 -->
+                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="8"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="9"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="10"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="11"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="12"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="13"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="14"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="15"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="16"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="17"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="18"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="19"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="20"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="21"></td>
+                            <td class="total-cell" id="现烤-total">0</td>
+                        </tr>
+                        
+                        <!-- 蛋糕销额行 -->
+                        <tr class="category-row">
+                            <td>蛋糕销额</td>
+                            <!-- 小时段输入框 -->
+                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="8"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="9"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="10"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="11"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="12"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="13"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="14"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="15"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="16"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="17"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="18"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="19"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="20"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="21"></td>
+                            <td class="total-cell" id="蛋糕-total">0</td>
+                        </tr>
+                        
+                        <!-- 常温销额行 -->
+                        <tr>
+                            <td>常温销额</td>
+                            <!-- 小时段输入框 -->
+                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="8"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="9"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="10"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="11"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="12"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="13"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="14"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="15"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="16"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="17"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="18"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="19"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="20"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="21"></td>
+                            <td class="total-cell" id="常温-total">0</td>
+                        </tr>
+                        
+                        <!-- 西点销额行 -->
+                        <tr class="category-row">
+                            <td>西点销额</td>
+                            <!-- 小时段输入框 -->
+                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="8"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="9"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="10"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="11"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="12"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="13"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="14"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="15"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="16"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="17"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="18"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="19"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="20"></td>
+                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="21"></td>
+                            <td class="total-cell" id="西点-total">0</td>
+                        </tr>
+                        
+                        <!-- 总计行 -->
+                        <tr class="total-row">
+                            <td>总计</td>
+                            <!-- 小时段总计 -->
+                            <td class="total-cell" id="hour-8-total">0</td>
+                            <td class="total-cell" id="hour-9-total">0</td>
+                            <td class="total-cell" id="hour-10-total">0</td>
+                            <td class="total-cell" id="hour-11-total">0</td>
+                            <td class="total-cell" id="hour-12-total">0</td>
+                            <td class="total-cell" id="hour-13-total">0</td>
+                            <td class="total-cell" id="hour-14-total">0</td>
+                            <td class="total-cell" id="hour-15-total">0</td>
+                            <td class="total-cell" id="hour-16-total">0</td>
+                            <td class="total-cell" id="hour-17-total">0</td>
+                            <td class="total-cell" id="hour-18-total">0</td>
+                            <td class="total-cell" id="hour-19-total">0</td>
+                            <td class="total-cell" id="hour-20-total">0</td>
+                            <td class="total-cell" id="hour-21-total">0</td>
+                            <td class="total-cell" id="grand-total">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="performance-buttons">
+                    <button class="form-btn submit-btn" id="save-performance">
+                        <i class="fas fa-save"></i> 保存数据
+                    </button>
+                    <button class="form-btn clear-btn" id="clear-performance">
+                        <i class="fas fa-eraser"></i> 清空数据
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification"></div>
+    
+    <script>
+        // 页面切换
+        const entryPage = document.getElementById('entry-page');
+        const wechatPage = document.getElementById('wechat-page');
+        const performancePage = document.getElementById('performance-page');
+        
+        const wechatBtn = document.getElementById('wechat-btn');
+        const performanceBtn = document.getElementById('performance-btn');
+        const backFromWechat = document.getElementById('back-from-wechat');
+        const backFromPerformance = document.getElementById('back-from-performance');
+        
+        function showWechatPage() {
+            entryPage.classList.remove('active');
+            performancePage.classList.remove('active');
+            wechatPage.classList.add('active');
+        }
+        
+        function showPerformancePage() {
+            entryPage.classList.remove('active');
+            wechatPage.classList.remove('active');
+            performancePage.classList.add('active');
+            loadPerformanceData();
+        }
+        
+        function showEntryPage() {
+            wechatPage.classList.remove('active');
+            performancePage.classList.remove('active');
+            entryPage.classList.add('active');
+        }
+        
+        wechatBtn.addEventListener('click', showWechatPage);
+        performanceBtn.addEventListener('click', showPerformancePage);
+        backFromWechat.addEventListener('click', showEntryPage);
+        backFromPerformance.addEventListener('click', showEntryPage);
+        
+        // 通用功能
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
+        }
+        
+        // 微信数据上报功能
+        const dataForm = document.getElementById('data-form');
+        const reportDateInput = document.getElementById('report-date');
+        const friendCountInput = document.getElementById('friend-count');
+        const groupCountInput = document.getElementById('group-count');
+        const groupMemberCountInput = document.getElementById('group-member-count');
+        const messageCountInput = document.getElementById('message-count');
+        const todayBtn = dataForm.querySelector('.today-btn');
+        const clearBtn = dataForm.querySelector('.clear-btn');
+        
+        // 设置默认日期为今天
+        function setDefaultDate() {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            reportDateInput.value = formattedDate;
+            reportDateInput.max = formattedDate;
+        }
+        
+        // 设置为今天日期
+        function setToToday() {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            reportDateInput.value = formattedDate;
+            showNotification('已设置为今天日期', 'info');
+        }
+        
+        // 从本地存储获取数据
+        function getWechatDataFromStorage() {
+            const data = localStorage.getItem('wechatData');
+            return data ? JSON.parse(data) : [];
+        }
+        
+        // 保存数据到本地存储
+        function saveWechatDataToStorage(data) {
+            localStorage.setItem('wechatData', JSON.stringify(data));
+        }
+        
+        // 检查今天是否已经提交过数据
+        function isTodayDataAlreadyReported() {
+            const today = new Date().toISOString().split('T')[0];
+            const records = getWechatDataFromStorage();
+            
+            return records.some(record => record.date === today);
+        }
+        
+        // 提交表单
+        function handleWechatFormSubmit(e) {
+            e.preventDefault();
+            
+            const reportDate = reportDateInput.value;
+            const friendCount = parseInt(friendCountInput.value) || 0;
+            const groupCount = parseInt(groupCountInput.value) || 0;
+            const groupMemberCount = parseInt(groupMemberCountInput.value) || 0;
+            const messageCount = parseInt(messageCountInput.value) || 0;
+            
+            // 验证输入
+            if (!reportDate) {
+                showNotification('请选择日期', 'error');
+                return;
+            }
+            
+            // 检查今天是否已经提交过数据
+            const today = new Date().toISOString().split('T')[0];
+            if (reportDate === today && isTodayDataAlreadyReported()) {
+                if (!confirm('今天已上报过数据，是否覆盖？')) {
+                    return;
+                }
+                
+                // 删除今天的旧记录
+                const records = getWechatDataFromStorage();
+                const filteredRecords = records.filter(record => record.date !== today);
+                saveWechatDataToStorage(filteredRecords);
+            }
+            
+            // 创建新记录
+            const newRecord = {
+                id: Date.now(),
+                date: reportDate,
+                friendCount,
+                groupCount,
+                groupMemberCount,
+                messageCount,
+                createdAt: new Date().toISOString()
+            };
+            
+            // 保存记录
+            const records = getWechatDataFromStorage();
+            records.push(newRecord);
+            saveWechatDataToStorage(records);
+            
+            // 显示成功消息
+            showNotification('数据上报成功', 'success');
+            
+            // 清空表单
+            dataForm.reset();
+            setDefaultDate();
+        }
+        
+        // 清空表单
+        function clearWechatForm() {
+            dataForm.reset();
+            setDefaultDate();
+            showNotification('表单已清空', 'info');
+        }
+        
+        // 初始化微信数据页面
+        function initWechatPage() {
+            setDefaultDate();
+            
+            // 设置事件监听器
+            dataForm.addEventListener('submit', handleWechatFormSubmit);
+            todayBtn.addEventListener('click', setToToday);
+            clearBtn.addEventListener('click', clearWechatForm);
+        }
+        
+        // 小时段业绩跟踪功能
+        const performanceDateInput = document.getElementById('performance-date');
+        const performanceTodayBtn = performancePage.querySelector('.today-btn');
+        const savePerformanceBtn = document.getElementById('save-performance');
+        const clearPerformanceBtn = document.getElementById('clear-performance');
+        
+        const categories = ['现烤', '蛋糕', '常温', '西点'];
+        const hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
+        
+        // 设置业绩跟踪日期为今天
+        function setPerformanceDateToToday() {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            performanceDateInput.value = formattedDate;
+            performanceDateInput.max = formattedDate;
+            loadPerformanceData();
+        }
+        
+        // 从本地存储获取业绩数据
+        function getPerformanceDataFromStorage() {
+            const data = localStorage.getItem('performanceData');
+            return data ? JSON.parse(data) : {};
+        }
+        
+        // 保存业绩数据到本地存储
+        function savePerformanceDataToStorage(data) {
+            localStorage.setItem('performanceData', JSON.stringify(data));
+        }
+        
+        // 加载业绩数据
+        function loadPerformanceData() {
+            const selectedDate = performanceDateInput.value;
+            const performanceData = getPerformanceDataFromStorage();
+            
+            // 清空所有输入框
+            const inputs = document.querySelectorAll('.performance-table input');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+            
+            // 如果有该日期的数据，则填充
+            if (performanceData[selectedDate]) {
+                const dateData = performanceData[selectedDate];
+                
+                // 填充目标销额
+                if (dateData.target) {
+                    hours.forEach(hour => {
+                        const input = document.querySelector(`.target-input[data-hour="${hour}"]`);
+                        if (input && dateData.target[hour] !== undefined) {
+                            input.value = dateData.target[hour];
+                        }
+                    });
+                }
+                
+                // 填充实际达成
+                if (dateData.actual) {
+                    hours.forEach(hour => {
+                        const input = document.querySelector(`.actual-input[data-hour="${hour}"]`);
+                        if (input && dateData.actual[hour] !== undefined) {
+                            input.value = dateData.actual[hour];
+                        }
+                    });
+                }
+                
+                // 填充各品类数据
+                categories.forEach(category => {
+                    if (dateData[category]) {
+                        hours.forEach(hour => {
+                            const input = document.querySelector(`.category-input[data-category="${category}"][data-hour="${hour}"]`);
+                            if (input && dateData[category][hour] !== undefined) {
+                                input.value = dateData[category][hour];
+                            }
+                        });
+                    }
+                });
+                
+                showNotification(`${selectedDate} 的数据已加载`, 'info');
+            }
+            
+            // 更新汇总计算
+            updateCalculations();
+        }
+        
+        // 计算并更新所有总计
+        function updateCalculations() {
+            // 计算目标总计
+            let targetTotal = 0;
+            const targetInputs = document.querySelectorAll('.target-input');
+            targetInputs.forEach(input => {
+                targetTotal += parseFloat(input.value) || 0;
+            });
+            document.getElementById('target-total').textContent = targetTotal;
+            
+            // 计算实际达成总计
+            let actualTotal = 0;
+            const actualInputs = document.querySelectorAll('.actual-input');
+            actualInputs.forEach(input => {
+                actualTotal += parseFloat(input.value) || 0;
+            });
+            document.getElementById('actual-total').textContent = actualTotal;
+            
+            // 计算各品类总计
+            categories.forEach(category => {
+                let categoryTotal = 0;
+                const inputs = document.querySelectorAll(`.category-input[data-category="${category}"]`);
+                inputs.forEach(input => {
+                    categoryTotal += parseFloat(input.value) || 0;
+                });
+                document.getElementById(`${category}-total`).textContent = categoryTotal;
+            });
+            
+            // 计算各小时段总计
+            hours.forEach(hour => {
+                let hourTotal = 0;
+                categories.forEach(category => {
+                    const input = document.querySelector(`.category-input[data-category="${category}"][data-hour="${hour}"]`);
+                    hourTotal += parseFloat(input?.value) || 0;
+                });
+                document.getElementById(`hour-${hour}-total`).textContent = hourTotal;
+            });
+            
+            // 计算所有品类总计（当日合计列的总计）
+            let grandTotal = 0;
+            categories.forEach(category => {
+                grandTotal += parseFloat(document.getElementById(`${category}-total`).textContent) || 0;
+            });
+            document.getElementById('grand-total').textContent = grandTotal;
+        }
+        
+        // 保存业绩数据
+        function savePerformanceData() {
+            const selectedDate = performanceDateInput.value;
+            
+            // 收集所有数据
+            const dateData = {
+                target: {},
+                actual: {}
+            };
+            
+            // 收集目标销额数据
+            const targetInputs = document.querySelectorAll('.target-input');
+            targetInputs.forEach(input => {
+                const hour = parseInt(input.dataset.hour);
+                const value = input.value ? parseFloat(input.value) : 0;
+                dateData.target[hour] = value;
+            });
+            
+            // 收集实际达成数据
+            const actualInputs = document.querySelectorAll('.actual-input');
+            actualInputs.forEach(input => {
+                const hour = parseInt(input.dataset.hour);
+                const value = input.value ? parseFloat(input.value) : 0;
+                dateData.actual[hour] = value;
+            });
+            
+            // 收集各品类数据
+            categories.forEach(category => {
+                dateData[category] = {};
+                const inputs = document.querySelectorAll(`.category-input[data-category="${category}"]`);
+                inputs.forEach(input => {
+                    const hour = parseInt(input.dataset.hour);
+                    const value = input.value ? parseFloat(input.value) : 0;
+                    dateData[category][hour] = value;
+                });
+            });
+            
+            // 保存到本地存储
+            const performanceData = getPerformanceDataFromStorage();
+            performanceData[selectedDate] = dateData;
+            savePerformanceDataToStorage(performanceData);
+            
+            // 更新汇总计算
+            updateCalculations();
+            
+            showNotification('数据已保存', 'success');
+        }
+        
+        // 清空业绩数据
+        function clearPerformanceData() {
+            const inputs = document.querySelectorAll('.performance-table input');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+            
+            updateCalculations();
+            showNotification('数据已清空', 'info');
+        }
+        
+        // 初始化小时段业绩页面
+        function initPerformancePage() {
+            // 设置默认日期
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            performanceDateInput.value = formattedDate;
+            performanceDateInput.max = formattedDate;
+            
+            // 设置事件监听器
+            performanceTodayBtn.addEventListener('click', setPerformanceDateToToday);
+            performanceDateInput.addEventListener('change', loadPerformanceData);
+            savePerformanceBtn.addEventListener('click', savePerformanceData);
+            clearPerformanceBtn.addEventListener('click', clearPerformanceData);
+            
+            // 为所有输入框添加事件监听器，实时更新计算
+            const table = document.getElementById('performance-table');
+            table.addEventListener('input', updateCalculations);
+            
+            // 加载今天的业绩数据
+            loadPerformanceData();
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initWechatPage();
+            initPerformancePage();
+        });
+    </script>
+</body>
+</html>
