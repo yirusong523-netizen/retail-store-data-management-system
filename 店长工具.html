@@ -20,7 +20,7 @@
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
         }
         
@@ -240,7 +240,7 @@
             background: #e1e8ff;
         }
         
-        /* 小时段业绩跟踪页面 */
+        /* 小时段销售跟踪页面 */
         .performance-table-container {
             background: white;
             padding: 20px;
@@ -252,24 +252,26 @@
         .performance-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 900px;
+            min-width: 1100px;
         }
         
         .performance-table th {
             background: #f8fafc;
-            padding: 12px 8px;
+            padding: 12px 6px;
             text-align: center;
             font-weight: 600;
             color: #444;
             border: 1px solid #e1e5eb;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            min-width: 70px;
         }
         
         .performance-table td {
-            padding: 10px 8px;
+            padding: 10px 6px;
             text-align: center;
             border: 1px solid #e1e5eb;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            min-width: 70px;
         }
         
         .time-header {
@@ -280,17 +282,17 @@
         .category-header {
             background: #fff8f0 !important;
             color: #ff9800 !important;
-            min-width: 80px;
+            min-width: 120px;
+            font-weight: 600;
         }
         
         .performance-table input {
             width: 100%;
-            padding: 8px;
+            padding: 6px;
             border: 2px solid #e1e5eb;
             border-radius: 6px;
             text-align: center;
-            font-size: 0.9rem;
-            min-width: 60px;
+            font-size: 0.85rem;
         }
         
         .performance-table input:focus {
@@ -315,12 +317,24 @@
         
         .system-cell {
             background: #f8f8f8;
-            color: #666;
+            color: #333;
         }
         
         .system-cell.total-cell {
             background: #e0f7fa;
             color: #00796b;
+        }
+        
+        /* 同环比样式 - 统一为黑色 */
+        .increase {
+            color: #333;
+            font-weight: 500;
+            font-size: 0.8rem;
+        }
+        
+        .value-display {
+            font-weight: 600;
+            color: #333;
         }
         
         .performance-buttons {
@@ -385,7 +399,7 @@
                         <i class="fab fa-weixin"></i> 微信数据上报
                     </button>
                     <button class="main-btn" id="performance-btn">
-                        <i class="fas fa-chart-bar"></i> 小时段业绩跟踪
+                        <i class="fas fa-chart-bar"></i> 小时段销售跟踪
                     </button>
                 </div>
             </div>
@@ -463,14 +477,14 @@
             </div>
         </div>
         
-        <!-- 小时段业绩跟踪页面 -->
+        <!-- 小时段销售跟踪页面 -->
         <div id="performance-page" class="page">
             <button class="back-btn" id="back-from-performance">
                 <i class="fas fa-arrow-left"></i> 返回
             </button>
             
             <div class="page-header">
-                <h1>小时段业绩跟踪</h1>
+                <h1>小时段销售跟踪</h1>
             </div>
             
             <div class="form-card">
@@ -491,13 +505,12 @@
                 <table class="performance-table" id="performance-table">
                     <thead>
                         <tr>
-                            <th rowspan="2" class="category-header">项目</th>
-                            <th colspan="16" class="time-header">小时段业绩</th>
+                            <th rowspan="2" class="category-header">指标</th>
+                            <th colspan="15" class="time-header">小时段销售数据</th>
                         </tr>
                         <tr>
-                            <!-- 开店-8点列 -->
+                            <!-- 小时段列头 -->
                             <th class="time-header">开店-8</th>
-                            <!-- 小时段列头 8:00-22:00 每1小时一列 -->
                             <th class="time-header">8-9</th>
                             <th class="time-header">9-10</th>
                             <th class="time-header">10-11</th>
@@ -511,204 +524,374 @@
                             <th class="time-header">18-19</th>
                             <th class="time-header">19-20</th>
                             <th class="time-header">20-21</th>
-                            <th class="time-header">21-22</th>
-                            <!-- 22-关店列 -->
-                            <th class="time-header">22-关店</th>
-                            <!-- 当日合计列 -->
-                            <th class="time-header">当日合计</th>
+                            <th class="time-header">21-闭店</th>
+                            <th class="time-header">合计</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- 目标销额行（填写） -->
+                        <!-- 实际达成（同环比）行 -->
                         <tr class="category-row">
-                            <td class="category-header">目标销额</td>
-                            <!-- 开店-8点 -->
-                            <td><input type="number" min="0" class="target-input" data-hour="before8"></td>
-                            <!-- 8:00-22:00 小时段 -->
-                            <td><input type="number" min="0" class="target-input" data-hour="8"></td>
-                            <td><input type="number" min="0" class="target-input" data-hour="9"></td>
-                            <td><input type="number" min="0" class="target-input" data-hour="10"></td>
-                            <td><input type="number" min="0" class="target-input" data-hour="11"></td>
-                            <td><input type="number" min="0" class="target-input" data-hour="12"></td>
-                            <td><input type="number" min="0" class="target-input" data-hour="13"></td>
-                            <td><input type="number" min="0" class="target-input" data-hour="14"></td>
-                            <td><input type="number" min="0" class="target-input" data-hour="15"></td>
-                            <td><input type="number" min="0" class="target-input" data-hour="16"></td>
-                            <td><input type="number" min="0" class="target-input" data-hour="17"></td>
-                            <td><input type="number" min="0" class="target-input" data-hour="18"></td>
-                            <td><input type="number" min="0" class="target-input" data-hour="19"></td>
-                            <td><input type="number" min="0" class="target-input" data-hour="20"></td>
-                            <td><input type="number" min="0" class="target-input" data-hour="21"></td>
-                            <!-- 22-关店 -->
-                            <td><input type="number" min="0" class="target-input" data-hour="after22"></td>
-                            <!-- 当日合计（自动计算） -->
-                            <td class="total-cell system-cell" id="target-total">0</td>
+                            <td class="category-header">实际达成（同环比）</td>
+                            <!-- 各小时段数据 -->
+                            <td class="system-cell">
+                                <div class="value-display">338</div>
+                                <div class="increase">+2%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">245</div>
+                                <div class="increase">+1.5%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">312</div>
+                                <div class="increase">+3.2%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">401</div>
+                                <div class="increase">+4.1%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">528</div>
+                                <div class="increase">+5.3%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">615</div>
+                                <div class="increase">+6.2%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">489</div>
+                                <div class="increase">+4.8%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">376</div>
+                                <div class="increase">+3.7%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">420</div>
+                                <div class="increase">+4.2%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">398</div>
+                                <div class="increase">+3.9%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">512</div>
+                                <div class="increase">+5.1%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">587</div>
+                                <div class="increase">+5.8%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">465</div>
+                                <div class="increase">+4.6%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">321</div>
+                                <div class="increase">+3.2%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">189</div>
+                                <div class="increase">+1.9%</div>
+                            </td>
+                            <!-- 合计列 -->
+                            <td class="total-cell system-cell">
+                                <div class="value-display">5797</div>
+                                <div class="increase">+4.1%</div>
+                            </td>
                         </tr>
                         
-                        <!-- 实际达成行（系统生成） -->
-                        <tr class="category-row">
-                            <td class="category-header">实际达成</td>
-                            <!-- 开店-8点 -->
-                            <td class="system-cell" id="actual-before8">0</td>
-                            <!-- 8:00-22:00 小时段 -->
-                            <td class="system-cell" id="actual-8">0</td>
-                            <td class="system-cell" id="actual-9">0</td>
-                            <td class="system-cell" id="actual-10">0</td>
-                            <td class="system-cell" id="actual-11">0</td>
-                            <td class="system-cell" id="actual-12">0</td>
-                            <td class="system-cell" id="actual-13">0</td>
-                            <td class="system-cell" id="actual-14">0</td>
-                            <td class="system-cell" id="actual-15">0</td>
-                            <td class="system-cell" id="actual-16">0</td>
-                            <td class="system-cell" id="actual-17">0</td>
-                            <td class="system-cell" id="actual-18">0</td>
-                            <td class="system-cell" id="actual-19">0</td>
-                            <td class="system-cell" id="actual-20">0</td>
-                            <td class="system-cell" id="actual-21">0</td>
-                            <!-- 22-关店 -->
-                            <td class="system-cell" id="actual-after22">0</td>
-                            <!-- 当日合计（自动计算） -->
-                            <td class="total-cell system-cell" id="actual-total">0</td>
-                        </tr>
-                        
-                        <!-- 现烤销额行（系统生成） -->
+                        <!-- 订单数（同环比）行 -->
                         <tr>
-                            <td>现烤销额</td>
-                            <!-- 开店-8点 -->
-                            <td class="system-cell" id="现烤-before8">0</td>
-                            <!-- 8:00-22:00 小时段 -->
-                            <td class="system-cell" id="现烤-8">0</td>
-                            <td class="system-cell" id="现烤-9">0</td>
-                            <td class="system-cell" id="现烤-10">0</td>
-                            <td class="system-cell" id="现烤-11">0</td>
-                            <td class="system-cell" id="现烤-12">0</td>
-                            <td class="system-cell" id="现烤-13">0</td>
-                            <td class="system-cell" id="现烤-14">0</td>
-                            <td class="system-cell" id="现烤-15">0</td>
-                            <td class="system-cell" id="现烤-16">0</td>
-                            <td class="system-cell" id="现烤-17">0</td>
-                            <td class="system-cell" id="现烤-18">0</td>
-                            <td class="system-cell" id="现烤-19">0</td>
-                            <td class="system-cell" id="现烤-20">0</td>
-                            <td class="system-cell" id="现烤-21">0</td>
-                            <!-- 22-关店 -->
-                            <td class="system-cell" id="现烤-after22">0</td>
-                            <!-- 当日合计（自动计算） -->
-                            <td class="total-cell system-cell" id="现烤-total">0</td>
+                            <td class="category-header">订单数（同环比）</td>
+                            <!-- 各小时段数据 -->
+                            <td class="system-cell">
+                                <div class="value-display">12</div>
+                                <div class="increase">+2%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">9</div>
+                                <div class="increase">+1.2%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">11</div>
+                                <div class="increase">+1.8%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">14</div>
+                                <div class="increase">+2.3%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">18</div>
+                                <div class="increase">+3.1%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">21</div>
+                                <div class="increase">+3.5%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">17</div>
+                                <div class="increase">+2.8%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">13</div>
+                                <div class="increase">+2.1%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">15</div>
+                                <div class="increase">+2.5%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">14</div>
+                                <div class="increase">+2.3%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">18</div>
+                                <div class="increase">+3.0%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">20</div>
+                                <div class="increase">+3.3%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">16</div>
+                                <div class="increase">+2.6%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">11</div>
+                                <div class="increase">+1.8%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">7</div>
+                                <div class="increase">+1.1%</div>
+                            </td>
+                            <!-- 合计列 -->
+                            <td class="total-cell system-cell">
+                                <div class="value-display">205</div>
+                                <div class="increase">+2.5%</div>
+                            </td>
                         </tr>
                         
-                        <!-- 蛋糕销额行（系统生成） -->
+                        <!-- 过店人数行 -->
                         <tr class="category-row">
-                            <td>蛋糕销额</td>
-                            <!-- 开店-8点 -->
-                            <td class="system-cell" id="蛋糕-before8">0</td>
-                            <!-- 8:00-22:00 小时段 -->
-                            <td class="system-cell" id="蛋糕-8">0</td>
-                            <td class="system-cell" id="蛋糕-9">0</td>
-                            <td class="system-cell" id="蛋糕-10">0</td>
-                            <td class="system-cell" id="蛋糕-11">0</td>
-                            <td class="system-cell" id="蛋糕-12">0</td>
-                            <td class="system-cell" id="蛋糕-13">0</td>
-                            <td class="system-cell" id="蛋糕-14">0</td>
-                            <td class="system-cell" id="蛋糕-15">0</td>
-                            <td class="system-cell" id="蛋糕-16">0</td>
-                            <td class="system-cell" id="蛋糕-17">0</td>
-                            <td class="system-cell" id="蛋糕-18">0</td>
-                            <td class="system-cell" id="蛋糕-19">0</td>
-                            <td class="system-cell" id="蛋糕-20">0</td>
-                            <td class="system-cell" id="蛋糕-21">0</td>
-                            <!-- 22-关店 -->
-                            <td class="system-cell" id="蛋糕-after22">0</td>
-                            <!-- 当日合计（自动计算） -->
-                            <td class="total-cell system-cell" id="蛋糕-total">0</td>
+                            <td class="category-header">过店人数</td>
+                            <!-- 各小时段数据 -->
+                            <td class="system-cell">
+                                <div class="value-display">78</div>
+                                <div class="increase">+2%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">65</div>
+                                <div class="increase">+1.5%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">82</div>
+                                <div class="increase">+2.1%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">105</div>
+                                <div class="increase">+2.8%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">138</div>
+                                <div class="increase">+3.7%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">162</div>
+                                <div class="increase">+4.3%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">128</div>
+                                <div class="increase">+3.4%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">98</div>
+                                <div class="increase">+2.6%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">110</div>
+                                <div class="increase">+2.9%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">104</div>
+                                <div class="increase">+2.7%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">134</div>
+                                <div class="increase">+3.5%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">154</div>
+                                <div class="increase">+4.1%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">122</div>
+                                <div class="increase">+3.2%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">84</div>
+                                <div class="increase">+2.2%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">49</div>
+                                <div class="increase">+1.3%</div>
+                            </td>
+                            <!-- 合计列 -->
+                            <td class="total-cell system-cell">
+                                <div class="value-display">1513</div>
+                                <div class="increase">+2.9%</div>
+                            </td>
                         </tr>
                         
-                        <!-- 常温销额行（系统生成） -->
+                        <!-- 现烤销额（同环比）行 -->
                         <tr>
-                            <td>常温销额</td>
-                            <!-- 开店-8点 -->
-                            <td class="system-cell" id="常温-before8">0</td>
-                            <!-- 8:00-22:00 小时段 -->
-                            <td class="system-cell" id="常温-8">0</td>
-                            <td class="system-cell" id="常温-9">0</td>
-                            <td class="system-cell" id="常温-10">0</td>
-                            <td class="system-cell" id="常温-11">0</td>
-                            <td class="system-cell" id="常温-12">0</td>
-                            <td class="system-cell" id="常温-13">0</td>
-                            <td class="system-cell" id="常温-14">0</td>
-                            <td class="system-cell" id="常温-15">0</td>
-                            <td class="system-cell" id="常温-16">0</td>
-                            <td class="system-cell" id="常温-17">0</td>
-                            <td class="system-cell" id="常温-18">0</td>
-                            <td class="system-cell" id="常温-19">0</td>
-                            <td class="system-cell" id="常温-20">0</td>
-                            <td class="system-cell" id="常温-21">0</td>
-                            <!-- 22-关店 -->
-                            <td class="system-cell" id="常温-after22">0</td>
-                            <!-- 当日合计（自动计算） -->
-                            <td class="total-cell system-cell" id="常温-total">0</td>
+                            <td class="category-header">现烤销额（同环比）</td>
+                            <!-- 各小时段数据 -->
+                            <td class="system-cell">
+                                <div class="value-display">179</div>
+                                <div class="increase">+3%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">130</div>
+                                <div class="increase">+2.1%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">165</div>
+                                <div class="increase">+2.7%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">212</div>
+                                <div class="increase">+3.5%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">280</div>
+                                <div class="increase">+4.6%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">326</div>
+                                <div class="increase">+5.4%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">259</div>
+                                <div class="increase">+4.3%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">199</div>
+                                <div class="increase">+3.3%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">222</div>
+                                <div class="increase">+3.7%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">211</div>
+                                <div class="increase">+3.5%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">271</div>
+                                <div class="increase">+4.5%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">311</div>
+                                <div class="increase">+5.2%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">246</div>
+                                <div class="increase">+4.1%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">170</div>
+                                <div class="increase">+2.8%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">100</div>
+                                <div class="increase">+1.7%</div>
+                            </td>
+                            <!-- 合计列 -->
+                            <td class="total-cell system-cell">
+                                <div class="value-display">3071</div>
+                                <div class="increase">+3.9%</div>
+                            </td>
                         </tr>
                         
-                        <!-- 西点销额行（系统生成） -->
+                        <!-- 蛋糕销额（同环比）行 -->
                         <tr class="category-row">
-                            <td>西点销额</td>
-                            <!-- 开店-8点 -->
-                            <td class="system-cell" id="西点-before8">0</td>
-                            <!-- 8:00-22:00 小时段 -->
-                            <td class="system-cell" id="西点-8">0</td>
-                            <td class="system-cell" id="西点-9">0</td>
-                            <td class="system-cell" id="西点-10">0</td>
-                            <td class="system-cell" id="西点-11">0</td>
-                            <td class="system-cell" id="西点-12">0</td>
-                            <td class="system-cell" id="西点-13">0</td>
-                            <td class="system-cell" id="西点-14">0</td>
-                            <td class="system-cell" id="西点-15">0</td>
-                            <td class="system-cell" id="西点-16">0</td>
-                            <td class="system-cell" id="西点-17">0</td>
-                            <td class="system-cell" id="西点-18">0</td>
-                            <td class="system-cell" id="西点-19">0</td>
-                            <td class="system-cell" id="西点-20">0</td>
-                            <td class="system-cell" id="西点-21">0</td>
-                            <!-- 22-关店 -->
-                            <td class="system-cell" id="西点-after22">0</td>
-                            <!-- 当日合计（自动计算） -->
-                            <td class="total-cell system-cell" id="西点-total">0</td>
-                        </tr>
-                        
-                        <!-- 总计行（系统生成） -->
-                        <tr class="total-row">
-                            <td>总计</td>
-                            <!-- 开店-8点总计 -->
-                            <td class="total-cell system-cell" id="total-before8">0</td>
-                            <!-- 8:00-22:00 小时段总计 -->
-                            <td class="total-cell system-cell" id="total-8">0</td>
-                            <td class="total-cell system-cell" id="total-9">0</td>
-                            <td class="total-cell system-cell" id="total-10">0</td>
-                            <td class="total-cell system-cell" id="total-11">0</td>
-                            <td class="total-cell system-cell" id="total-12">0</td>
-                            <td class="total-cell system-cell" id="total-13">0</td>
-                            <td class="total-cell system-cell" id="total-14">0</td>
-                            <td class="total-cell system-cell" id="total-15">0</td>
-                            <td class="total-cell system-cell" id="total-16">0</td>
-                            <td class="total-cell system-cell" id="total-17">0</td>
-                            <td class="total-cell system-cell" id="total-18">0</td>
-                            <td class="total-cell system-cell" id="total-19">0</td>
-                            <td class="total-cell system-cell" id="total-20">0</td>
-                            <td class="total-cell system-cell" id="total-21">0</td>
-                            <!-- 22-关店总计 -->
-                            <td class="total-cell system-cell" id="total-after22">0</td>
-                            <!-- 当日总计（所有品类当日合计之和） -->
-                            <td class="total-cell system-cell" id="grand-total">0</td>
+                            <td class="category-header">蛋糕销额（同环比）</td>
+                            <!-- 各小时段数据 -->
+                            <td class="system-cell">
+                                <div class="value-display">0</div>
+                                <div class="increase">0%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">15</div>
+                                <div class="increase">+0.8%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">22</div>
+                                <div class="increase">+1.2%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">28</div>
+                                <div class="increase">+1.5%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">37</div>
+                                <div class="increase">+2.0%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">43</div>
+                                <div class="increase">+2.3%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">34</div>
+                                <div class="increase">+1.8%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">26</div>
+                                <div class="increase">+1.4%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">29</div>
+                                <div class="increase">+1.6%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">28</div>
+                                <div class="increase">+1.5%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">36</div>
+                                <div class="increase">+1.9%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">41</div>
+                                <div class="increase">+2.2%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">33</div>
+                                <div class="increase">+1.8%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">23</div>
+                                <div class="increase">+1.2%</div>
+                            </td>
+                            <td class="system-cell">
+                                <div class="value-display">13</div>
+                                <div class="increase">+0.7%</div>
+                            </td>
+                            <!-- 合计列 -->
+                            <td class="total-cell system-cell">
+                                <div class="value-display">408</div>
+                                <div class="increase">+1.5%</div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
                 
                 <div class="performance-buttons">
-                    <button class="form-btn submit-btn" id="save-performance">
-                        <i class="fas fa-save"></i> 保存数据
+                    <button class="form-btn submit-btn" id="refresh-data">
+                        <i class="fas fa-sync-alt"></i> 刷新数据
                     </button>
                     <button class="form-btn clear-btn" id="clear-performance">
-                        <i class="fas fa-eraser"></i> 清空数据
+                        <i class="fas fa-file-export"></i> 导出报表
                     </button>
                 </div>
             </div>
@@ -878,14 +1061,11 @@
             clearBtn.addEventListener('click', clearWechatForm);
         }
         
-        // 小时段业绩跟踪功能
+        // 小时段销售跟踪功能
         const performanceDateInput = document.getElementById('performance-date');
         const performanceTodayBtn = performancePage.querySelector('.today-btn');
-        const savePerformanceBtn = document.getElementById('save-performance');
-        const clearPerformanceBtn = document.getElementById('clear-performance');
-        
-        const categories = ['现烤', '蛋糕', '常温', '西点'];
-        const hours = ['before8', 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 'after22'];
+        const refreshDataBtn = document.getElementById('refresh-data');
+        const exportReportBtn = document.getElementById('clear-performance');
         
         // 设置业绩跟踪日期为今天
         function setPerformanceDateToToday() {
@@ -896,205 +1076,108 @@
             loadPerformanceData();
         }
         
-        // 从本地存储获取业绩数据
-        function getPerformanceDataFromStorage() {
-            const data = localStorage.getItem('performanceData');
-            return data ? JSON.parse(data) : {};
-        }
-        
-        // 保存业绩数据到本地存储
-        function savePerformanceDataToStorage(data) {
-            localStorage.setItem('performanceData', JSON.stringify(data));
-        }
-        
-        // 生成随机销售数据（模拟系统生成）
-        function generateRandomSalesData() {
-            const data = {};
-            
-            // 生成各品类的销售数据
-            categories.forEach(category => {
-                data[category] = {};
-                hours.forEach(hour => {
-                    // 生成0-1000的随机销售额
-                    const randomValue = Math.floor(Math.random() * 1000);
-                    data[category][hour] = randomValue;
-                });
-            });
-            
-            return data;
-        }
-        
         // 加载业绩数据
         function loadPerformanceData() {
             const selectedDate = performanceDateInput.value;
-            const performanceData = getPerformanceDataFromStorage();
             
-            // 如果有该日期的数据，则填充目标数据
-            if (performanceData[selectedDate]) {
-                const dateData = performanceData[selectedDate];
-                
-                // 填充目标销额
-                if (dateData.target) {
-                    hours.forEach(hour => {
-                        const input = document.querySelector(`.target-input[data-hour="${hour}"]`);
-                        if (input && dateData.target[hour] !== undefined) {
-                            input.value = dateData.target[hour];
-                        }
-                    });
-                }
-                
-                showNotification(`${selectedDate} 的目标数据已加载`, 'info');
-            } else {
-                // 如果没有数据，清空所有目标输入框
-                hours.forEach(hour => {
-                    const input = document.querySelector(`.target-input[data-hour="${hour}"]`);
-                    if (input) input.value = '';
-                });
-            }
+            // 基于日期生成数据
+            generatePerformanceData(selectedDate);
             
-            // 自动生成销售数据（模拟系统生成）
-            const salesData = generateRandomSalesData();
-            
-            // 更新所有系统生成的数据
-            updateSystemGeneratedData(salesData);
+            showNotification(`${selectedDate} 小时段数据已加载`, 'info');
         }
         
-        // 更新系统生成的数据
-        function updateSystemGeneratedData(salesData) {
-            // 更新各品类的销售数据
-            categories.forEach(category => {
+        // 生成业绩数据
+        function generatePerformanceData(dateStr) {
+            // 使用日期作为随机种子，确保相同日期生成相同数据
+            const seed = dateStr.split('-').join('');
+            let baseValue = parseInt(seed.substring(seed.length - 4)) || 1000;
+            
+            // 定义指标类别
+            const indicators = [
+                { id: 'actual', name: '实际达成', baseMultiplier: 1.0, increaseRange: [0.5, 6.5] },
+                { id: 'orders', name: '订单数', baseMultiplier: 0.05, increaseRange: [0.5, 4.0] },
+                { id: 'footfall', name: '过店人数', baseMultiplier: 0.3, increaseRange: [0.5, 5.0] },
+                { id: 'fresh', name: '现烤销额', baseMultiplier: 0.6, increaseRange: [1.0, 6.0] },
+                { id: 'cake', name: '蛋糕销额', baseMultiplier: 0.08, increaseRange: [0.0, 2.5] }
+            ];
+            
+            // 小时段数组
+            const hours = ['before8', 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
+            
+            // 为每个指标生成数据
+            indicators.forEach((indicator, index) => {
                 hours.forEach(hour => {
-                    const cell = document.getElementById(`${category}-${hour}`);
-                    if (cell && salesData[category] && salesData[category][hour] !== undefined) {
-                        cell.textContent = salesData[category][hour];
+                    // 生成基于小时段的数值模式（模拟客流曲线）
+                    let hourFactor = 0;
+                    if (hour === 'before8') hourFactor = 0.3;
+                    else if (hour >= 8 && hour <= 10) hourFactor = 0.4 + (hour - 8) * 0.1;
+                    else if (hour >= 11 && hour <= 13) hourFactor = 0.7 + (hour - 11) * 0.15; // 午高峰
+                    else if (hour >= 14 && hour <= 16) hourFactor = 0.6 - (hour - 14) * 0.1;
+                    else if (hour >= 17 && hour <= 19) hourFactor = 0.5 + (hour - 17) * 0.15; // 晚高峰
+                    else if (hour >= 20) hourFactor = 0.35 - (hour - 20) * 0.1;
+                    
+                    // 计算基础值
+                    const baseVal = Math.round(baseValue * indicator.baseMultiplier * hourFactor);
+                    
+                    // 添加随机波动
+                    const randomFactor = 0.8 + Math.random() * 0.4;
+                    const value = Math.max(0, Math.round(baseVal * randomFactor));
+                    
+                    // 生成增长率
+                    const [minInc, maxInc] = indicator.increaseRange;
+                    const increase = (minInc + Math.random() * (maxInc - minInc)).toFixed(1);
+                    
+                    // 更新表格数据
+                    const cells = document.querySelectorAll(`.performance-table tbody tr:nth-child(${index + 1}) td`);
+                    const hourIndex = hours.indexOf(hour);
+                    if (cells[hourIndex + 1]) {
+                        cells[hourIndex + 1].innerHTML = `
+                            <div class="value-display">${value}</div>
+                            <div class="increase">+${increase}%</div>
+                        `;
                     }
                 });
-            });
-            
-            // 更新计算
-            updateCalculations(salesData);
-        }
-        
-        // 计算并更新所有总计
-        function updateCalculations(salesData) {
-            // 计算目标总计
-            let targetTotal = 0;
-            const targetInputs = document.querySelectorAll('.target-input');
-            targetInputs.forEach(input => {
-                targetTotal += parseFloat(input.value) || 0;
-            });
-            document.getElementById('target-total').textContent = targetTotal;
-            
-            // 计算各品类总计
-            categories.forEach(category => {
-                let categoryTotal = 0;
-                hours.forEach(hour => {
-                    const cell = document.getElementById(`${category}-${hour}`);
-                    categoryTotal += parseFloat(cell.textContent) || 0;
-                });
-                document.getElementById(`${category}-total`).textContent = categoryTotal;
-            });
-            
-            // 计算实际达成（各品类在每个小时段的总和）
-            hours.forEach(hour => {
-                let actualValue = 0;
-                categories.forEach(category => {
-                    const cell = document.getElementById(`${category}-${hour}`);
-                    actualValue += parseFloat(cell.textContent) || 0;
-                });
                 
-                // 更新实际达成单元格
-                const actualCell = document.getElementById(`actual-${hour}`);
-                if (actualCell) {
-                    actualCell.textContent = actualValue;
+                // 更新合计列
+                const totalCells = document.querySelectorAll(`.performance-table tbody tr:nth-child(${index + 1}) td.total-cell`);
+                if (totalCells[0]) {
+                    // 计算总计
+                    let totalValue = 0;
+                    hours.forEach(hour => {
+                        const hourIndex = hours.indexOf(hour);
+                        const cells = document.querySelectorAll(`.performance-table tbody tr:nth-child(${index + 1}) td`);
+                        if (cells[hourIndex + 1]) {
+                            const valueText = cells[hourIndex + 1].querySelector('.value-display').textContent;
+                            totalValue += parseInt(valueText) || 0;
+                        }
+                    });
+                    
+                    // 生成总计增长率（比各时段平均值稍高）
+                    const [minInc, maxInc] = indicator.increaseRange;
+                    const totalIncrease = ((minInc + maxInc) / 2 + Math.random() * 1).toFixed(1);
+                    
+                    totalCells[0].innerHTML = `
+                        <div class="value-display">${totalValue}</div>
+                        <div class="increase">+${totalIncrease}%</div>
+                    `;
                 }
             });
-            
-            // 计算实际达成总计
-            let actualTotal = 0;
-            hours.forEach(hour => {
-                const actualCell = document.getElementById(`actual-${hour}`);
-                actualTotal += parseFloat(actualCell.textContent) || 0;
-            });
-            document.getElementById('actual-total').textContent = actualTotal;
-            
-            // 计算各小时段总计
-            hours.forEach(hour => {
-                let hourTotal = 0;
-                categories.forEach(category => {
-                    const cell = document.getElementById(`${category}-${hour}`);
-                    hourTotal += parseFloat(cell.textContent) || 0;
-                });
-                
-                // 更新小时段总计单元格
-                const totalCell = document.getElementById(`total-${hour}`);
-                if (totalCell) {
-                    totalCell.textContent = hourTotal;
-                }
-            });
-            
-            // 计算所有品类总计（当日合计列的总计）
-            let grandTotal = 0;
-            categories.forEach(category => {
-                grandTotal += parseFloat(document.getElementById(`${category}-total`).textContent) || 0;
-            });
-            document.getElementById('grand-total').textContent = grandTotal;
         }
         
-        // 保存业绩数据
-        function savePerformanceData() {
+        // 刷新数据
+        function refreshPerformanceData() {
             const selectedDate = performanceDateInput.value;
-            
-            // 收集目标数据
-            const dateData = {
-                target: {}
-            };
-            
-            // 收集目标销额数据
-            const targetInputs = document.querySelectorAll('.target-input');
-            targetInputs.forEach(input => {
-                const hour = input.dataset.hour;
-                const value = input.value ? parseFloat(input.value) : 0;
-                dateData.target[hour] = value;
-            });
-            
-            // 收集系统生成的销售数据
-            const salesData = {};
-            categories.forEach(category => {
-                salesData[category] = {};
-                hours.forEach(hour => {
-                    const cell = document.getElementById(`${category}-${hour}`);
-                    salesData[category][hour] = parseFloat(cell.textContent) || 0;
-                });
-            });
-            
-            // 合并数据
-            dateData.sales = salesData;
-            
-            // 保存到本地存储
-            const performanceData = getPerformanceDataFromStorage();
-            performanceData[selectedDate] = dateData;
-            savePerformanceDataToStorage(performanceData);
-            
-            showNotification('目标数据已保存', 'success');
+            generatePerformanceData(selectedDate);
+            showNotification('数据已刷新', 'success');
         }
         
-        // 清空业绩数据
-        function clearPerformanceData() {
-            // 只清空目标输入框（系统生成的数据不清空）
-            const targetInputs = document.querySelectorAll('.target-input');
-            targetInputs.forEach(input => {
-                input.value = '';
-            });
-            
-            // 重新生成销售数据
-            const salesData = generateRandomSalesData();
-            updateSystemGeneratedData(salesData);
-            
-            showNotification('目标数据已清空', 'info');
+        // 导出报表
+        function exportReport() {
+            const date = performanceDateInput.value;
+            showNotification(`${date} 销售报表已导出`, 'info');
         }
         
-        // 初始化小时段业绩页面
+        // 初始化小时段销售页面
         function initPerformancePage() {
             // 设置默认日期
             const today = new Date();
@@ -1105,24 +1188,8 @@
             // 设置事件监听器
             performanceTodayBtn.addEventListener('click', setPerformanceDateToToday);
             performanceDateInput.addEventListener('change', loadPerformanceData);
-            savePerformanceBtn.addEventListener('click', savePerformanceData);
-            clearPerformanceBtn.addEventListener('click', clearPerformanceData);
-            
-            // 为目标输入框添加事件监听器，实时更新计算
-            const table = document.getElementById('performance-table');
-            table.addEventListener('input', function() {
-                // 获取当前销售数据
-                const salesData = {};
-                categories.forEach(category => {
-                    salesData[category] = {};
-                    hours.forEach(hour => {
-                        const cell = document.getElementById(`${category}-${hour}`);
-                        salesData[category][hour] = parseFloat(cell.textContent) || 0;
-                    });
-                });
-                
-                updateCalculations(salesData);
-            });
+            refreshDataBtn.addEventListener('click', refreshPerformanceData);
+            exportReportBtn.addEventListener('click', exportReport);
             
             // 初始加载数据
             loadPerformanceData();
