@@ -20,7 +20,7 @@
         }
         
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
         }
         
@@ -252,22 +252,24 @@
         .performance-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 800px;
+            min-width: 900px;
         }
         
         .performance-table th {
             background: #f8fafc;
-            padding: 12px;
+            padding: 12px 8px;
             text-align: center;
             font-weight: 600;
             color: #444;
             border: 1px solid #e1e5eb;
+            font-size: 0.9rem;
         }
         
         .performance-table td {
-            padding: 10px;
+            padding: 10px 8px;
             text-align: center;
             border: 1px solid #e1e5eb;
+            font-size: 0.9rem;
         }
         
         .time-header {
@@ -278,6 +280,7 @@
         .category-header {
             background: #fff8f0 !important;
             color: #ff9800 !important;
+            min-width: 80px;
         }
         
         .performance-table input {
@@ -286,7 +289,8 @@
             border: 2px solid #e1e5eb;
             border-radius: 6px;
             text-align: center;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            min-width: 60px;
         }
         
         .performance-table input:focus {
@@ -307,6 +311,16 @@
             background: #e8f4ff;
             font-weight: 600;
             color: #1a6dff;
+        }
+        
+        .system-cell {
+            background: #f8f8f8;
+            color: #666;
+        }
+        
+        .system-cell.total-cell {
+            background: #e0f7fa;
+            color: #00796b;
         }
         
         .performance-buttons {
@@ -478,11 +492,12 @@
                     <thead>
                         <tr>
                             <th rowspan="2" class="category-header">项目</th>
-                            <th colspan="15" class="time-header">小时段 (8:00-22:00)</th>
-                            <th rowspan="2" class="time-header">当日合计</th>
+                            <th colspan="16" class="time-header">小时段业绩</th>
                         </tr>
                         <tr>
-                            <!-- 小时段列头 -->
+                            <!-- 开店-8点列 -->
+                            <th class="time-header">开店-8</th>
+                            <!-- 小时段列头 8:00-22:00 每1小时一列 -->
                             <th class="time-header">8-9</th>
                             <th class="time-header">9-10</th>
                             <th class="time-header">10-11</th>
@@ -497,13 +512,19 @@
                             <th class="time-header">19-20</th>
                             <th class="time-header">20-21</th>
                             <th class="time-header">21-22</th>
+                            <!-- 22-关店列 -->
+                            <th class="time-header">22-关店</th>
+                            <!-- 当日合计列 -->
+                            <th class="time-header">当日合计</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- 目标销额行 -->
+                        <!-- 目标销额行（填写） -->
                         <tr class="category-row">
                             <td class="category-header">目标销额</td>
-                            <!-- 小时段输入框 -->
+                            <!-- 开店-8点 -->
+                            <td><input type="number" min="0" class="target-input" data-hour="before8"></td>
+                            <!-- 8:00-22:00 小时段 -->
                             <td><input type="number" min="0" class="target-input" data-hour="8"></td>
                             <td><input type="number" min="0" class="target-input" data-hour="9"></td>
                             <td><input type="number" min="0" class="target-input" data-hour="10"></td>
@@ -518,133 +539,166 @@
                             <td><input type="number" min="0" class="target-input" data-hour="19"></td>
                             <td><input type="number" min="0" class="target-input" data-hour="20"></td>
                             <td><input type="number" min="0" class="target-input" data-hour="21"></td>
-                            <td class="total-cell" id="target-total">0</td>
+                            <!-- 22-关店 -->
+                            <td><input type="number" min="0" class="target-input" data-hour="after22"></td>
+                            <!-- 当日合计（自动计算） -->
+                            <td class="total-cell system-cell" id="target-total">0</td>
                         </tr>
                         
-                        <!-- 实际达成行 -->
+                        <!-- 实际达成行（系统生成） -->
                         <tr class="category-row">
                             <td class="category-header">实际达成</td>
-                            <!-- 小时段输入框 -->
-                            <td><input type="number" min="0" class="actual-input" data-hour="8"></td>
-                            <td><input type="number" min="0" class="actual-input" data-hour="9"></td>
-                            <td><input type="number" min="0" class="actual-input" data-hour="10"></td>
-                            <td><input type="number" min="0" class="actual-input" data-hour="11"></td>
-                            <td><input type="number" min="0" class="actual-input" data-hour="12"></td>
-                            <td><input type="number" min="0" class="actual-input" data-hour="13"></td>
-                            <td><input type="number" min="0" class="actual-input" data-hour="14"></td>
-                            <td><input type="number" min="0" class="actual-input" data-hour="15"></td>
-                            <td><input type="number" min="0" class="actual-input" data-hour="16"></td>
-                            <td><input type="number" min="0" class="actual-input" data-hour="17"></td>
-                            <td><input type="number" min="0" class="actual-input" data-hour="18"></td>
-                            <td><input type="number" min="0" class="actual-input" data-hour="19"></td>
-                            <td><input type="number" min="0" class="actual-input" data-hour="20"></td>
-                            <td><input type="number" min="0" class="actual-input" data-hour="21"></td>
-                            <td class="total-cell" id="actual-total">0</td>
+                            <!-- 开店-8点 -->
+                            <td class="system-cell" id="actual-before8">0</td>
+                            <!-- 8:00-22:00 小时段 -->
+                            <td class="system-cell" id="actual-8">0</td>
+                            <td class="system-cell" id="actual-9">0</td>
+                            <td class="system-cell" id="actual-10">0</td>
+                            <td class="system-cell" id="actual-11">0</td>
+                            <td class="system-cell" id="actual-12">0</td>
+                            <td class="system-cell" id="actual-13">0</td>
+                            <td class="system-cell" id="actual-14">0</td>
+                            <td class="system-cell" id="actual-15">0</td>
+                            <td class="system-cell" id="actual-16">0</td>
+                            <td class="system-cell" id="actual-17">0</td>
+                            <td class="system-cell" id="actual-18">0</td>
+                            <td class="system-cell" id="actual-19">0</td>
+                            <td class="system-cell" id="actual-20">0</td>
+                            <td class="system-cell" id="actual-21">0</td>
+                            <!-- 22-关店 -->
+                            <td class="system-cell" id="actual-after22">0</td>
+                            <!-- 当日合计（自动计算） -->
+                            <td class="total-cell system-cell" id="actual-total">0</td>
                         </tr>
                         
-                        <!-- 现烤销额行 -->
+                        <!-- 现烤销额行（系统生成） -->
                         <tr>
                             <td>现烤销额</td>
-                            <!-- 小时段输入框 -->
-                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="8"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="9"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="10"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="11"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="12"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="13"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="14"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="15"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="16"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="17"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="18"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="19"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="20"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="现烤" data-hour="21"></td>
-                            <td class="total-cell" id="现烤-total">0</td>
+                            <!-- 开店-8点 -->
+                            <td class="system-cell" id="现烤-before8">0</td>
+                            <!-- 8:00-22:00 小时段 -->
+                            <td class="system-cell" id="现烤-8">0</td>
+                            <td class="system-cell" id="现烤-9">0</td>
+                            <td class="system-cell" id="现烤-10">0</td>
+                            <td class="system-cell" id="现烤-11">0</td>
+                            <td class="system-cell" id="现烤-12">0</td>
+                            <td class="system-cell" id="现烤-13">0</td>
+                            <td class="system-cell" id="现烤-14">0</td>
+                            <td class="system-cell" id="现烤-15">0</td>
+                            <td class="system-cell" id="现烤-16">0</td>
+                            <td class="system-cell" id="现烤-17">0</td>
+                            <td class="system-cell" id="现烤-18">0</td>
+                            <td class="system-cell" id="现烤-19">0</td>
+                            <td class="system-cell" id="现烤-20">0</td>
+                            <td class="system-cell" id="现烤-21">0</td>
+                            <!-- 22-关店 -->
+                            <td class="system-cell" id="现烤-after22">0</td>
+                            <!-- 当日合计（自动计算） -->
+                            <td class="total-cell system-cell" id="现烤-total">0</td>
                         </tr>
                         
-                        <!-- 蛋糕销额行 -->
+                        <!-- 蛋糕销额行（系统生成） -->
                         <tr class="category-row">
                             <td>蛋糕销额</td>
-                            <!-- 小时段输入框 -->
-                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="8"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="9"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="10"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="11"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="12"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="13"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="14"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="15"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="16"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="17"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="18"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="19"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="20"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="蛋糕" data-hour="21"></td>
-                            <td class="total-cell" id="蛋糕-total">0</td>
+                            <!-- 开店-8点 -->
+                            <td class="system-cell" id="蛋糕-before8">0</td>
+                            <!-- 8:00-22:00 小时段 -->
+                            <td class="system-cell" id="蛋糕-8">0</td>
+                            <td class="system-cell" id="蛋糕-9">0</td>
+                            <td class="system-cell" id="蛋糕-10">0</td>
+                            <td class="system-cell" id="蛋糕-11">0</td>
+                            <td class="system-cell" id="蛋糕-12">0</td>
+                            <td class="system-cell" id="蛋糕-13">0</td>
+                            <td class="system-cell" id="蛋糕-14">0</td>
+                            <td class="system-cell" id="蛋糕-15">0</td>
+                            <td class="system-cell" id="蛋糕-16">0</td>
+                            <td class="system-cell" id="蛋糕-17">0</td>
+                            <td class="system-cell" id="蛋糕-18">0</td>
+                            <td class="system-cell" id="蛋糕-19">0</td>
+                            <td class="system-cell" id="蛋糕-20">0</td>
+                            <td class="system-cell" id="蛋糕-21">0</td>
+                            <!-- 22-关店 -->
+                            <td class="system-cell" id="蛋糕-after22">0</td>
+                            <!-- 当日合计（自动计算） -->
+                            <td class="total-cell system-cell" id="蛋糕-total">0</td>
                         </tr>
                         
-                        <!-- 常温销额行 -->
+                        <!-- 常温销额行（系统生成） -->
                         <tr>
                             <td>常温销额</td>
-                            <!-- 小时段输入框 -->
-                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="8"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="9"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="10"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="11"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="12"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="13"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="14"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="15"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="16"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="17"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="18"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="19"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="20"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="常温" data-hour="21"></td>
-                            <td class="total-cell" id="常温-total">0</td>
+                            <!-- 开店-8点 -->
+                            <td class="system-cell" id="常温-before8">0</td>
+                            <!-- 8:00-22:00 小时段 -->
+                            <td class="system-cell" id="常温-8">0</td>
+                            <td class="system-cell" id="常温-9">0</td>
+                            <td class="system-cell" id="常温-10">0</td>
+                            <td class="system-cell" id="常温-11">0</td>
+                            <td class="system-cell" id="常温-12">0</td>
+                            <td class="system-cell" id="常温-13">0</td>
+                            <td class="system-cell" id="常温-14">0</td>
+                            <td class="system-cell" id="常温-15">0</td>
+                            <td class="system-cell" id="常温-16">0</td>
+                            <td class="system-cell" id="常温-17">0</td>
+                            <td class="system-cell" id="常温-18">0</td>
+                            <td class="system-cell" id="常温-19">0</td>
+                            <td class="system-cell" id="常温-20">0</td>
+                            <td class="system-cell" id="常温-21">0</td>
+                            <!-- 22-关店 -->
+                            <td class="system-cell" id="常温-after22">0</td>
+                            <!-- 当日合计（自动计算） -->
+                            <td class="total-cell system-cell" id="常温-total">0</td>
                         </tr>
                         
-                        <!-- 西点销额行 -->
+                        <!-- 西点销额行（系统生成） -->
                         <tr class="category-row">
                             <td>西点销额</td>
-                            <!-- 小时段输入框 -->
-                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="8"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="9"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="10"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="11"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="12"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="13"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="14"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="15"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="16"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="17"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="18"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="19"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="20"></td>
-                            <td><input type="number" min="0" class="category-input" data-category="西点" data-hour="21"></td>
-                            <td class="total-cell" id="西点-total">0</td>
+                            <!-- 开店-8点 -->
+                            <td class="system-cell" id="西点-before8">0</td>
+                            <!-- 8:00-22:00 小时段 -->
+                            <td class="system-cell" id="西点-8">0</td>
+                            <td class="system-cell" id="西点-9">0</td>
+                            <td class="system-cell" id="西点-10">0</td>
+                            <td class="system-cell" id="西点-11">0</td>
+                            <td class="system-cell" id="西点-12">0</td>
+                            <td class="system-cell" id="西点-13">0</td>
+                            <td class="system-cell" id="西点-14">0</td>
+                            <td class="system-cell" id="西点-15">0</td>
+                            <td class="system-cell" id="西点-16">0</td>
+                            <td class="system-cell" id="西点-17">0</td>
+                            <td class="system-cell" id="西点-18">0</td>
+                            <td class="system-cell" id="西点-19">0</td>
+                            <td class="system-cell" id="西点-20">0</td>
+                            <td class="system-cell" id="西点-21">0</td>
+                            <!-- 22-关店 -->
+                            <td class="system-cell" id="西点-after22">0</td>
+                            <!-- 当日合计（自动计算） -->
+                            <td class="total-cell system-cell" id="西点-total">0</td>
                         </tr>
                         
-                        <!-- 总计行 -->
+                        <!-- 总计行（系统生成） -->
                         <tr class="total-row">
                             <td>总计</td>
-                            <!-- 小时段总计 -->
-                            <td class="total-cell" id="hour-8-total">0</td>
-                            <td class="total-cell" id="hour-9-total">0</td>
-                            <td class="total-cell" id="hour-10-total">0</td>
-                            <td class="total-cell" id="hour-11-total">0</td>
-                            <td class="total-cell" id="hour-12-total">0</td>
-                            <td class="total-cell" id="hour-13-total">0</td>
-                            <td class="total-cell" id="hour-14-total">0</td>
-                            <td class="total-cell" id="hour-15-total">0</td>
-                            <td class="total-cell" id="hour-16-total">0</td>
-                            <td class="total-cell" id="hour-17-total">0</td>
-                            <td class="total-cell" id="hour-18-total">0</td>
-                            <td class="total-cell" id="hour-19-total">0</td>
-                            <td class="total-cell" id="hour-20-total">0</td>
-                            <td class="total-cell" id="hour-21-total">0</td>
-                            <td class="total-cell" id="grand-total">0</td>
+                            <!-- 开店-8点总计 -->
+                            <td class="total-cell system-cell" id="total-before8">0</td>
+                            <!-- 8:00-22:00 小时段总计 -->
+                            <td class="total-cell system-cell" id="total-8">0</td>
+                            <td class="total-cell system-cell" id="total-9">0</td>
+                            <td class="total-cell system-cell" id="total-10">0</td>
+                            <td class="total-cell system-cell" id="total-11">0</td>
+                            <td class="total-cell system-cell" id="total-12">0</td>
+                            <td class="total-cell system-cell" id="total-13">0</td>
+                            <td class="total-cell system-cell" id="total-14">0</td>
+                            <td class="total-cell system-cell" id="total-15">0</td>
+                            <td class="total-cell system-cell" id="total-16">0</td>
+                            <td class="total-cell system-cell" id="total-17">0</td>
+                            <td class="total-cell system-cell" id="total-18">0</td>
+                            <td class="total-cell system-cell" id="total-19">0</td>
+                            <td class="total-cell system-cell" id="total-20">0</td>
+                            <td class="total-cell system-cell" id="total-21">0</td>
+                            <!-- 22-关店总计 -->
+                            <td class="total-cell system-cell" id="total-after22">0</td>
+                            <!-- 当日总计（所有品类当日合计之和） -->
+                            <td class="total-cell system-cell" id="grand-total">0</td>
                         </tr>
                     </tbody>
                 </table>
@@ -831,7 +885,7 @@
         const clearPerformanceBtn = document.getElementById('clear-performance');
         
         const categories = ['现烤', '蛋糕', '常温', '西点'];
-        const hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
+        const hours = ['before8', 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 'after22'];
         
         // 设置业绩跟踪日期为今天
         function setPerformanceDateToToday() {
@@ -853,18 +907,29 @@
             localStorage.setItem('performanceData', JSON.stringify(data));
         }
         
+        // 生成随机销售数据（模拟系统生成）
+        function generateRandomSalesData() {
+            const data = {};
+            
+            // 生成各品类的销售数据
+            categories.forEach(category => {
+                data[category] = {};
+                hours.forEach(hour => {
+                    // 生成0-1000的随机销售额
+                    const randomValue = Math.floor(Math.random() * 1000);
+                    data[category][hour] = randomValue;
+                });
+            });
+            
+            return data;
+        }
+        
         // 加载业绩数据
         function loadPerformanceData() {
             const selectedDate = performanceDateInput.value;
             const performanceData = getPerformanceDataFromStorage();
             
-            // 清空所有输入框
-            const inputs = document.querySelectorAll('.performance-table input');
-            inputs.forEach(input => {
-                input.value = '';
-            });
-            
-            // 如果有该日期的数据，则填充
+            // 如果有该日期的数据，则填充目标数据
             if (performanceData[selectedDate]) {
                 const dateData = performanceData[selectedDate];
                 
@@ -878,37 +943,40 @@
                     });
                 }
                 
-                // 填充实际达成
-                if (dateData.actual) {
-                    hours.forEach(hour => {
-                        const input = document.querySelector(`.actual-input[data-hour="${hour}"]`);
-                        if (input && dateData.actual[hour] !== undefined) {
-                            input.value = dateData.actual[hour];
-                        }
-                    });
-                }
-                
-                // 填充各品类数据
-                categories.forEach(category => {
-                    if (dateData[category]) {
-                        hours.forEach(hour => {
-                            const input = document.querySelector(`.category-input[data-category="${category}"][data-hour="${hour}"]`);
-                            if (input && dateData[category][hour] !== undefined) {
-                                input.value = dateData[category][hour];
-                            }
-                        });
-                    }
+                showNotification(`${selectedDate} 的目标数据已加载`, 'info');
+            } else {
+                // 如果没有数据，清空所有目标输入框
+                hours.forEach(hour => {
+                    const input = document.querySelector(`.target-input[data-hour="${hour}"]`);
+                    if (input) input.value = '';
                 });
-                
-                showNotification(`${selectedDate} 的数据已加载`, 'info');
             }
             
-            // 更新汇总计算
-            updateCalculations();
+            // 自动生成销售数据（模拟系统生成）
+            const salesData = generateRandomSalesData();
+            
+            // 更新所有系统生成的数据
+            updateSystemGeneratedData(salesData);
+        }
+        
+        // 更新系统生成的数据
+        function updateSystemGeneratedData(salesData) {
+            // 更新各品类的销售数据
+            categories.forEach(category => {
+                hours.forEach(hour => {
+                    const cell = document.getElementById(`${category}-${hour}`);
+                    if (cell && salesData[category] && salesData[category][hour] !== undefined) {
+                        cell.textContent = salesData[category][hour];
+                    }
+                });
+            });
+            
+            // 更新计算
+            updateCalculations(salesData);
         }
         
         // 计算并更新所有总计
-        function updateCalculations() {
+        function updateCalculations(salesData) {
             // 计算目标总计
             let targetTotal = 0;
             const targetInputs = document.querySelectorAll('.target-input');
@@ -917,32 +985,52 @@
             });
             document.getElementById('target-total').textContent = targetTotal;
             
-            // 计算实际达成总计
-            let actualTotal = 0;
-            const actualInputs = document.querySelectorAll('.actual-input');
-            actualInputs.forEach(input => {
-                actualTotal += parseFloat(input.value) || 0;
-            });
-            document.getElementById('actual-total').textContent = actualTotal;
-            
             // 计算各品类总计
             categories.forEach(category => {
                 let categoryTotal = 0;
-                const inputs = document.querySelectorAll(`.category-input[data-category="${category}"]`);
-                inputs.forEach(input => {
-                    categoryTotal += parseFloat(input.value) || 0;
+                hours.forEach(hour => {
+                    const cell = document.getElementById(`${category}-${hour}`);
+                    categoryTotal += parseFloat(cell.textContent) || 0;
                 });
                 document.getElementById(`${category}-total`).textContent = categoryTotal;
             });
+            
+            // 计算实际达成（各品类在每个小时段的总和）
+            hours.forEach(hour => {
+                let actualValue = 0;
+                categories.forEach(category => {
+                    const cell = document.getElementById(`${category}-${hour}`);
+                    actualValue += parseFloat(cell.textContent) || 0;
+                });
+                
+                // 更新实际达成单元格
+                const actualCell = document.getElementById(`actual-${hour}`);
+                if (actualCell) {
+                    actualCell.textContent = actualValue;
+                }
+            });
+            
+            // 计算实际达成总计
+            let actualTotal = 0;
+            hours.forEach(hour => {
+                const actualCell = document.getElementById(`actual-${hour}`);
+                actualTotal += parseFloat(actualCell.textContent) || 0;
+            });
+            document.getElementById('actual-total').textContent = actualTotal;
             
             // 计算各小时段总计
             hours.forEach(hour => {
                 let hourTotal = 0;
                 categories.forEach(category => {
-                    const input = document.querySelector(`.category-input[data-category="${category}"][data-hour="${hour}"]`);
-                    hourTotal += parseFloat(input?.value) || 0;
+                    const cell = document.getElementById(`${category}-${hour}`);
+                    hourTotal += parseFloat(cell.textContent) || 0;
                 });
-                document.getElementById(`hour-${hour}-total`).textContent = hourTotal;
+                
+                // 更新小时段总计单元格
+                const totalCell = document.getElementById(`total-${hour}`);
+                if (totalCell) {
+                    totalCell.textContent = hourTotal;
+                }
             });
             
             // 计算所有品类总计（当日合计列的总计）
@@ -957,59 +1045,53 @@
         function savePerformanceData() {
             const selectedDate = performanceDateInput.value;
             
-            // 收集所有数据
+            // 收集目标数据
             const dateData = {
-                target: {},
-                actual: {}
+                target: {}
             };
             
             // 收集目标销额数据
             const targetInputs = document.querySelectorAll('.target-input');
             targetInputs.forEach(input => {
-                const hour = parseInt(input.dataset.hour);
+                const hour = input.dataset.hour;
                 const value = input.value ? parseFloat(input.value) : 0;
                 dateData.target[hour] = value;
             });
             
-            // 收集实际达成数据
-            const actualInputs = document.querySelectorAll('.actual-input');
-            actualInputs.forEach(input => {
-                const hour = parseInt(input.dataset.hour);
-                const value = input.value ? parseFloat(input.value) : 0;
-                dateData.actual[hour] = value;
-            });
-            
-            // 收集各品类数据
+            // 收集系统生成的销售数据
+            const salesData = {};
             categories.forEach(category => {
-                dateData[category] = {};
-                const inputs = document.querySelectorAll(`.category-input[data-category="${category}"]`);
-                inputs.forEach(input => {
-                    const hour = parseInt(input.dataset.hour);
-                    const value = input.value ? parseFloat(input.value) : 0;
-                    dateData[category][hour] = value;
+                salesData[category] = {};
+                hours.forEach(hour => {
+                    const cell = document.getElementById(`${category}-${hour}`);
+                    salesData[category][hour] = parseFloat(cell.textContent) || 0;
                 });
             });
+            
+            // 合并数据
+            dateData.sales = salesData;
             
             // 保存到本地存储
             const performanceData = getPerformanceDataFromStorage();
             performanceData[selectedDate] = dateData;
             savePerformanceDataToStorage(performanceData);
             
-            // 更新汇总计算
-            updateCalculations();
-            
-            showNotification('数据已保存', 'success');
+            showNotification('目标数据已保存', 'success');
         }
         
         // 清空业绩数据
         function clearPerformanceData() {
-            const inputs = document.querySelectorAll('.performance-table input');
-            inputs.forEach(input => {
+            // 只清空目标输入框（系统生成的数据不清空）
+            const targetInputs = document.querySelectorAll('.target-input');
+            targetInputs.forEach(input => {
                 input.value = '';
             });
             
-            updateCalculations();
-            showNotification('数据已清空', 'info');
+            // 重新生成销售数据
+            const salesData = generateRandomSalesData();
+            updateSystemGeneratedData(salesData);
+            
+            showNotification('目标数据已清空', 'info');
         }
         
         // 初始化小时段业绩页面
@@ -1026,11 +1108,23 @@
             savePerformanceBtn.addEventListener('click', savePerformanceData);
             clearPerformanceBtn.addEventListener('click', clearPerformanceData);
             
-            // 为所有输入框添加事件监听器，实时更新计算
+            // 为目标输入框添加事件监听器，实时更新计算
             const table = document.getElementById('performance-table');
-            table.addEventListener('input', updateCalculations);
+            table.addEventListener('input', function() {
+                // 获取当前销售数据
+                const salesData = {};
+                categories.forEach(category => {
+                    salesData[category] = {};
+                    hours.forEach(hour => {
+                        const cell = document.getElementById(`${category}-${hour}`);
+                        salesData[category][hour] = parseFloat(cell.textContent) || 0;
+                    });
+                });
+                
+                updateCalculations(salesData);
+            });
             
-            // 加载今天的业绩数据
+            // 初始加载数据
             loadPerformanceData();
         }
         
