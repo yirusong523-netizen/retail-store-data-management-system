@@ -397,6 +397,30 @@
             color: #059669;
             font-weight: 700;
         }
+        
+        /* 品类标签样式 */
+        .category-tag {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .category-fresh-bake {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        .category-cake {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+        
+        .category-others {
+            background-color: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+        }
     </style>
 </head>
 <body>
@@ -420,6 +444,11 @@
                     <div class="tile-header">
                         <div class="tile-title-container">
                             <div class="tile-title">销售</div>
+                            <div class="title-buttons">
+                                <a href="#" class="title-button" data-page="red-black">
+                                    <span>红黑榜</span>
+                                </a>
+                            </div>
                         </div>
                         <div class="tile-icon">
                             <i class="fas fa-shopping-cart"></i>
@@ -439,15 +468,12 @@
                             <div class="tile-title">现烤</div>
                             <div class="title-buttons">
                                 <a href="#" class="title-button" data-page="red-black">
-                                    <i class="fas fa-chart-bar"></i>
                                     <span>红黑榜</span>
                                 </a>
                                 <a href="#" class="title-button" data-page="new-discontinued">
-                                    <i class="fas fa-exchange-alt"></i>
                                     <span>上新/下架</span>
                                 </a>
                                 <a href="#" class="title-button" data-page="display-stock">
-                                    <i class="fas fa-boxes"></i>
                                     <span>陈列/备货</span>
                                 </a>
                             </div>
@@ -470,16 +496,7 @@
                             <div class="tile-title">蛋糕</div>
                             <div class="title-buttons">
                                 <a href="#" class="title-button" data-page="red-black">
-                                    <i class="fas fa-chart-bar"></i>
                                     <span>红黑榜</span>
-                                </a>
-                                <a href="#" class="title-button" data-page="new-discontinued">
-                                    <i class="fas fa-exchange-alt"></i>
-                                    <span>上新/下架</span>
-                                </a>
-                                <a href="#" class="title-button" data-page="display-stock">
-                                    <i class="fas fa-boxes"></i>
-                                    <span>陈列/备货</span>
                                 </a>
                             </div>
                         </div>
@@ -501,16 +518,7 @@
                             <div class="tile-title">其他</div>
                             <div class="title-buttons">
                                 <a href="#" class="title-button" data-page="red-black">
-                                    <i class="fas fa-chart-bar"></i>
                                     <span>红黑榜</span>
-                                </a>
-                                <a href="#" class="title-button" data-page="new-discontinued">
-                                    <i class="fas fa-exchange-alt"></i>
-                                    <span>上新/下架</span>
-                                </a>
-                                <a href="#" class="title-button" data-page="display-stock">
-                                    <i class="fas fa-boxes"></i>
-                                    <span>陈列/备货</span>
                                 </a>
                             </div>
                         </div>
@@ -595,18 +603,16 @@
                 </div>
             </header>
             
-            <div class="detail-tabs">
-                <button class="detail-tab active" data-tab="red-black">红黑榜</button>
-                <button class="detail-tab" data-tab="new-discontinued">上新/下架</button>
-                <button class="detail-tab" data-tab="display-stock">陈列/备货</button>
+            <div class="detail-tabs" id="detail-tabs-container">
+                <!-- 标签页由JS动态生成 -->
             </div>
             
             <div class="page-content">
                 <!-- 红黑榜 -->
-                <div class="detail-section active" id="red-black-content">
+                <div class="detail-section" id="red-black-content">
                     <div class="page-title">
                         <i class="fas fa-chart-bar" style="color: #ef4444;"></i>
-                        <span>产品红黑榜分析</span>
+                        <span id="ranking-title">产品红黑榜分析</span>
                     </div>
                     
                     <div class="table-container">
@@ -614,15 +620,16 @@
                             <thead>
                                 <tr>
                                     <th style="width: 50px;">排名</th>
-                                    <th style="width: 180px;" data-sort="name">产品名称</th>
-                                    <th style="width: 100px;" data-sort="sales">销额(元)</th>
-                                    <th style="width: 100px;" data-sort="salesGrowth">销额增长率</th>
-                                    <th style="width: 100px;" data-sort="quantity">销量(个)</th>
-                                    <th style="width: 100px;" data-sort="quantityGrowth">销量增长率</th>
-                                    <th style="width: 80px;" data-sort="price">单价(元)</th>
-                                    <th style="width: 80px;" data-sort="discount">折扣</th>
-                                    <th style="width: 100px;" data-sort="launchDate">上架日期</th>
-                                    <th style="width: 80px;">状态</th>
+                                    <th style="width: 150px;" data-sort="name">产品名称</th>
+                                    <th style="width: 80px;" data-sort="category">品类</th>
+                                    <th style="width: 90px;" data-sort="sales">销额(元)</th>
+                                    <th style="width: 90px;" data-sort="salesGrowth">销额增长率</th>
+                                    <th style="width: 90px;" data-sort="quantity">销量(个)</th>
+                                    <th style="width: 90px;" data-sort="quantityGrowth">销量增长率</th>
+                                    <th style="width: 70px;" data-sort="price">单价(元)</th>
+                                    <th style="width: 70px;" data-sort="discount">折扣</th>
+                                    <th style="width: 90px;" data-sort="launchDate">上架日期</th>
+                                    <th style="width: 70px;">状态</th>
                                 </tr>
                             </thead>
                             <tbody id="ranking-table-body">
@@ -704,73 +711,108 @@
     </div>
 
     <script>
-        // 红黑榜数据 - 固定状态
-        const redBlackData = [
-            { name: "法式牛角包", sales: 1245, salesGrowth: 23.5, quantity: 98, quantityGrowth: 18.2, price: 12.7, discount: 5, launchDate: "2023-01-15", status: "红榜" },
-            { name: "巧克力蛋糕", sales: 987, salesGrowth: 15.8, quantity: 45, quantityGrowth: 12.5, price: 21.9, discount: 10, launchDate: "2023-02-10", status: "红榜" },
-            { name: "全麦吐司", sales: 856, salesGrowth: 18.3, quantity: 142, quantityGrowth: 15.6, price: 6.0, discount: 0, launchDate: "2023-03-05", status: "红榜" },
-            { name: "提拉米苏", sales: 732, salesGrowth: 12.4, quantity: 32, quantityGrowth: 8.7, price: 22.9, discount: 8, launchDate: "2023-01-20", status: "红榜" },
-            { name: "甜甜圈", sales: 645, salesGrowth: 8.9, quantity: 86, quantityGrowth: 6.5, price: 7.5, discount: 15, launchDate: "2023-02-15", status: "红榜" },
-            { name: "蓝莓芝士", sales: 598, salesGrowth: 10.2, quantity: 28, quantityGrowth: 7.8, price: 21.4, discount: 5, launchDate: "2023-03-12", status: "红榜" },
-            { name: "法棍面包", sales: 521, salesGrowth: 6.7, quantity: 65, quantityGrowth: 5.2, price: 8.0, discount: 0, launchDate: "2023-01-10", status: "" },
-            { name: "草莓蛋糕", sales: 487, salesGrowth: 9.3, quantity: 24, quantityGrowth: 6.9, price: 20.3, discount: 12, launchDate: "2023-02-20", status: "" },
-            { name: "肉松面包", sales: 432, salesGrowth: 5.6, quantity: 72, quantityGrowth: 4.8, price: 6.0, discount: 5, launchDate: "2023-03-08", status: "" },
-            { name: "黑森林", sales: 398, salesGrowth: 7.1, quantity: 19, quantityGrowth: 5.3, price: 20.9, discount: 8, launchDate: "2023-01-25", status: "" },
-            { name: "可颂", sales: 365, salesGrowth: 4.2, quantity: 41, quantityGrowth: 3.8, price: 8.9, discount: 10, launchDate: "2023-02-28", status: "" },
-            { name: "芒果慕斯", sales: 321, salesGrowth: 3.8, quantity: 16, quantityGrowth: 2.9, price: 20.1, discount: 5, launchDate: "2023-03-15", status: "" },
-            { name: "菠萝包", sales: 298, salesGrowth: 2.5, quantity: 52, quantityGrowth: 1.8, price: 5.7, discount: 0, launchDate: "2023-01-30", status: "" },
-            { name: "抹茶蛋糕", sales: 265, salesGrowth: 1.9, quantity: 13, quantityGrowth: 1.2, price: 20.4, discount: 15, launchDate: "2023-02-25", status: "黑榜" },
-            { name: "红豆面包", sales: 231, salesGrowth: 0.8, quantity: 38, quantityGrowth: 0.5, price: 6.1, discount: 5, launchDate: "2023-03-20", status: "黑榜" },
-            { name: "芝士蛋糕", sales: 198, salesGrowth: -1.2, quantity: 10, quantityGrowth: -2.3, price: 19.8, discount: 10, launchDate: "2023-01-18", status: "黑榜" },
-            { name: "奶油泡芙", sales: 176, salesGrowth: -2.5, quantity: 22, quantityGrowth: -3.1, price: 8.0, discount: 20, launchDate: "2023-02-22", status: "黑榜" },
-            { name: "苹果派", sales: 154, salesGrowth: -3.8, quantity: 19, quantityGrowth: -4.2, price: 8.1, discount: 0, launchDate: "2023-03-10", status: "黑榜" },
-            { name: "胡萝卜蛋糕", sales: 132, salesGrowth: -5.2, quantity: 11, quantityGrowth: -6.1, price: 12.0, discount: 25, launchDate: "2023-01-28", status: "黑榜" },
-            { name: "南瓜派", sales: 110, salesGrowth: -7.1, quantity: 14, quantityGrowth: -8.3, price: 7.9, discount: 30, launchDate: "2023-02-18", status: "黑榜" }
-        ];
+        // 红黑榜数据 - 根据不同品类筛选
+        const redBlackData = {
+            // 全部数据（销售宫格使用）
+            all: [
+                { name: "法式牛角包", sales: 1245, salesGrowth: 23.5, quantity: 98, quantityGrowth: 18.2, price: 12.7, discount: 5, launchDate: "2023-01-15", status: "红榜", category: "现烤" },
+                { name: "巧克力蛋糕", sales: 987, salesGrowth: 15.8, quantity: 45, quantityGrowth: 12.5, price: 21.9, discount: 10, launchDate: "2023-02-10", status: "红榜", category: "蛋糕" },
+                { name: "全麦吐司", sales: 856, salesGrowth: 18.3, quantity: 142, quantityGrowth: 15.6, price: 6.0, discount: 0, launchDate: "2023-03-05", status: "红榜", category: "现烤" },
+                { name: "提拉米苏", sales: 732, salesGrowth: 12.4, quantity: 32, quantityGrowth: 8.7, price: 22.9, discount: 8, launchDate: "2023-01-20", status: "红榜", category: "蛋糕" },
+                { name: "甜甜圈", sales: 645, salesGrowth: 8.9, quantity: 86, quantityGrowth: 6.5, price: 7.5, discount: 15, launchDate: "2023-02-15", status: "红榜", category: "现烤" },
+                { name: "蓝莓芝士", sales: 598, salesGrowth: 10.2, quantity: 28, quantityGrowth: 7.8, price: 21.4, discount: 5, launchDate: "2023-03-12", status: "红榜", category: "蛋糕" },
+                { name: "法棍面包", sales: 521, salesGrowth: 6.7, quantity: 65, quantityGrowth: 5.2, price: 8.0, discount: 0, launchDate: "2023-01-10", status: "", category: "现烤" },
+                { name: "草莓蛋糕", sales: 487, salesGrowth: 9.3, quantity: 24, quantityGrowth: 6.9, price: 20.3, discount: 12, launchDate: "2023-02-20", status: "", category: "蛋糕" },
+                { name: "肉松面包", sales: 432, salesGrowth: 5.6, quantity: 72, quantityGrowth: 4.8, price: 6.0, discount: 5, launchDate: "2023-03-08", status: "", category: "现烤" },
+                { name: "黑森林", sales: 398, salesGrowth: 7.1, quantity: 19, quantityGrowth: 5.3, price: 20.9, discount: 8, launchDate: "2023-01-25", status: "", category: "蛋糕" },
+                { name: "可颂", sales: 365, salesGrowth: 4.2, quantity: 41, quantityGrowth: 3.8, price: 8.9, discount: 10, launchDate: "2023-02-28", status: "", category: "现烤" },
+                { name: "芒果慕斯", sales: 321, salesGrowth: 3.8, quantity: 16, quantityGrowth: 2.9, price: 20.1, discount: 5, launchDate: "2023-03-15", status: "", category: "蛋糕" },
+                { name: "菠萝包", sales: 298, salesGrowth: 2.5, quantity: 52, quantityGrowth: 1.8, price: 5.7, discount: 0, launchDate: "2023-01-30", status: "", category: "现烤" },
+                { name: "抹茶蛋糕", sales: 265, salesGrowth: 1.9, quantity: 13, quantityGrowth: 1.2, price: 20.4, discount: 15, launchDate: "2023-02-25", status: "黑榜", category: "蛋糕" },
+                { name: "红豆面包", sales: 231, salesGrowth: 0.8, quantity: 38, quantityGrowth: 0.5, price: 6.1, discount: 5, launchDate: "2023-03-20", status: "黑榜", category: "现烤" },
+                { name: "芝士蛋糕", sales: 198, salesGrowth: -1.2, quantity: 10, quantityGrowth: -2.3, price: 19.8, discount: 10, launchDate: "2023-01-18", status: "黑榜", category: "蛋糕" },
+                { name: "奶油泡芙", sales: 176, salesGrowth: -2.5, quantity: 22, quantityGrowth: -3.1, price: 8.0, discount: 20, launchDate: "2023-02-22", status: "黑榜", category: "现烤" },
+                { name: "苹果派", sales: 154, salesGrowth: -3.8, quantity: 19, quantityGrowth: -4.2, price: 8.1, discount: 0, launchDate: "2023-03-10", status: "黑榜", category: "其他" },
+                { name: "胡萝卜蛋糕", sales: 132, salesGrowth: -5.2, quantity: 11, quantityGrowth: -6.1, price: 12.0, discount: 25, launchDate: "2023-01-28", status: "黑榜", category: "蛋糕" },
+                { name: "南瓜派", sales: 110, salesGrowth: -7.1, quantity: 14, quantityGrowth: -8.3, price: 7.9, discount: 30, launchDate: "2023-02-18", status: "黑榜", category: "其他" },
+                { name: "黑糖奶茶", sales: 215, salesGrowth: 12.5, quantity: 35, quantityGrowth: 8.7, price: 6.1, discount: 5, launchDate: "2023-02-14", status: "红榜", category: "其他" },
+                { name: "美式咖啡", sales: 345, salesGrowth: 8.9, quantity: 68, quantityGrowth: 7.2, price: 5.1, discount: 0, launchDate: "2023-01-05", status: "", category: "其他" },
+                { name: "拿铁咖啡", sales: 412, salesGrowth: 11.3, quantity: 52, quantityGrowth: 9.1, price: 7.9, discount: 10, launchDate: "2023-01-12", status: "红榜", category: "其他" },
+                { name: "冰沙", sales: 187, salesGrowth: -1.5, quantity: 42, quantityGrowth: -2.3, price: 4.5, discount: 15, launchDate: "2023-03-01", status: "黑榜", category: "其他" }
+            ]
+        };
 
         // 上新数据 - 虚拟数据
-        const newProductData = [
-            { name: "草莓芝士蛋糕", category: "蛋糕", companyDailySales: 256, companyDailyQuantity: 12, suggestedQuantity: 15, predictedSales: 320 },
-            { name: "抹茶千层", category: "蛋糕", companyDailySales: 198, companyDailyQuantity: 9, suggestedQuantity: 12, predictedSales: 240 },
-            { name: "榴莲泡芙", category: "现烤", companyDailySales: 156, companyDailyQuantity: 22, suggestedQuantity: 25, predictedSales: 175 },
-            { name: "芋泥波波包", category: "现烤", companyDailySales: 124, companyDailyQuantity: 18, suggestedQuantity: 20, predictedSales: 140 },
-            { name: "海盐咖啡卷", category: "蛋糕", companyDailySales: 187, companyDailyQuantity: 8, suggestedQuantity: 10, predictedSales: 235 },
-            { name: "黑糖珍珠奶茶", category: "其他", companyDailySales: 215, companyDailyQuantity: 35, suggestedQuantity: 40, predictedSales: 245 },
-            { name: "蔓越莓司康", category: "现烤", companyDailySales: 142, companyDailyQuantity: 24, suggestedQuantity: 30, predictedSales: 180 }
-        ];
+        const newProductData = {
+            "现烤": [
+                { name: "榴莲泡芙", category: "现烤", companyDailySales: 156, companyDailyQuantity: 22, suggestedQuantity: 25, predictedSales: 175 },
+                { name: "芋泥波波包", category: "现烤", companyDailySales: 124, companyDailyQuantity: 18, suggestedQuantity: 20, predictedSales: 140 },
+                { name: "蔓越莓司康", category: "现烤", companyDailySales: 142, companyDailyQuantity: 24, suggestedQuantity: 30, predictedSales: 180 },
+                { name: "海盐牛角包", category: "现烤", companyDailySales: 198, companyDailyQuantity: 32, suggestedQuantity: 35, predictedSales: 215 },
+                { name: "巧克力麻薯", category: "现烤", companyDailySales: 112, companyDailyQuantity: 28, suggestedQuantity: 30, predictedSales: 135 }
+            ],
+            "蛋糕": [
+                { name: "草莓芝士蛋糕", category: "蛋糕", companyDailySales: 256, companyDailyQuantity: 12, suggestedQuantity: 15, predictedSales: 320 },
+                { name: "抹茶千层", category: "蛋糕", companyDailySales: 198, companyDailyQuantity: 9, suggestedQuantity: 12, predictedSales: 240 },
+                { name: "海盐咖啡卷", category: "蛋糕", companyDailySales: 187, companyDailyQuantity: 8, suggestedQuantity: 10, predictedSales: 235 }
+            ],
+            "其他": [
+                { name: "黑糖珍珠奶茶", category: "其他", companyDailySales: 215, companyDailyQuantity: 35, suggestedQuantity: 40, predictedSales: 245 },
+                { name: "柚子柠檬茶", category: "其他", companyDailySales: 178, companyDailyQuantity: 42, suggestedQuantity: 45, predictedSales: 195 },
+                { name: "红豆奶茶", category: "其他", companyDailySales: 165, companyDailyQuantity: 38, suggestedQuantity: 40, predictedSales: 180 }
+            ]
+        };
 
         // 下架数据 - 虚拟数据
-        const discontinuedData = [
-            { name: "胡萝卜蛋糕", category: "蛋糕", storeDailySales: 45, storeDailyQuantity: 3 },
-            { name: "南瓜派", category: "其他", storeDailySales: 32, storeDailyQuantity: 4 },
-            { name: "蓝莓松饼", category: "现烤", storeDailySales: 28, storeDailyQuantity: 5 },
-            { name: "抹茶马卡龙", category: "其他", storeDailySales: 21, storeDailyQuantity: 2 },
-            { name: "柠檬塔", category: "蛋糕", storeDailySales: 38, storeDailyQuantity: 3 },
-            { name: "花生酥", category: "其他", storeDailySales: 42, storeDailyQuantity: 7 },
-            { name: "椰蓉面包", category: "现烤", storeDailySales: 35, storeDailyQuantity: 6 }
-        ];
+        const discontinuedData = {
+            "现烤": [
+                { name: "蓝莓松饼", category: "现烤", storeDailySales: 28, storeDailyQuantity: 5 },
+                { name: "椰蓉面包", category: "现烤", storeDailySales: 35, storeDailyQuantity: 6 },
+                { name: "香葱面包", category: "现烤", storeDailySales: 42, storeDailyQuantity: 8 }
+            ],
+            "蛋糕": [
+                { name: "胡萝卜蛋糕", category: "蛋糕", storeDailySales: 45, storeDailyQuantity: 3 },
+                { name: "柠檬塔", category: "蛋糕", storeDailySales: 38, storeDailyQuantity: 3 },
+                { name: "芒果布丁", category: "蛋糕", storeDailySales: 52, storeDailyQuantity: 4 }
+            ],
+            "其他": [
+                { name: "南瓜派", category: "其他", storeDailySales: 32, storeDailyQuantity: 4 },
+                { name: "抹茶马卡龙", category: "其他", storeDailySales: 21, storeDailyQuantity: 2 },
+                { name: "花生酥", category: "其他", storeDailySales: 42, storeDailyQuantity: 7 }
+            ]
+        };
 
         // 陈列/备货数据 - 虚拟数据
-        const displayStockData = [
-            { name: "法式牛角包", displayLevel: "A级", suggestedStock: 100, displayArea: "15%" },
-            { name: "巧克力蛋糕", displayLevel: "A级", suggestedStock: 45, displayArea: "12%" },
-            { name: "全麦吐司", displayLevel: "A级", suggestedStock: 140, displayArea: "10%" },
-            { name: "提拉米苏", displayLevel: "B级", suggestedStock: 30, displayArea: "8%" },
-            { name: "甜甜圈", displayLevel: "B级", suggestedStock: 85, displayArea: "7%" },
-            { name: "蓝莓芝士", displayLevel: "B级", suggestedStock: 25, displayArea: "6%" },
-            { name: "法棍面包", displayLevel: "C级", suggestedStock: 65, displayArea: "5%" },
-            { name: "草莓蛋糕", displayLevel: "C级", suggestedStock: 22, displayArea: "5%" },
-            { name: "肉松面包", displayLevel: "C级", suggestedStock: 70, displayArea: "4%" },
-            { name: "黑森林", displayLevel: "C级", suggestedStock: 18, displayArea: "4%" }
-        ];
+        const displayStockData = {
+            "现烤": [
+                { name: "法式牛角包", displayLevel: "A级", suggestedStock: 100, displayArea: "15%" },
+                { name: "全麦吐司", displayLevel: "A级", suggestedStock: 140, displayArea: "10%" },
+                { name: "甜甜圈", displayLevel: "B级", suggestedStock: 85, displayArea: "7%" },
+                { name: "法棍面包", displayLevel: "C级", suggestedStock: 65, displayArea: "5%" },
+                { name: "肉松面包", displayLevel: "C级", suggestedStock: 70, displayArea: "4%" }
+            ],
+            "蛋糕": [
+                { name: "巧克力蛋糕", displayLevel: "A级", suggestedStock: 45, displayArea: "12%" },
+                { name: "提拉米苏", displayLevel: "B级", suggestedStock: 30, displayArea: "8%" },
+                { name: "蓝莓芝士", displayLevel: "B级", suggestedStock: 25, displayArea: "6%" },
+                { name: "草莓蛋糕", displayLevel: "C级", suggestedStock: 22, displayArea: "5%" },
+                { name: "黑森林", displayLevel: "C级", suggestedStock: 18, displayArea: "4%" }
+            ],
+            "其他": [
+                { name: "黑糖奶茶", displayLevel: "B级", suggestedStock: 40, displayArea: "8%" },
+                { name: "拿铁咖啡", displayLevel: "B级", suggestedStock: 35, displayArea: "7%" },
+                { name: "美式咖啡", displayLevel: "C级", suggestedStock: 30, displayArea: "5%" }
+            ]
+        };
 
         document.addEventListener('DOMContentLoaded', function() {
             const titleButtons = document.querySelectorAll('.title-button');
             const dashboardPage = document.getElementById('dashboard-page');
             const detailPage = document.getElementById('detail-page');
             const detailPageTitle = document.getElementById('detail-page-title');
+            const rankingTitle = document.getElementById('ranking-title');
             const backButton = document.getElementById('back-from-detail');
-            const detailTabs = document.querySelectorAll('.detail-tab');
+            const detailTabsContainer = document.getElementById('detail-tabs-container');
             const detailSections = document.querySelectorAll('.detail-section');
             const rankingTableBody = document.getElementById('ranking-table-body');
             const newTableBody = document.getElementById('new-table-body');
@@ -778,17 +820,70 @@
             const displayTableBody = document.getElementById('display-table-body');
             
             let currentCategory = '';
+            let currentPage = '';
             let currentSort = { field: 'sales', direction: 'desc' };
             
+            // 生成标签页
+            function generateTabs(page, category) {
+                detailTabsContainer.innerHTML = '';
+                
+                if (page === 'red-black') {
+                    // 红黑榜只有一个标签
+                    const tab = document.createElement('button');
+                    tab.className = 'detail-tab active';
+                    tab.setAttribute('data-tab', 'red-black');
+                    tab.textContent = '红黑榜';
+                    detailTabsContainer.appendChild(tab);
+                } else if (page === 'new-discontinued') {
+                    // 上新/下架有多个标签
+                    const tabs = [
+                        { id: 'new-discontinued', label: '上新/下架' },
+                        { id: 'red-black', label: '红黑榜' }
+                    ];
+                    
+                    tabs.forEach((tabInfo, index) => {
+                        const tab = document.createElement('button');
+                        tab.className = `detail-tab ${index === 0 ? 'active' : ''}`;
+                        tab.setAttribute('data-tab', tabInfo.id);
+                        tab.textContent = tabInfo.label;
+                        detailTabsContainer.appendChild(tab);
+                    });
+                } else if (page === 'display-stock') {
+                    // 陈列/备货有多个标签
+                    const tabs = [
+                        { id: 'display-stock', label: '陈列/备货' },
+                        { id: 'red-black', label: '红黑榜' }
+                    ];
+                    
+                    tabs.forEach((tabInfo, index) => {
+                        const tab = document.createElement('button');
+                        tab.className = `detail-tab ${index === 0 ? 'active' : ''}`;
+                        tab.setAttribute('data-tab', tabInfo.id);
+                        tab.textContent = tabInfo.label;
+                        detailTabsContainer.appendChild(tab);
+                    });
+                }
+                
+                // 重新绑定标签点击事件
+                bindTabEvents();
+            }
+            
             // 生成红黑榜表格
-            function generateRankingTable(sortField = 'sales', sortDirection = 'desc') {
+            function generateRankingTable(sortField = 'sales', sortDirection = 'desc', category = 'all') {
                 rankingTableBody.innerHTML = '';
                 
+                // 筛选数据
+                let filteredData = [...redBlackData.all];
+                if (category !== 'all') {
+                    filteredData = filteredData.filter(product => product.category === category);
+                }
+                
                 // 排序数据
-                let sortedData = [...redBlackData];
+                let sortedData = [...filteredData];
                 
                 const sortFunctions = {
                     name: (a, b) => a.name.localeCompare(b.name),
+                    category: (a, b) => a.category.localeCompare(b.category),
                     sales: (a, b) => b.sales - a.sales,
                     salesGrowth: (a, b) => b.salesGrowth - a.salesGrowth,
                     quantity: (a, b) => b.quantity - a.quantity,
@@ -800,8 +895,8 @@
                 
                 if (sortDirection === 'asc') {
                     sortedData.sort((a, b) => {
-                        if (sortField === 'name') {
-                            return a.name.localeCompare(b.name);
+                        if (sortField === 'name' || sortField === 'category') {
+                            return a[sortField].localeCompare(b[sortField]);
                         } else if (sortField === 'launchDate') {
                             return new Date(a.launchDate) - new Date(b.launchDate);
                         } else {
@@ -814,6 +909,7 @@
                 
                 // 计算合计
                 let totalSales = 0, totalSalesGrowth = 0, totalQuantity = 0, totalQuantityGrowth = 0, totalPrice = 0, totalDiscount = 0;
+                let productCount = sortedData.length;
                 
                 sortedData.forEach(product => {
                     totalSales += product.sales;
@@ -824,26 +920,28 @@
                     totalDiscount += product.discount;
                 });
                 
-                const avgSalesGrowth = totalSalesGrowth / sortedData.length;
-                const avgQuantityGrowth = totalQuantityGrowth / sortedData.length;
-                const avgPrice = totalPrice / sortedData.length;
-                const avgDiscount = totalDiscount / sortedData.length;
+                const avgSalesGrowth = productCount > 0 ? totalSalesGrowth / productCount : 0;
+                const avgQuantityGrowth = productCount > 0 ? totalQuantityGrowth / productCount : 0;
+                const avgPrice = productCount > 0 ? totalPrice / productCount : 0;
+                const avgDiscount = productCount > 0 ? totalDiscount / productCount : 0;
                 
                 // 合计行
-                const summaryRow = document.createElement('tr');
-                summaryRow.className = 'summary-row';
-                summaryRow.innerHTML = `
-                    <td colspan="2">合计</td>
-                    <td>¥${totalSales.toLocaleString()}</td>
-                    <td>${avgSalesGrowth >= 0 ? '+' : ''}${avgSalesGrowth.toFixed(1)}%</td>
-                    <td>${totalQuantity.toLocaleString()}</td>
-                    <td>${avgQuantityGrowth >= 0 ? '+' : ''}${avgQuantityGrowth.toFixed(1)}%</td>
-                    <td>¥${avgPrice.toFixed(1)}</td>
-                    <td>${avgDiscount.toFixed(1)}%</td>
-                    <td>-</td>
-                    <td>-</td>
-                `;
-                rankingTableBody.appendChild(summaryRow);
+                if (productCount > 0) {
+                    const summaryRow = document.createElement('tr');
+                    summaryRow.className = 'summary-row';
+                    summaryRow.innerHTML = `
+                        <td colspan="3">合计 (${productCount}个产品)</td>
+                        <td>¥${totalSales.toLocaleString()}</td>
+                        <td>${avgSalesGrowth >= 0 ? '+' : ''}${avgSalesGrowth.toFixed(1)}%</td>
+                        <td>${totalQuantity.toLocaleString()}</td>
+                        <td>${avgQuantityGrowth >= 0 ? '+' : ''}${avgQuantityGrowth.toFixed(1)}%</td>
+                        <td>¥${avgPrice.toFixed(1)}</td>
+                        <td>${avgDiscount.toFixed(1)}%</td>
+                        <td>-</td>
+                        <td>-</td>
+                    `;
+                    rankingTableBody.appendChild(summaryRow);
+                }
                 
                 // 数据行
                 sortedData.forEach((product, index) => {
@@ -861,11 +959,22 @@
                     const salesGrowthClass = product.salesGrowth >= 0 ? 'positive' : 'negative';
                     const quantityGrowthClass = product.quantityGrowth >= 0 ? 'positive' : 'negative';
                     
+                    // 确定品类标签的类名
+                    let categoryClass = '';
+                    if (product.category === "现烤") {
+                        categoryClass = 'category-fresh-bake';
+                    } else if (product.category === "蛋糕") {
+                        categoryClass = 'category-cake';
+                    } else {
+                        categoryClass = 'category-others';
+                    }
+                    
                     const row = document.createElement('tr');
                     if (rowClass) row.className = rowClass;
                     row.innerHTML = `
                         <td>${index + 1}</td>
                         <td>${product.name}</td>
+                        <td><span class="category-tag ${categoryClass}">${product.category}</span></td>
                         <td>¥${product.sales.toLocaleString()}</td>
                         <td class="${salesGrowthClass}">${product.salesGrowth >= 0 ? '+' : ''}${product.salesGrowth.toFixed(1)}%</td>
                         <td>${product.quantity}</td>
@@ -878,14 +987,28 @@
                     rankingTableBody.appendChild(row);
                 });
                 
+                // 如果没有数据
+                if (productCount === 0) {
+                    const emptyRow = document.createElement('tr');
+                    emptyRow.innerHTML = `
+                        <td colspan="11" style="text-align: center; padding: 50px; color: #94a3b8;">
+                            <i class="fas fa-chart-bar" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i>
+                            <div style="font-size: 18px;">暂无${category !== 'all' ? category : ''}产品数据</div>
+                        </td>
+                    `;
+                    rankingTableBody.appendChild(emptyRow);
+                }
+                
                 updateSortIndicators(sortField, sortDirection);
             }
             
             // 生成上新表格
-            function generateNewTable() {
+            function generateNewTable(category) {
                 newTableBody.innerHTML = '';
                 
-                newProductData.forEach(product => {
+                const data = newProductData[category] || [];
+                
+                data.forEach(product => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${product.name}</td>
@@ -900,10 +1023,12 @@
             }
             
             // 生成下架表格
-            function generateDiscontinuedTable() {
+            function generateDiscontinuedTable(category) {
                 discontinuedTableBody.innerHTML = '';
                 
-                discontinuedData.forEach(product => {
+                const data = discontinuedData[category] || [];
+                
+                data.forEach(product => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${product.name}</td>
@@ -916,10 +1041,12 @@
             }
             
             // 生成陈列/备货表格
-            function generateDisplayTable() {
+            function generateDisplayTable(category) {
                 displayTableBody.innerHTML = '';
                 
-                displayStockData.forEach(product => {
+                const data = displayStockData[category] || [];
+                
+                data.forEach(product => {
                     let levelClass = '';
                     if (product.displayLevel === "A级") {
                         levelClass = 'level-a';
@@ -960,7 +1087,48 @@
                         }
                         
                         currentSort = { field: sortField, direction: sortDirection };
-                        generateRankingTable(sortField, sortDirection);
+                        generateRankingTable(sortField, sortDirection, currentCategory === '销售' ? 'all' : currentCategory);
+                    });
+                });
+            }
+            
+            // 绑定标签点击事件
+            function bindTabEvents() {
+                const detailTabs = document.querySelectorAll('.detail-tab');
+                
+                detailTabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        const tabName = this.getAttribute('data-tab');
+                        
+                        detailTabs.forEach(t => t.classList.remove('active'));
+                        detailSections.forEach(section => section.classList.remove('active'));
+                        
+                        this.classList.add('active');
+                        const activeSection = document.getElementById(`${tabName}-content`);
+                        if (activeSection) activeSection.classList.add('active');
+                        
+                        // 更新页面标题
+                        let pageTitle = '';
+                        if (tabName === 'red-black') {
+                            pageTitle = '红黑榜 - ' + currentCategory;
+                            rankingTitle.textContent = currentCategory + '产品红黑榜分析';
+                        } else if (tabName === 'new-discontinued') {
+                            pageTitle = '上新/下架 - ' + currentCategory;
+                        } else if (tabName === 'display-stock') {
+                            pageTitle = '陈列/备货 - ' + currentCategory;
+                        }
+                        detailPageTitle.textContent = pageTitle;
+                        
+                        // 生成对应页面的数据
+                        if (tabName === 'red-black') {
+                            generateRankingTable('sales', 'desc', currentCategory === '销售' ? 'all' : currentCategory);
+                            setTimeout(() => setupSorting(), 0);
+                        } else if (tabName === 'new-discontinued') {
+                            generateNewTable(currentCategory);
+                            generateDiscontinuedTable(currentCategory);
+                        } else if (tabName === 'display-stock') {
+                            generateDisplayTable(currentCategory);
+                        }
                     });
                 });
             }
@@ -972,13 +1140,17 @@
                     const page = this.getAttribute('data-page');
                     
                     const tile = this.closest('.tile');
-                    if (tile.classList.contains('fresh-bake')) {
+                    if (tile.classList.contains('sales')) {
+                        currentCategory = '销售';
+                    } else if (tile.classList.contains('fresh-bake')) {
                         currentCategory = '现烤';
                     } else if (tile.classList.contains('cake')) {
                         currentCategory = '蛋糕';
                     } else if (tile.classList.contains('others')) {
                         currentCategory = '其他';
                     }
+                    
+                    currentPage = page;
                     
                     let pageTitle = '';
                     switch(page) {
@@ -993,28 +1165,28 @@
                             break;
                     }
                     detailPageTitle.textContent = pageTitle;
+                    rankingTitle.textContent = currentCategory + '产品红黑榜分析';
                     
                     dashboardPage.classList.add('hidden');
                     detailPage.classList.remove('hidden');
                     
-                    detailTabs.forEach(tab => tab.classList.remove('active'));
                     detailSections.forEach(section => section.classList.remove('active'));
                     
-                    const activeTab = document.querySelector(`.detail-tab[data-tab="${page}"]`);
                     const activeSection = document.getElementById(`${page}-content`);
-                    
-                    if (activeTab) activeTab.classList.add('active');
                     if (activeSection) activeSection.classList.add('active');
+                    
+                    // 生成标签页
+                    generateTabs(page, currentCategory);
                     
                     // 生成对应页面的数据
                     if (page === 'red-black') {
-                        generateRankingTable();
+                        generateRankingTable('sales', 'desc', currentCategory === '销售' ? 'all' : currentCategory);
                         setTimeout(() => setupSorting(), 0);
                     } else if (page === 'new-discontinued') {
-                        generateNewTable();
-                        generateDiscontinuedTable();
+                        generateNewTable(currentCategory);
+                        generateDiscontinuedTable(currentCategory);
                     } else if (page === 'display-stock') {
-                        generateDisplayTable();
+                        generateDisplayTable(currentCategory);
                     }
                 });
             });
@@ -1025,50 +1197,8 @@
                 dashboardPage.classList.remove('hidden');
             });
             
-            // tab切换
-            detailTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const tabName = this.getAttribute('data-tab');
-                    
-                    detailTabs.forEach(t => t.classList.remove('active'));
-                    detailSections.forEach(section => section.classList.remove('active'));
-                    
-                    this.classList.add('active');
-                    const activeSection = document.getElementById(`${tabName}-content`);
-                    if (activeSection) activeSection.classList.add('active');
-                    
-                    let pageTitle = '';
-                    switch(tabName) {
-                        case 'red-black':
-                            pageTitle = '红黑榜 - ' + currentCategory;
-                            break;
-                        case 'new-discontinued':
-                            pageTitle = '上新/下架 - ' + currentCategory;
-                            break;
-                        case 'display-stock':
-                            pageTitle = '陈列/备货 - ' + currentCategory;
-                            break;
-                    }
-                    detailPageTitle.textContent = pageTitle;
-                    
-                    // 生成对应页面的数据
-                    if (tabName === 'red-black') {
-                        generateRankingTable();
-                        setTimeout(() => setupSorting(), 0);
-                    } else if (tabName === 'new-discontinued') {
-                        generateNewTable();
-                        generateDiscontinuedTable();
-                    } else if (tabName === 'display-stock') {
-                        generateDisplayTable();
-                    }
-                });
-            });
-            
             // 初始生成表格
             generateRankingTable();
-            generateNewTable();
-            generateDiscontinuedTable();
-            generateDisplayTable();
         });
     </script>
 </body>
