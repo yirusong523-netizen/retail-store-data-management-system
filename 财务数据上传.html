@@ -245,65 +245,6 @@
             box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.1);
         }
         
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal.active {
-            display: flex;
-        }
-        
-        .modal-content {
-            background-color: white;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 500px;
-            padding: 32px;
-            position: relative;
-        }
-        
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            font-size: 20px;
-            color: #6c757d;
-            cursor: pointer;
-        }
-        
-        .modal-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: #2c3e50;
-        }
-        
-        .progress-bar {
-            height: 8px;
-            background-color: #e9ecef;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 24px;
-        }
-        
-        .progress {
-            height: 100%;
-            background-color: #40c057;
-            width: 0%;
-            transition: width 0.5s;
-        }
-        
         .month-selector {
             display: flex;
             align-items: center;
@@ -397,18 +338,6 @@
             font-size: 48px;
             margin-bottom: 16px;
             color: #adb5bd;
-        }
-        
-        .change-up {
-            color: #e03131;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .change-down {
-            color: #2f9e44;
-            font-size: 12px;
-            font-weight: 600;
         }
         
         .system-value {
@@ -513,9 +442,8 @@
                 <thead>
                     <tr>
                         <th>产品名称</th>
-                        <th>系统成本</th>
-                        <th>财务成本</th>
-                        <th>变动</th>
+                        <th>当前成本</th>
+                        <th>核算后成本</th>
                     </tr>
                 </thead>
                 <tbody id="productTableBody">
@@ -621,42 +549,21 @@
             </div>
         </div>
     </main>
-    
-    <!-- 提交确认模态框 -->
-    <div class="modal" id="confirmModal">
-        <div class="modal-content">
-            <button class="modal-close" id="closeModal">&times;</button>
-            <h2 class="modal-title" id="modalTitle">确认提交</h2>
-            
-            <div id="modalContent">
-                <!-- 内容将通过JavaScript动态添加 -->
-            </div>
-            
-            <div class="progress-bar" style="display: none;" id="progressBar">
-                <div class="progress" id="submitProgress"></div>
-            </div>
-            
-            <div class="actions">
-                <button class="btn btn-secondary" id="cancelSubmit">取消</button>
-                <button class="btn btn-success" id="finalSubmit">确认提交</button>
-            </div>
-        </div>
-    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <script>
         // 模拟数据 - 产品成本
         const productData = [
-            {id: "A-001", name: "笔记本电脑", systemCost: 1200, financeCost: 1200},
-            {id: "A-002", name: "无线鼠标", systemCost: 85, financeCost: 85},
-            {id: "B-015", name: "机械键盘", systemCost: 150, financeCost: 150},
-            {id: "C-033", name: "显示器", systemCost: 850, financeCost: 850},
-            {id: "D-045", name: "服务器", systemCost: 5200, financeCost: 5200},
-            {id: "E-012", name: "路由器", systemCost: 120, financeCost: 120},
-            {id: "F-078", name: "U盘 64GB", systemCost: 45, financeCost: 45},
-            {id: "G-023", name: "移动硬盘 1TB", systemCost: 320, financeCost: 320},
-            {id: "H-056", name: "平板电脑", systemCost: 2100, financeCost: 2100},
-            {id: "I-089", name: "智能手表", systemCost: 380, financeCost: 380}
+            {id: "A-001", name: "笔记本电脑", currentCost: 1200, calculatedCost: 1200},
+            {id: "A-002", name: "无线鼠标", currentCost: 85, calculatedCost: 85},
+            {id: "B-015", name: "机械键盘", currentCost: 150, calculatedCost: 150},
+            {id: "C-033", name: "显示器", currentCost: 850, calculatedCost: 850},
+            {id: "D-045", name: "服务器", currentCost: 5200, calculatedCost: 5200},
+            {id: "E-012", name: "路由器", currentCost: 120, calculatedCost: 120},
+            {id: "F-078", name: "U盘 64GB", currentCost: 45, calculatedCost: 45},
+            {id: "G-023", name: "移动硬盘 1TB", currentCost: 320, calculatedCost: 320},
+            {id: "H-056", name: "平板电脑", currentCost: 2100, calculatedCost: 2100},
+            {id: "I-089", name: "智能手表", currentCost: 380, calculatedCost: 380}
         ];
         
         // 模拟数据 - 门店费用
@@ -771,18 +678,11 @@
             tableBody.innerHTML = '';
             
             productData.forEach((item, index) => {
-                const change = item.financeCost - item.systemCost;
-                const changePercent = item.systemCost > 0 ? ((change / item.systemCost) * 100).toFixed(1) : 0;
-                const changeClass = change > 0 ? 'change-up' : change < 0 ? 'change-down' : '';
-                const changeSign = change > 0 ? '+' : '';
-                const changeText = change !== 0 ? `${changeSign}${changePercent}%` : '';
-                
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${item.name}</td>
-                    <td class="system-value">¥${item.systemCost.toFixed(2)}</td>
-                    <td><input type="number" class="edit-input" value="${item.financeCost}" data-index="${index}" data-type="product"></td>
-                    <td><span class="${changeClass}">${changeText}</span></td>
+                    <td class="system-value">¥${item.currentCost.toFixed(2)}</td>
+                    <td><input type="number" class="edit-input" value="${item.calculatedCost}" data-index="${index}"></td>
                 `;
                 
                 tableBody.appendChild(row);
@@ -794,16 +694,7 @@
                     const newValue = parseFloat(this.value) || 0;
                     
                     // 更新数据
-                    productData[index].financeCost = newValue;
-                    
-                    // 更新变动显示
-                    const change = newValue - productData[index].systemCost;
-                    const changePercent = productData[index].systemCost > 0 ? ((change / productData[index].systemCost) * 100).toFixed(1) : 0;
-                    const changeClass = change > 0 ? 'change-up' : change < 0 ? 'change-down' : '';
-                    const changeSign = change > 0 ? '+' : '';
-                    const changeText = change !== 0 ? `${changeSign}${changePercent}%` : '';
-                    
-                    row.cells[3].innerHTML = `<span class="${changeClass}">${changeText}</span>`;
+                    productData[index].calculatedCost = newValue;
                 });
             });
         }
@@ -885,7 +776,7 @@
             // 检查是否有数据被修改
             let hasChanges = false;
             productData.forEach(item => {
-                if (item.financeCost !== item.systemCost) {
+                if (item.calculatedCost !== item.currentCost) {
                     hasChanges = true;
                 }
             });
