@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>财务数据上传</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 24px;
+        }
+        
+        .logo i {
+            color: #4dabf7;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-title i {
+            color: #4dabf7;
+        }
+        
+        .card-desc {
+            color: #6c757d;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+        
+        .upload-options {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background-color: #339af0;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #228be6;
+        }
+        
+        .btn-secondary {
+            background-color: #f8f9fa;
+            color: #495057;
+            border: 1px solid #dee2e6;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+        
+        .btn-success {
+            background-color: #40c057;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #37b24d;
+        }
+        
+        .file-upload-area {
+            border: 2px dashed #c5d3e6;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 20px;
+            background-color: #fafcff;
+            transition: all 0.3s;
+        }
+        
+        .file-upload-area:hover {
+            border-color: #4dabf7;
+            background-color: #f0f8ff;
+        }
+        
+        .file-upload-icon {
+            font-size: 40px;
+            color: #4dabf7;
+            margin-bottom: 16px;
+        }
+        
+        .upload-text {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+        
+        .upload-subtext {
+            color: #6c757d;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: #6c757d;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 20px;
+            padding: 8px 0;
+        }
+        
+        .back-btn:hover {
+            color: #339af0;
+        }
+        
+        .search-box {
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #c5d3e6;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #4dabf7;
+            box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.1);
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .data-table th {
+            background-color: #f8f9fa;
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .data-table td {
+            padding: 16px;
+            border-bottom: 1px solid #eef2f7;
+        }
+        
+        .data-table tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        .edit-input {
+            padding: 8px 12px;
+            border: 1px solid #c5d3e6;
+            border-radius: 6px;
+            width: 100%;
+            font-size: 14px;
+        }
+        
+        .edit-input:focus {
+            outline: none;
+            border-color: #4dabf7;
+            box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.1);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            padding: 32px;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #6c757d;
+            cursor: pointer;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #2c3e50;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 24px;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #40c057;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .month-selector {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .month-input {
+            padding: 10px 12px;
+            border: 1px solid #c5d3e6;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        
+        .template-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .template-item {
+            background-color: #f8fafc;
+            border: 1px solid #eef2f7;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .template-item:hover {
+            background-color: #edf2f9;
+            border-color: #c5d3e6;
+        }
+        
+        .template-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background-color: #e7f5ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #339af0;
+            font-size: 18px;
+        }
+        
+        .template-info {
+            flex: 1;
+        }
+        
+        .template-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #2c3e50;
+        }
+        
+        .template-desc {
+            font-size: 13px;
+            color: #6c757d;
+        }
+        
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .upload-info {
+            margin-top: 16px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .upload-info i {
+            color: #40c057;
+            margin-right: 6px;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+        
+        .no-results i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: #adb5bd;
+        }
+        
+        .change-up {
+            color: #e03131;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .change-down {
+            color: #2f9e44;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .system-value {
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <i class="fas fa-chart-line"></i>
+        <span>财务数据上传</span>
+    </div>
+    
+    <main>
+        <!-- 首页：选择数据类型 -->
+        <div id="home" class="page active">
+            <div class="container">
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-box"></i> 产品成本</h2>
+                    <p class="card-desc">上传或编辑各产品的成本数据</p>
+                    <div class="upload-options">
+                        <button class="btn btn-primary" id="productTemplateBtn">
+                            <i class="fas fa-file-download"></i> 模板上传
+                        </button>
+                        <button class="btn btn-secondary" id="productEditBtn">
+                            <i class="fas fa-edit"></i> 在线编辑
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2 class="card-title"><i class="fas fa-store"></i> 门店费用</h2>
+                    <p class="card-desc">每月上传一次各门店的费用数据</p>
+                    <div class="upload-options">
+                        <button class="btn btn-primary" id="storeTemplateBtn">
+                            <i class="fas fa-file-download"></i> 模板上传
+                        </button>
+                        <button class="btn btn-secondary" id="storeEditBtn">
+                            <i class="fas fa-edit"></i> 在线编辑
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 产品成本模板上传 -->
+        <div id="productTemplatePage" class="page">
+            <button class="back-btn" data-back="home">
+                <i class="fas fa-arrow-left"></i> 返回
+            </button>
+            <h2 class="card-title"><i class="fas fa-box"></i> 产品成本 - 模板上传</h2>
+            
+            <div class="template-list">
+                <div class="template-item" id="productStandardTemplate">
+                    <div class="template-icon">
+                        <i class="fas fa-file-excel"></i>
+                    </div>
+                    <div class="template-info">
+                        <div class="template-name">产品成本模板.xlsx</div>
+                        <div class="template-desc">包含所有产品数据，系统已预填产品信息和当前成本</div>
+                    </div>
+                    <div class="template-actions">
+                        <button class="btn btn-primary btn-small download-btn" data-template="product">下载</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="file-upload-area" id="productUploadArea" style="display: none;">
+                <div class="file-upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <h3 class="upload-text">上传已填写的产品成本文件</h3>
+                <p class="upload-subtext">支持 .xlsx 和 .csv 格式</p>
+                <button class="btn btn-primary" id="productSelectFileBtn">
+                    <i class="fas fa-folder-open"></i> 选择文件
+                </button>
+                <p style="margin-top: 12px; color: #6c757d; font-size: 14px;">或直接将文件拖拽到此区域</p>
+                <input type="file" id="productFileInput" accept=".xlsx,.csv" style="display: none;">
+            </div>
+            
+            <div class="upload-info" id="productUploadInfo" style="display: none;">
+                <i class="fas fa-check-circle"></i> 文件已上传，正在处理...
+            </div>
+            
+            <div class="actions">
+                <button class="btn btn-success" id="productUploadSubmit" style="display: none;">提交数据</button>
+            </div>
+        </div>
+        
+        <!-- 产品成本在线编辑 -->
+        <div id="productEditPage" class="page">
+            <button class="back-btn" data-back="home">
+                <i class="fas fa-arrow-left"></i> 返回
+            </button>
+            <h2 class="card-title"><i class="fas fa-box"></i> 产品成本 - 在线编辑</h2>
+            
+            <div class="search-box">
+                <input type="text" class="search-input" id="productSearch" placeholder="搜索产品名称...">
+            </div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>产品名称</th>
+                        <th>系统成本</th>
+                        <th>财务成本</th>
+                        <th>变动</th>
+                    </tr>
+                </thead>
+                <tbody id="productTableBody">
+                    <!-- 数据将通过JavaScript动态添加 -->
+                </tbody>
+            </table>
+            
+            <div id="noResults" class="no-results" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h3>未找到匹配的产品</h3>
+                <p>尝试使用其他关键词搜索</p>
+            </div>
+            
+            <div class="actions">
+                <button class="btn btn-secondary" data-back="home">取消</button>
+                <button class="btn btn-success" id="productEditSubmit">保存修改</button>
+            </div>
+        </div>
+        
+        <!-- 门店费用模板上传 -->
+        <div id="storeTemplatePage" class="page">
+            <button class="back-btn" data-back="home">
+                <i class="fas fa-arrow-left"></i> 返回
+            </button>
+            <h2 class="card-title"><i class="fas fa-store"></i> 门店费用 - 模板上传</h2>
+            
+            <div class="month-selector">
+                <label for="storeMonth">选择月份：</label>
+                <input type="month" id="storeMonth" class="month-input" value="2024-01">
+            </div>
+            
+            <div class="template-list">
+                <div class="template-item" id="storeStandardTemplate">
+                    <div class="template-icon">
+                        <i class="fas fa-file-excel"></i>
+                    </div>
+                    <div class="template-info">
+                        <div class="template-name">门店费用模板.xlsx</div>
+                        <div class="template-desc">包含所有门店费用项目，按所选月份生成</div>
+                    </div>
+                    <div class="template-actions">
+                        <button class="btn btn-primary btn-small download-btn" data-template="store">下载</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="file-upload-area" id="storeUploadArea" style="display: none;">
+                <div class="file-upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <h3 class="upload-text">上传门店费用文件</h3>
+                <p class="upload-subtext">支持 .xlsx 和 .csv 格式</p>
+                <button class="btn btn-primary" id="storeSelectFileBtn">
+                    <i class="fas fa-folder-open"></i> 选择文件
+                </button>
+                <p style="margin-top: 12px; color: #6c757d; font-size: 14px;">或直接将文件拖拽到此区域</p>
+                <input type="file" id="storeFileInput" accept=".xlsx,.csv" style="display: none;">
+            </div>
+            
+            <div class="upload-info" id="storeUploadInfo" style="display: none;">
+                <i class="fas fa-check-circle"></i> 文件已上传，正在处理...
+            </div>
+            
+            <div class="actions">
+                <button class="btn btn-success" id="storeUploadSubmit" style="display: none;">提交数据</button>
+            </div>
+        </div>
+        
+        <!-- 门店费用在线编辑 -->
+        <div id="storeEditPage" class="page">
+            <button class="back-btn" data-back="home">
+                <i class="fas fa-arrow-left"></i> 返回
+            </button>
+            <h2 class="card-title"><i class="fas fa-store"></i> 门店费用 - 在线编辑</h2>
+            
+            <div class="month-selector">
+                <label for="storeEditMonth">选择月份：</label>
+                <input type="month" id="storeEditMonth" class="month-input" value="2024-01">
+            </div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>门店名称</th>
+                        <th>租金</th>
+                        <th>能源费用</th>
+                        <th>人工费用</th>
+                        <th>营销费用</th>
+                        <th>管理费用</th>
+                        <th>折旧费用</th>
+                        <th>其他费用</th>
+                        <th>总计</th>
+                    </tr>
+                </thead>
+                <tbody id="storeTableBody">
+                    <!-- 数据将通过JavaScript动态添加 -->
+                </tbody>
+            </table>
+            
+            <div class="actions">
+                <button class="btn btn-secondary" data-back="home">取消</button>
+                <button class="btn btn-success" id="storeEditSubmit">保存修改</button>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 提交确认模态框 -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <h2 class="modal-title" id="modalTitle">确认提交</h2>
+            
+            <div id="modalContent">
+                <!-- 内容将通过JavaScript动态添加 -->
+            </div>
+            
+            <div class="progress-bar" style="display: none;" id="progressBar">
+                <div class="progress" id="submitProgress"></div>
+            </div>
+            
+            <div class="actions">
+                <button class="btn btn-secondary" id="cancelSubmit">取消</button>
+                <button class="btn btn-success" id="finalSubmit">确认提交</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+        // 模拟数据 - 产品成本
+        const productData = [
+            {id: "A-001", name: "笔记本电脑", systemCost: 1200, financeCost: 1200},
+            {id: "A-002", name: "无线鼠标", systemCost: 85, financeCost: 85},
+            {id: "B-015", name: "机械键盘", systemCost: 150, financeCost: 150},
+            {id: "C-033", name: "显示器", systemCost: 850, financeCost: 850},
+            {id: "D-045", name: "服务器", systemCost: 5200, financeCost: 5200},
+            {id: "E-012", name: "路由器", systemCost: 120, financeCost: 120},
+            {id: "F-078", name: "U盘 64GB", systemCost: 45, financeCost: 45},
+            {id: "G-023", name: "移动硬盘 1TB", systemCost: 320, financeCost: 320},
+            {id: "H-056", name: "平板电脑", systemCost: 2100, financeCost: 2100},
+            {id: "I-089", name: "智能手表", systemCost: 380, financeCost: 380}
+        ];
+        
+        // 模拟数据 - 门店费用
+        const storeData = [
+            {name: "北京门店", rent: 15000, energy: 3000, labor: 25000, marketing: 5000, management: 3000, depreciation: 2000, other: 5000},
+            {name: "上海门店", rent: 18000, energy: 3500, labor: 28000, marketing: 6000, management: 3500, depreciation: 2500, other: 6000},
+            {name: "广州门店", rent: 12000, energy: 2500, labor: 22000, marketing: 4000, management: 2500, depreciation: 1500, other: 4000},
+            {name: "深圳门店", rent: 16000, energy: 3200, labor: 26000, marketing: 5500, management: 3200, depreciation: 2200, other: 5500},
+            {name: "成都门店", rent: 10000, energy: 2200, labor: 20000, marketing: 3500, management: 2200, depreciation: 1200, other: 3500},
+            {name: "杭州门店", rent: 13000, energy: 2800, labor: 23000, marketing: 4500, management: 2800, depreciation: 1800, other: 4500}
+        ];
+        
+        // 显示指定页面
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+        
+        // 返回按钮事件
+        document.querySelectorAll('.back-btn, .btn-secondary[data-back]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const targetPage = this.getAttribute('data-back') || 'home';
+                showPage(targetPage);
+            });
+        });
+        
+        // 首页按钮事件
+        document.getElementById('productTemplateBtn').addEventListener('click', function() {
+            showPage('productTemplatePage');
+        });
+        
+        document.getElementById('productEditBtn').addEventListener('click', function() {
+            showPage('productEditPage');
+            populateProductTable();
+        });
+        
+        document.getElementById('storeTemplateBtn').addEventListener('click', function() {
+            showPage('storeTemplatePage');
+        });
+        
+        document.getElementById('storeEditBtn').addEventListener('click', function() {
+            showPage('storeEditPage');
+            populateStoreTable();
+        });
+        
+        // 模板下载功能
+        document.querySelectorAll('.download-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const templateType = this.getAttribute('data-template');
+                let templateName = "";
+                
+                if (templateType === "product") {
+                    templateName = "产品成本模板.xlsx";
+                } else {
+                    const month = document.getElementById('storeMonth').value || "2024-01";
+                    templateName = `门店费用模板_${month}.xlsx`;
+                }
+                
+                // 模拟下载
+                alert(`开始下载: ${templateName}`);
+                
+                // 显示上传区域
+                if (templateType === "product") {
+                    document.getElementById('productUploadArea').style.display = 'block';
+                } else {
+                    document.getElementById('storeUploadArea').style.display = 'block';
+                }
+            });
+        });
+        
+        // 文件选择功能 - 产品成本
+        document.getElementById('productSelectFileBtn').addEventListener('click', function() {
+            document.getElementById('productFileInput').click();
+        });
+        
+        document.getElementById('productFileInput').addEventListener('change', function(e) {
+            if (this.files.length > 0) {
+                const fileName = this.files[0].name;
+                document.getElementById('productUploadInfo').style.display = 'block';
+                document.getElementById('productUploadSubmit').style.display = 'inline-flex';
+                
+                // 模拟处理
+                setTimeout(() => {
+                    document.getElementById('productUploadInfo').innerHTML = 
+                        '<i class="fas fa-check-circle"></i> 文件已处理完成';
+                }, 800);
+            }
+        });
+        
+        // 文件选择功能 - 门店费用
+        document.getElementById('storeSelectFileBtn').addEventListener('click', function() {
+            document.getElementById('storeFileInput').click();
+        });
+        
+        document.getElementById('storeFileInput').addEventListener('change', function(e) {
+            if (this.files.length > 0) {
+                const fileName = this.files[0].name;
+                document.getElementById('storeUploadInfo').style.display = 'block';
+                document.getElementById('storeUploadSubmit').style.display = 'inline-flex';
+                
+                // 模拟处理
+                setTimeout(() => {
+                    document.getElementById('storeUploadInfo').innerHTML = 
+                        '<i class="fas fa-check-circle"></i> 文件已处理完成';
+                }, 800);
+            }
+        });
+        
+        // 填充产品成本表格
+        function populateProductTable() {
+            const tableBody = document.getElementById('productTableBody');
+            tableBody.innerHTML = '';
+            
+            productData.forEach((item, index) => {
+                const change = item.financeCost - item.systemCost;
+                const changePercent = item.systemCost > 0 ? ((change / item.systemCost) * 100).toFixed(1) : 0;
+                const changeClass = change > 0 ? 'change-up' : change < 0 ? 'change-down' : '';
+                const changeSign = change > 0 ? '+' : '';
+                const changeText = change !== 0 ? `${changeSign}${changePercent}%` : '';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td class="system-value">¥${item.systemCost.toFixed(2)}</td>
+                    <td><input type="number" class="edit-input" value="${item.financeCost}" data-index="${index}" data-type="product"></td>
+                    <td><span class="${changeClass}">${changeText}</span></td>
+                `;
+                
+                tableBody.appendChild(row);
+                
+                // 为输入框添加事件
+                const input = row.querySelector('.edit-input');
+                input.addEventListener('input', function() {
+                    const index = this.getAttribute('data-index');
+                    const newValue = parseFloat(this.value) || 0;
+                    
+                    // 更新数据
+                    productData[index].financeCost = newValue;
+                    
+                    // 更新变动显示
+                    const change = newValue - productData[index].systemCost;
+                    const changePercent = productData[index].systemCost > 0 ? ((change / productData[index].systemCost) * 100).toFixed(1) : 0;
+                    const changeClass = change > 0 ? 'change-up' : change < 0 ? 'change-down' : '';
+                    const changeSign = change > 0 ? '+' : '';
+                    const changeText = change !== 0 ? `${changeSign}${changePercent}%` : '';
+                    
+                    row.cells[3].innerHTML = `<span class="${changeClass}">${changeText}</span>`;
+                });
+            });
+        }
+        
+        // 填充门店费用表格
+        function populateStoreTable() {
+            const tableBody = document.getElementById('storeTableBody');
+            tableBody.innerHTML = '';
+            
+            storeData.forEach((item, index) => {
+                const total = item.rent + item.energy + item.labor + item.marketing + 
+                             item.management + item.depreciation + item.other;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td><input type="number" class="edit-input" value="${item.rent}" data-index="${index}" data-field="rent"></td>
+                    <td><input type="number" class="edit-input" value="${item.energy}" data-index="${index}" data-field="energy"></td>
+                    <td><input type="number" class="edit-input" value="${item.labor}" data-index="${index}" data-field="labor"></td>
+                    <td><input type="number" class="edit-input" value="${item.marketing}" data-index="${index}" data-field="marketing"></td>
+                    <td><input type="number" class="edit-input" value="${item.management}" data-index="${index}" data-field="management"></td>
+                    <td><input type="number" class="edit-input" value="${item.depreciation}" data-index="${index}" data-field="depreciation"></td>
+                    <td><input type="number" class="edit-input" value="${item.other}" data-index="${index}" data-field="other"></td>
+                    <td>¥${total.toFixed(2)}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // 为输入框添加事件
+            document.querySelectorAll('#storeTableBody .edit-input').forEach(input => {
+                input.addEventListener('input', function() {
+                    const index = this.getAttribute('data-index');
+                    const field = this.getAttribute('data-field');
+                    storeData[index][field] = parseFloat(this.value) || 0;
+                    
+                    // 更新总计
+                    const row = this.parentElement.parentElement;
+                    const total = storeData[index].rent + storeData[index].energy + 
+                                  storeData[index].labor + storeData[index].marketing + 
+                                  storeData[index].management + storeData[index].depreciation + 
+                                  storeData[index].other;
+                    row.cells[8].textContent = `¥${total.toFixed(2)}`;
+                });
+            });
+        }
+        
+        // 产品搜索功能
+        document.getElementById('productSearch').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#productTableBody tr');
+            let hasVisibleResults = false;
+            
+            rows.forEach(row => {
+                const productName = row.cells[0].textContent.toLowerCase();
+                
+                if (productName.includes(searchTerm)) {
+                    row.style.display = '';
+                    hasVisibleResults = true;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // 显示/隐藏无结果消息
+            if (hasVisibleResults) {
+                document.getElementById('noResults').style.display = 'none';
+            } else {
+                document.getElementById('noResults').style.display = 'block';
+            }
+        });
+        
+        // 提交功能 - 产品成本
+        document.getElementById('productUploadSubmit').addEventListener('click', function() {
+            alert('产品成本数据已成功提交！');
+            showPage('home');
+        });
+        
+        document.getElementById('productEditSubmit').addEventListener('click', function() {
+            // 检查是否有数据被修改
+            let hasChanges = false;
+            productData.forEach(item => {
+                if (item.financeCost !== item.systemCost) {
+                    hasChanges = true;
+                }
+            });
+            
+            if (!hasChanges) {
+                alert('没有检测到任何修改。');
+                return;
+            }
+            
+            // 模拟保存过程
+            this.disabled = true;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 保存中...';
+            
+            setTimeout(() => {
+                alert('产品成本数据已成功保存！');
+                this.disabled = false;
+                this.innerHTML = '<i class="fas fa-check"></i> 保存修改';
+                showPage('home');
+            }, 1000);
+        });
+        
+        document.getElementById('storeUploadSubmit').addEventListener('click', function() {
+            alert('门店费用数据已成功提交！');
+            showPage('home');
+        });
+        
+        document.getElementById('storeEditSubmit').addEventListener('click', function() {
+            // 模拟保存过程
+            this.disabled = true;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 保存中...';
+            
+            setTimeout(() => {
+                alert('门店费用数据已成功保存！');
+                this.disabled = false;
+                this.innerHTML = '<i class="fas fa-check"></i> 保存修改';
+                showPage('home');
+            }, 1000);
+        });
+        
+        // 拖拽上传功能
+        ['productUploadArea', 'storeUploadArea'].forEach(areaId => {
+            const area = document.getElementById(areaId);
+            if (area) {
+                area.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.style.borderColor = '#4dabf7';
+                    this.style.backgroundColor = '#f0f8ff';
+                });
+                
+                area.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    this.style.borderColor = '#c5d3e6';
+                    this.style.backgroundColor = '#fafcff';
+                });
+                
+                area.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.style.borderColor = '#c5d3e6';
+                    this.style.backgroundColor = '#fafcff';
+                    
+                    if (e.dataTransfer.files.length > 0) {
+                        const fileName = e.dataTransfer.files[0].name;
+                        
+                        // 显示上传信息
+                        const infoId = areaId === 'productUploadArea' ? 'productUploadInfo' : 'storeUploadInfo';
+                        const submitId = areaId === 'productUploadArea' ? 'productUploadSubmit' : 'storeUploadSubmit';
+                        
+                        document.getElementById(infoId).style.display = 'block';
+                        document.getElementById(submitId).style.display = 'inline-flex';
+                        
+                        // 模拟处理
+                        setTimeout(() => {
+                            document.getElementById(infoId).innerHTML = 
+                                `<i class="fas fa-check-circle"></i> 文件已处理完成`;
+                        }, 800);
+                    }
+                });
+            }
+        });
+        
+        // 初始化
+        window.addEventListener('DOMContentLoaded', function() {
+            // 设置当前月份
+            const now = new Date();
+            const currentMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+            document.getElementById('storeMonth').value = currentMonth;
+            document.getElementById('storeEditMonth').value = currentMonth;
+        });
+    </script>
+</body>
+</html>
