@@ -418,6 +418,17 @@
             font-size: 14px;
         }
         
+        .select-all-btn {
+            background: #1890ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-left: 10px;
+        }
+        
         .clear-btn {
             background: none;
             border: 1px solid #d9d9d9;
@@ -426,6 +437,54 @@
             cursor: pointer;
             font-size: 13px;
             margin-left: 10px;
+        }
+        
+        .compare-object-selection {
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            padding: 15px;
+            background-color: #fafafa;
+            margin-top: 10px;
+        }
+        
+        .compare-object-group {
+            margin-top: 15px;
+        }
+        
+        .compare-object-group h4 {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .compare-object-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .compare-object-option {
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        
+        .compare-object-option:hover {
+            border-color: #1890ff;
+            color: #1890ff;
+        }
+        
+        .compare-object-option.selected {
+            background-color: #e6f7ff;
+            border-color: #1890ff;
+            color: #1890ff;
+            font-weight: 500;
         }
         
         .form-actions {
@@ -558,88 +617,29 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* 门店*产品选择样式 */
-        .store-product-container {
-            display: flex;
-            gap: 20px;
-            margin-top: 10px;
-        }
-        
-        .store-selection, .product-selection {
-            flex: 1;
-        }
-        
-        .store-selection h4, .product-selection h4 {
-            font-size: 14px;
-            color: #333;
+        .input-row {
             margin-bottom: 10px;
-            font-weight: 600;
         }
         
-        .store-product-info {
-            margin-top: 15px;
-            padding: 10px;
-            background-color: #fafafa;
-            border-radius: 6px;
-            border: 1px solid #e8e8e8;
-        }
-        
-        .store-product-info p {
+        .input-row label {
+            display: block;
+            margin-bottom: 5px;
             font-size: 14px;
             color: #666;
-            margin-bottom: 5px;
+            font-weight: normal;
         }
         
-        .store-product-info strong {
-            color: #1890ff;
-        }
-        
-        .step-indicator {
-            display: flex;
-            margin-bottom: 15px;
-            position: relative;
-        }
-        
-        .step {
-            flex: 1;
-            text-align: center;
-            padding: 8px;
+        .input-row input[type="date"] {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
             font-size: 14px;
-            font-weight: 500;
-            color: #999;
-            position: relative;
-            background-color: #fafafa;
-            border: 1px solid #e8e8e8;
-        }
-        
-        .step:first-child {
-            border-radius: 4px 0 0 4px;
-        }
-        
-        .step:last-child {
-            border-radius: 0 4px 4px 0;
-        }
-        
-        .step.active {
-            background-color: #e6f7ff;
-            color: #1890ff;
-            border-color: #1890ff;
-        }
-        
-        .step.completed {
-            background-color: #f6ffed;
-            color: #52c41a;
-            border-color: #b7eb8f;
-        }
-        
-        /* 利润额对比样式 */
-        .profit-margin-cell {
-            line-height: 1.6;
         }
         
         /* 响应式设计 */
         @media (max-width: 768px) {
-            .form-row, .data-input-group, .store-product-container {
+            .form-row {
                 flex-direction: column;
                 gap: 10px;
             }
@@ -687,20 +687,16 @@
                         <tr>
                             <th>实验标题</th>
                             <th>实验对象</th>
-                            <th>实验周期</th>
-                            <th>对比周期/对照组</th>
                             <th>销额对比</th>
                             <th>毛利额对比</th>
-                            <th>利润额对比</th>
+                            <th>门店贡献对比</th>
                             <th>操作</th>
                         </tr>
                     </thead>
                     <tbody id="experimentTableBody">
+                        <!-- 合计行放在这里 -->
                         <!-- 数据通过JavaScript动态生成 -->
                     </tbody>
-                    <tfoot id="experimentTableFooter">
-                        <!-- 合计行通过JavaScript动态生成 -->
-                    </tfoot>
                 </table>
             </div>
         </div>
@@ -726,19 +722,20 @@
                                 <input type="radio" id="dimensionProduct" name="dimension" value="product">
                                 <label for="dimensionProduct">产品</label>
                             </div>
-                            <div class="radio-option">
-                                <input type="radio" id="dimensionStoreProduct" name="dimension" value="store_product">
-                                <label for="dimensionStoreProduct">门店*产品</label>
-                            </div>
                         </div>
                     </div>
                     
                     <!-- 门店选择 -->
-                    <div id="storeSelectionSection" class="form-group" style="display: none;">
+                    <div id="storeSelectionSection" class="form-group" style="display: block;">
                         <label>2. 选择门店</label>
                         <div class="search-box">
                             <i class="fas fa-search"></i>
                             <input type="text" id="storeSearch" placeholder="搜索门店...">
+                        </div>
+                        
+                        <div style="margin: 10px 0;">
+                            <button type="button" class="select-all-btn" id="selectAllStores">一键全部门店</button>
+                            <button type="button" class="clear-btn" id="clearStoreSelection">清除选择</button>
                         </div>
                         
                         <div class="selection-panel" id="storeSelectionPanel">
@@ -747,13 +744,12 @@
                         
                         <div class="selected-count">
                             已选择门店: <span id="selectedStoreCount">0</span>个
-                            <button type="button" class="clear-btn" id="clearStoreSelection">清除选择</button>
                         </div>
                     </div>
                     
                     <!-- 产品选择 -->
                     <div id="productSelectionSection" class="form-group" style="display: none;">
-                        <label>3. 选择产品</label>
+                        <label>2. 选择产品</label>
                         <div class="search-box">
                             <i class="fas fa-search"></i>
                             <input type="text" id="productSearch" placeholder="搜索产品...">
@@ -769,67 +765,13 @@
                         </div>
                     </div>
                     
-                    <!-- 门店*产品组合选择 -->
-                    <div id="storeProductSelectionSection" class="form-group" style="display: none;">
-                        <label>2. 选择门店*产品组合</label>
-                        <div class="step-indicator">
-                            <div class="step active" id="step1">选择门店</div>
-                            <div class="step" id="step2">选择产品</div>
-                        </div>
-                        
-                        <div class="store-product-container">
-                            <div class="store-selection" id="storeProductStoreSelection">
-                                <h4>选择门店</h4>
-                                <div class="search-box">
-                                    <i class="fas fa-search"></i>
-                                    <input type="text" id="storeProductStoreSearch" placeholder="搜索门店...">
-                                </div>
-                                
-                                <div class="selection-panel" id="storeProductStorePanel">
-                                    <!-- 选项通过JavaScript动态生成 -->
-                                </div>
-                                
-                                <div class="selected-count">
-                                    已选择门店: <span id="selectedStoreProductStoreCount">0</span>个
-                                    <button type="button" class="clear-btn" id="clearStoreProductStoreSelection">清除选择</button>
-                                </div>
-                            </div>
-                            
-                            <div class="product-selection" id="storeProductProductSelection" style="display: none;">
-                                <h4>选择产品</h4>
-                                <div class="search-box">
-                                    <i class="fas fa-search"></i>
-                                    <input type="text" id="storeProductProductSearch" placeholder="搜索产品...">
-                                </div>
-                                
-                                <div class="selection-panel" id="storeProductProductPanel">
-                                    <!-- 选项通过JavaScript动态生成 -->
-                                </div>
-                                
-                                <div class="selected-count">
-                                    已选择产品: <span id="selectedStoreProductProductCount">0</span>个
-                                    <button type="button" class="clear-btn" id="clearStoreProductProductSelection">清除选择</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="store-product-info">
-                            <p>您已选择: <strong><span id="selectedStoreProductInfo">0个门店 × 0个产品 = 0种组合</span></strong></p>
-                        </div>
-                        
-                        <div class="form-row" style="margin-top: 10px;">
-                            <button type="button" class="cancel-btn" id="nextStepBtn" style="display: none;">下一步：选择产品</button>
-                            <button type="button" class="cancel-btn" id="prevStepBtn" style="display: none;">上一步：选择门店</button>
-                        </div>
-                    </div>
-                    
                     <div class="form-group">
-                        <label>4. 实验标题</label>
+                        <label>3. 实验标题</label>
                         <input type="text" id="experimentTitle" placeholder="输入实验标题..." required>
                     </div>
                     
                     <div class="form-group">
-                        <label>5. 对比类型</label>
+                        <label>4. 对比类型</label>
                         <div class="compare-type-selector">
                             <button type="button" class="compare-type-btn active" data-compare-type="time">时间对比</button>
                             <button type="button" class="compare-type-btn" data-compare-type="dimension">维度对比</button>
@@ -840,7 +782,7 @@
                     <div id="timeCompareSection" class="compare-data-section active">
                         <div class="explanation">
                             <i class="fas fa-info-circle"></i>
-                            <strong>时间对比说明：</strong>对比实验对象实验前后的业绩数据。系统将根据历史数据自动计算实验前后的业绩指标。
+                            <strong>时间对比说明：</strong>对比实验对象实验前后的业绩数据，计算绝对值变化。
                         </div>
                         
                         <div class="form-group">
@@ -876,7 +818,7 @@
                     <div id="dimensionCompareSection" class="compare-data-section">
                         <div class="explanation">
                             <i class="fas fa-info-circle"></i>
-                            <strong>维度对比说明：</strong>对比实验对象和公司内其他门店、产品的业绩数据。系统将根据同一时间段的数据进行对比分析。
+                            <strong>维度对比说明：</strong>对比实验对象和对照对象的环比变化率。展示结果为：实验对象增长率/对照对象增长率 + 相对增长百分点。
                         </div>
                         
                         <div class="form-group">
@@ -895,9 +837,40 @@
                             </div>
                         </div>
                         
-                        <div class="info-message">
-                            <i class="fas fa-database"></i>
-                            <strong>数据来源：</strong>系统将自动从销售数据库中获取实验对象和对比对象在同一时间段的业绩数据，并进行对比分析。
+                        <div class="form-group">
+                            <label>选择对比对象</label>
+                            <div class="compare-object-selection">
+                                <div id="storeCompareSection" style="display: block;">
+                                    <h4>选择对比门店</h4>
+                                    <div class="search-box">
+                                        <i class="fas fa-search"></i>
+                                        <input type="text" id="compareStoreSearch" placeholder="搜索对比门店...">
+                                    </div>
+                                    
+                                    <div style="margin: 10px 0;">
+                                        <button type="button" class="select-all-btn" id="selectAllCompareStores">全选</button>
+                                        <button type="button" class="clear-btn" id="clearCompareStoreSelection">清除</button>
+                                    </div>
+                                    
+                                    <div class="selection-panel" id="compareStorePanel">
+                                        <!-- 选项通过JavaScript动态生成 -->
+                                    </div>
+                                    
+                                    <div class="selected-count">
+                                        已选择对比门店: <span id="selectedCompareStoreCount">0</span>个
+                                    </div>
+                                </div>
+                                
+                                <div id="productCompareSection" style="display: none;">
+                                    <h4>选择对比产品类别</h4>
+                                    <div class="compare-object-options" id="compareProductOptions">
+                                        <!-- 选项通过JavaScript动态生成 -->
+                                    </div>
+                                    <div class="selected-count">
+                                        已选择对比产品类别: <span id="selectedCompareProductCount">0</span>个
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
@@ -933,103 +906,160 @@
             // 门店历史销售数据（按日期和门店ID）
             stores: {
                 1: { // 北京朝阳店
-                    "2024-01-08": { sales: 32000, profit: 9600, margin: 30.0 },
-                    "2024-01-09": { sales: 34000, profit: 10200, margin: 30.0 },
-                    "2024-01-10": { sales: 36000, profit: 10800, margin: 30.0 },
-                    "2024-01-11": { sales: 38000, profit: 11400, margin: 30.0 },
-                    "2024-01-12": { sales: 35000, profit: 10500, margin: 30.0 },
-                    "2024-01-13": { sales: 42000, profit: 12600, margin: 30.0 },
-                    "2024-01-14": { sales: 45000, profit: 13500, margin: 30.0 },
-                    "2024-01-15": { sales: 35000, profit: 10500, margin: 30.0 },
-                    "2024-01-16": { sales: 37000, profit: 11100, margin: 30.0 },
-                    "2024-01-17": { sales: 39000, profit: 11700, margin: 30.0 },
-                    "2024-01-18": { sales: 41000, profit: 12300, margin: 30.0 },
-                    "2024-01-19": { sales: 38000, profit: 11400, margin: 30.0 },
-                    "2024-01-20": { sales: 45000, profit: 13500, margin: 30.0 },
-                    "2024-01-21": { sales: 48000, profit: 14400, margin: 30.0 }
+                    "2026-01-07": { sales: 32000, profit: 9600, margin: 30.0 },
+                    "2026-01-08": { sales: 34000, profit: 10200, margin: 30.0 },
+                    "2026-01-09": { sales: 36000, profit: 10800, margin: 30.0 },
+                    "2026-01-10": { sales: 38000, profit: 11400, margin: 30.0 },
+                    "2026-01-11": { sales: 35000, profit: 10500, margin: 30.0 },
+                    "2026-01-12": { sales: 42000, profit: 12600, margin: 30.0 },
+                    "2026-01-13": { sales: 45000, profit: 13500, margin: 30.0 },
+                    "2026-01-14": { sales: 48000, profit: 14400, margin: 30.0 },
+                    "2025-12-31": { sales: 28000, profit: 8400, margin: 30.0 },
+                    "2026-01-01": { sales: 30000, profit: 9000, margin: 30.0 },
+                    "2026-01-02": { sales: 32000, profit: 9600, margin: 30.0 },
+                    "2026-01-03": { sales: 34000, profit: 10200, margin: 30.0 },
+                    "2026-01-04": { sales: 31000, profit: 9300, margin: 30.0 },
+                    "2026-01-05": { sales: 38000, profit: 11400, margin: 30.0 },
+                    "2026-01-06": { sales: 41000, profit: 12300, margin: 30.0 }
                 },
                 2: { // 上海徐汇店
-                    "2024-01-08": { sales: 42000, profit: 12600, margin: 30.0 },
-                    "2024-01-09": { sales: 44000, profit: 13200, margin: 30.0 },
-                    "2024-01-10": { sales: 46000, profit: 13800, margin: 30.0 },
-                    "2024-01-11": { sales: 48000, profit: 14400, margin: 30.0 },
-                    "2024-01-12": { sales: 45000, profit: 13500, margin: 30.0 },
-                    "2024-01-13": { sales: 52000, profit: 15600, margin: 30.0 },
-                    "2024-01-14": { sales: 55000, profit: 16500, margin: 30.0 },
-                    "2024-01-15": { sales: 45000, profit: 13500, margin: 30.0 },
-                    "2024-01-16": { sales: 47000, profit: 14100, margin: 30.0 },
-                    "2024-01-17": { sales: 49000, profit: 14700, margin: 30.0 },
-                    "2024-01-18": { sales: 51000, profit: 15300, margin: 30.0 },
-                    "2024-01-19": { sales: 48000, profit: 14400, margin: 30.0 },
-                    "2024-01-20": { sales: 55000, profit: 16500, margin: 30.0 },
-                    "2024-01-21": { sales: 58000, profit: 17400, margin: 30.0 }
+                    "2026-01-07": { sales: 42000, profit: 12600, margin: 30.0 },
+                    "2026-01-08": { sales: 44000, profit: 13200, margin: 30.0 },
+                    "2026-01-09": { sales: 46000, profit: 13800, margin: 30.0 },
+                    "2026-01-10": { sales: 48000, profit: 14400, margin: 30.0 },
+                    "2026-01-11": { sales: 45000, profit: 13500, margin: 30.0 },
+                    "2026-01-12": { sales: 52000, profit: 15600, margin: 30.0 },
+                    "2026-01-13": { sales: 55000, profit: 16500, margin: 30.0 },
+                    "2026-01-14": { sales: 58000, profit: 17400, margin: 30.0 },
+                    "2025-12-31": { sales: 38000, profit: 11400, margin: 30.0 },
+                    "2026-01-01": { sales: 40000, profit: 12000, margin: 30.0 },
+                    "2026-01-02": { sales: 42000, profit: 12600, margin: 30.0 },
+                    "2026-01-03": { sales: 44000, profit: 13200, margin: 30.0 },
+                    "2026-01-04": { sales: 41000, profit: 12300, margin: 30.0 },
+                    "2026-01-05": { sales: 48000, profit: 14400, margin: 30.0 },
+                    "2026-01-06": { sales: 51000, profit: 15300, margin: 30.0 }
                 },
                 3: { // 广州天河店
-                    "2024-01-08": { sales: 28000, profit: 8400, margin: 30.0 },
-                    "2024-01-09": { sales: 30000, profit: 9000, margin: 30.0 },
-                    "2024-01-10": { sales: 32000, profit: 9600, margin: 30.0 },
-                    "2024-01-11": { sales: 34000, profit: 10200, margin: 30.0 },
-                    "2024-01-12": { sales: 31000, profit: 9300, margin: 30.0 },
-                    "2024-01-13": { sales: 38000, profit: 11400, margin: 30.0 },
-                    "2024-01-14": { sales: 41000, profit: 12300, margin: 30.0 },
-                    "2024-01-15": { sales: 32000, profit: 9600, margin: 30.0 },
-                    "2024-01-16": { sales: 34000, profit: 10200, margin: 30.0 },
-                    "2024-01-17": { sales: 36000, profit: 10800, margin: 30.0 },
-                    "2024-01-18": { sales: 38000, profit: 11400, margin: 30.0 },
-                    "2024-01-19": { sales: 35000, profit: 10500, margin: 30.0 },
-                    "2024-01-20": { sales: 42000, profit: 12600, margin: 30.0 },
-                    "2024-01-21": { sales: 45000, profit: 13500, margin: 30.0 }
+                    "2026-01-07": { sales: 28000, profit: 8400, margin: 30.0 },
+                    "2026-01-08": { sales: 30000, profit: 9000, margin: 30.0 },
+                    "2026-01-09": { sales: 32000, profit: 9600, margin: 30.0 },
+                    "2026-01-10": { sales: 34000, profit: 10200, margin: 30.0 },
+                    "2026-01-11": { sales: 31000, profit: 9300, margin: 30.0 },
+                    "2026-01-12": { sales: 38000, profit: 11400, margin: 30.0 },
+                    "2026-01-13": { sales: 41000, profit: 12300, margin: 30.0 },
+                    "2026-01-14": { sales: 44000, profit: 13200, margin: 30.0 },
+                    "2025-12-31": { sales: 24000, profit: 7200, margin: 30.0 },
+                    "2026-01-01": { sales: 26000, profit: 7800, margin: 30.0 },
+                    "2026-01-02": { sales: 28000, profit: 8400, margin: 30.0 },
+                    "2026-01-03": { sales: 30000, profit: 9000, margin: 30.0 },
+                    "2026-01-04": { sales: 27000, profit: 8100, margin: 30.0 },
+                    "2026-01-05": { sales: 34000, profit: 10200, margin: 30.0 },
+                    "2026-01-06": { sales: 37000, profit: 11100, margin: 30.0 }
+                },
+                4: { // 深圳南山店
+                    "2026-01-07": { sales: 35000, profit: 10500, margin: 30.0 },
+                    "2026-01-08": { sales: 37000, profit: 11100, margin: 30.0 },
+                    "2026-01-09": { sales: 39000, profit: 11700, margin: 30.0 },
+                    "2026-01-10": { sales: 41000, profit: 12300, margin: 30.0 },
+                    "2026-01-11": { sales: 38000, profit: 11400, margin: 30.0 },
+                    "2026-01-12": { sales: 45000, profit: 13500, margin: 30.0 },
+                    "2026-01-13": { sales: 48000, profit: 14400, margin: 30.0 },
+                    "2026-01-14": { sales: 51000, profit: 15300, margin: 30.0 },
+                    "2025-12-31": { sales: 30000, profit: 9000, margin: 30.0 },
+                    "2026-01-01": { sales: 32000, profit: 9600, margin: 30.0 },
+                    "2026-01-02": { sales: 34000, profit: 10200, margin: 30.0 },
+                    "2026-01-03": { sales: 36000, profit: 10800, margin: 30.0 },
+                    "2026-01-04": { sales: 33000, profit: 9900, margin: 30.0 },
+                    "2026-01-05": { sales: 40000, profit: 12000, margin: 30.0 },
+                    "2026-01-06": { sales: 43000, profit: 12900, margin: 30.0 }
+                },
+                5: { // 成都锦江店
+                    "2026-01-07": { sales: 25000, profit: 7500, margin: 30.0 },
+                    "2026-01-08": { sales: 27000, profit: 8100, margin: 30.0 },
+                    "2026-01-09": { sales: 29000, profit: 8700, margin: 30.0 },
+                    "2026-01-10": { sales: 31000, profit: 9300, margin: 30.0 },
+                    "2026-01-11": { sales: 28000, profit: 8400, margin: 30.0 },
+                    "2026-01-12": { sales: 35000, profit: 10500, margin: 30.0 },
+                    "2026-01-13": { sales: 38000, profit: 11400, margin: 30.0 },
+                    "2026-01-14": { sales: 41000, profit: 12300, margin: 30.0 },
+                    "2025-12-31": { sales: 21000, profit: 6300, margin: 30.0 },
+                    "2026-01-01": { sales: 23000, profit: 6900, margin: 30.0 },
+                    "2026-01-02": { sales: 25000, profit: 7500, margin: 30.0 },
+                    "2026-01-03": { sales: 27000, profit: 8100, margin: 30.0 },
+                    "2026-01-04": { sales: 24000, profit: 7200, margin: 30.0 },
+                    "2026-01-05": { sales: 31000, profit: 9300, margin: 30.0 },
+                    "2026-01-06": { sales: 34000, profit: 10200, margin: 30.0 }
                 }
             },
             // 产品历史销售数据（按日期和产品ID）
             products: {
-                101: { // 可口可乐
-                    "2024-01-08": { sales: 8000, profit: 2400, margin: 30.0 },
-                    "2024-01-09": { sales: 8500, profit: 2550, margin: 30.0 },
-                    "2024-01-10": { sales: 9000, profit: 2700, margin: 30.0 },
-                    "2024-01-11": { sales: 9500, profit: 2850, margin: 30.0 },
-                    "2024-01-12": { sales: 8800, profit: 2640, margin: 30.0 },
-                    "2024-01-13": { sales: 11000, profit: 3300, margin: 30.0 },
-                    "2024-01-14": { sales: 12000, profit: 3600, margin: 30.0 },
-                    "2024-01-15": { sales: 9000, profit: 2700, margin: 30.0 },
-                    "2024-01-16": { sales: 9500, profit: 2850, margin: 30.0 },
-                    "2024-01-17": { sales: 10000, profit: 3000, margin: 30.0 },
-                    "2024-01-18": { sales: 10500, profit: 3150, margin: 30.0 },
-                    "2024-01-19": { sales: 9800, profit: 2940, margin: 30.0 },
-                    "2024-01-20": { sales: 12500, profit: 3750, margin: 30.0 },
-                    "2024-01-21": { sales: 13500, profit: 4050, margin: 30.0 }
+                101: { // 手撕包
+                    "2026-01-07": { sales: 8000, profit: 2400, margin: 30.0 },
+                    "2026-01-08": { sales: 8500, profit: 2550, margin: 30.0 },
+                    "2026-01-09": { sales: 9000, profit: 2700, margin: 30.0 },
+                    "2026-01-10": { sales: 9500, profit: 2850, margin: 30.0 },
+                    "2026-01-11": { sales: 8800, profit: 2640, margin: 30.0 },
+                    "2026-01-12": { sales: 11000, profit: 3300, margin: 30.0 },
+                    "2026-01-13": { sales: 12000, profit: 3600, margin: 30.0 },
+                    "2026-01-14": { sales: 12500, profit: 3750, margin: 30.0 },
+                    "2025-12-31": { sales: 7000, profit: 2100, margin: 30.0 },
+                    "2026-01-01": { sales: 7200, profit: 2160, margin: 30.0 },
+                    "2026-01-02": { sales: 7400, profit: 2220, margin: 30.0 },
+                    "2026-01-03": { sales: 7800, profit: 2340, margin: 30.0 },
+                    "2026-01-04": { sales: 7500, profit: 2250, margin: 30.0 },
+                    "2026-01-05": { sales: 8200, profit: 2460, margin: 30.0 },
+                    "2026-01-06": { sales: 8500, profit: 2550, margin: 30.0 }
                 },
-                102: { // 雪碧
-                    "2024-01-08": { sales: 6000, profit: 1800, margin: 30.0 },
-                    "2024-01-09": { sales: 6500, profit: 1950, margin: 30.0 },
-                    "2024-01-10": { sales: 7000, profit: 2100, margin: 30.0 },
-                    "2024-01-11": { sales: 7500, profit: 2250, margin: 30.0 },
-                    "2024-01-12": { sales: 6800, profit: 2040, margin: 30.0 },
-                    "2024-01-13": { sales: 9000, profit: 2700, margin: 30.0 },
-                    "2024-01-14": { sales: 10000, profit: 3000, margin: 30.0 },
-                    "2024-01-15": { sales: 7000, profit: 2100, margin: 30.0 },
-                    "2024-01-16": { sales: 7500, profit: 2250, margin: 30.0 },
-                    "2024-01-17": { sales: 8000, profit: 2400, margin: 30.0 },
-                    "2024-01-18": { sales: 8500, profit: 2550, margin: 30.0 },
-                    "2024-01-19": { sales: 7800, profit: 2340, margin: 30.0 },
-                    "2024-01-20": { sales: 10500, profit: 3150, margin: 30.0 },
-                    "2024-01-21": { sales: 11500, profit: 3450, margin: 30.0 }
+                102: { // 现烤品类
+                    "2026-01-07": { sales: 25000, profit: 7500, margin: 30.0 },
+                    "2026-01-08": { sales: 26000, profit: 7800, margin: 30.0 },
+                    "2026-01-09": { sales: 27000, profit: 8100, margin: 30.0 },
+                    "2026-01-10": { sales: 28000, profit: 8400, margin: 30.0 },
+                    "2026-01-11": { sales: 26500, profit: 7950, margin: 30.0 },
+                    "2026-01-12": { sales: 32000, profit: 9600, margin: 30.0 },
+                    "2026-01-13": { sales: 34000, profit: 10200, margin: 30.0 },
+                    "2026-01-14": { sales: 36000, profit: 10800, margin: 30.0 },
+                    "2025-12-31": { sales: 22000, profit: 6600, margin: 30.0 },
+                    "2026-01-01": { sales: 22500, profit: 6750, margin: 30.0 },
+                    "2026-01-02": { sales: 23000, profit: 6900, margin: 30.0 },
+                    "2026-01-03": { sales: 23500, profit: 7050, margin: 30.0 },
+                    "2026-01-04": { sales: 22800, profit: 6840, margin: 30.0 },
+                    "2026-01-05": { sales: 24500, profit: 7350, margin: 30.0 },
+                    "2026-01-06": { sales: 26000, profit: 7800, margin: 30.0 }
                 },
-                103: { // 矿泉水
-                    "2024-01-08": { sales: 4000, profit: 1200, margin: 30.0 },
-                    "2024-01-09": { sales: 4500, profit: 1350, margin: 30.0 },
-                    "2024-01-10": { sales: 5000, profit: 1500, margin: 30.0 },
-                    "2024-01-11": { sales: 5500, profit: 1650, margin: 30.0 },
-                    "2024-01-12": { sales: 4800, profit: 1440, margin: 30.0 },
-                    "2024-01-13": { sales: 7000, profit: 2100, margin: 30.0 },
-                    "2024-01-14": { sales: 8000, profit: 2400, margin: 30.0 },
-                    "2024-01-15": { sales: 5000, profit: 1500, margin: 30.0 },
-                    "2024-01-16": { sales: 5500, profit: 1650, margin: 30.0 },
-                    "2024-01-17": { sales: 6000, profit: 1800, margin: 30.0 },
-                    "2024-01-18": { sales: 6500, profit: 1950, margin: 30.0 },
-                    "2024-01-19": { sales: 5800, profit: 1740, margin: 30.0 },
-                    "2024-01-20": { sales: 8500, profit: 2550, margin: 30.0 },
-                    "2024-01-21": { sales: 9500, profit: 2850, margin: 30.0 }
+                103: { // 饮料品类
+                    "2026-01-07": { sales: 18000, profit: 5400, margin: 30.0 },
+                    "2026-01-08": { sales: 18500, profit: 5550, margin: 30.0 },
+                    "2026-01-09": { sales: 19000, profit: 5700, margin: 30.0 },
+                    "2026-01-10": { sales: 19500, profit: 5850, margin: 30.0 },
+                    "2026-01-11": { sales: 18800, profit: 5640, margin: 30.0 },
+                    "2026-01-12": { sales: 21000, profit: 6300, margin: 30.0 },
+                    "2026-01-13": { sales: 22000, profit: 6600, margin: 30.0 },
+                    "2026-01-14": { sales: 23000, profit: 6900, margin: 30.0 },
+                    "2025-12-31": { sales: 16500, profit: 4950, margin: 30.0 },
+                    "2026-01-01": { sales: 16800, profit: 5040, margin: 30.0 },
+                    "2026-01-02": { sales: 17000, profit: 5100, margin: 30.0 },
+                    "2026-01-03": { sales: 17200, profit: 5160, margin: 30.0 },
+                    "2026-01-04": { sales: 16900, profit: 5070, margin: 30.0 },
+                    "2026-01-05": { sales: 17500, profit: 5250, margin: 30.0 },
+                    "2026-01-06": { sales: 18000, profit: 5400, margin: 30.0 }
+                },
+                104: { // 零食品类
+                    "2026-01-07": { sales: 12000, profit: 3600, margin: 30.0 },
+                    "2026-01-08": { sales: 12500, profit: 3750, margin: 30.0 },
+                    "2026-01-09": { sales: 13000, profit: 3900, margin: 30.0 },
+                    "2026-01-10": { sales: 13500, profit: 4050, margin: 30.0 },
+                    "2026-01-11": { sales: 12800, profit: 3840, margin: 30.0 },
+                    "2026-01-12": { sales: 15000, profit: 4500, margin: 30.0 },
+                    "2026-01-13": { sales: 16000, profit: 4800, margin: 30.0 },
+                    "2026-01-14": { sales: 16500, profit: 4950, margin: 30.0 },
+                    "2025-12-31": { sales: 11000, profit: 3300, margin: 30.0 },
+                    "2026-01-01": { sales: 11200, profit: 3360, margin: 30.0 },
+                    "2026-01-02": { sales: 11400, profit: 3420, margin: 30.0 },
+                    "2026-01-03": { sales: 11600, profit: 3480, margin: 30.0 },
+                    "2026-01-04": { sales: 11300, profit: 3390, margin: 30.0 },
+                    "2026-01-05": { sales: 11800, profit: 3540, margin: 30.0 },
+                    "2026-01-06": { sales: 12000, profit: 3600, margin: 30.0 }
                 }
             }
         };
@@ -1038,75 +1068,72 @@
         let experimentData = [
             {
                 id: 1,
-                title: "春节促销活动实验",
-                dimension: "store",
-                objectType: "门店",
-                objectCount: 3,
-                objectNames: ["北京朝阳店", "上海徐汇店", "广州天河店"],
-                compareType: "time",
-                experimentPeriod: "2024-01-15 至 2024-01-21",
-                comparePeriod: "2024-01-08 至 2024-01-14",
-                beforeData: { sales: 100000, profit: 30000, margin: 30.0 },
-                afterData: { sales: 120000, profit: 36000, margin: 30.0 },
+                title: "手撕包促销实验",
+                dimension: "product",
+                objectType: "产品",
+                objectNames: ["手撕包"],
+                compareType: "dimension",
+                experimentPeriod: "2026-01-07 至 2026-01-14",
+                comparePeriod: "2025-12-31 至 2026-01-06",
+                compareObject: "现烤品类",
+                salesCompare: "15%/10% +5",
+                profitCompare: "25%/10% +15",
+                storeContribution: "--",
                 objectDetails: [
-                    { name: "北京朝阳店", beforeSales: 35000, afterSales: 42000, salesChange: 20.0, beforeProfit: 10500, afterProfit: 12600, profitChange: 20.0, beforeMargin: 30.0, afterMargin: 30.0, marginChange: 0.0 },
-                    { name: "上海徐汇店", beforeSales: 42000, afterSales: 50000, salesChange: 19.0, beforeProfit: 12600, afterProfit: 15000, profitChange: 19.0, beforeMargin: 30.0, afterMargin: 30.0, marginChange: 0.0 },
-                    { name: "广州天河店", beforeSales: 23000, afterSales: 28000, salesChange: 21.7, beforeProfit: 6900, afterProfit: 8400, profitChange: 21.7, beforeMargin: 30.0, afterMargin: 30.0, marginChange: 0.0 }
+                    { 
+                        name: "手撕包", 
+                        experimentSales: 75000, 
+                        compareSales: 60000,
+                        experimentProfit: 22500,
+                        compareProfit: 18000,
+                        salesGrowthRate: 25.0,
+                        profitGrowthRate: 25.0
+                    }
+                ],
+                compareObjectDetails: [
+                    {
+                        name: "现烤品类",
+                        experimentSales: 220000,
+                        compareSales: 200000,
+                        experimentProfit: 66000,
+                        compareProfit: 60000,
+                        salesGrowthRate: 10.0,
+                        profitGrowthRate: 10.0
+                    }
                 ]
             },
             {
                 id: 2,
-                title: "饮料品类促销实验",
-                dimension: "product",
-                objectType: "产品",
-                objectCount: 2,
-                objectNames: ["可口可乐", "雪碧"],
-                compareType: "dimension",
-                experimentPeriod: "2024-01-15 至 2024-01-21",
-                compareObject: "饮料品类其他产品",
-                beforeData: { sales: 45000, profit: 13500, margin: 30.0 },
-                afterData: { sales: 55000, profit: 16500, margin: 30.0 },
-                objectDetails: [
-                    { name: "可口可乐", beforeSales: 25000, afterSales: 30000, salesChange: 20.0, beforeProfit: 7500, afterProfit: 9000, profitChange: 20.0, beforeMargin: 30.0, afterMargin: 30.0, marginChange: 0.0 },
-                    { name: "雪碧", beforeSales: 20000, afterSales: 25000, salesChange: 25.0, beforeProfit: 6000, afterProfit: 7500, profitChange: 25.0, beforeMargin: 30.0, afterMargin: 30.0, marginChange: 0.0 }
-                ]
-            },
-            {
-                id: 3,
-                title: "周末特价活动",
+                title: "周末门店促销",
                 dimension: "store",
                 objectType: "门店",
-                objectCount: 2,
                 objectNames: ["北京朝阳店", "上海徐汇店"],
-                compareType: "dimension",
-                experimentPeriod: "2024-01-15 至 2024-01-21",
-                compareObject: "公司其他门店",
-                beforeData: { sales: 80000, profit: 24000, margin: 30.0 },
-                afterData: { sales: 95000, profit: 28500, margin: 30.0 },
-                objectDetails: [
-                    { name: "北京朝阳店", beforeSales: 35000, afterSales: 42000, salesChange: 20.0, beforeProfit: 10500, afterProfit: 12600, profitChange: 20.0, beforeMargin: 30.0, afterMargin: 30.0, marginChange: 0.0 },
-                    { name: "上海徐汇店", beforeSales: 45000, afterSales: 53000, salesChange: 17.8, beforeProfit: 13500, afterProfit: 15900, profitChange: 17.8, beforeMargin: 30.0, afterMargin: 30.0, marginChange: 0.0 }
-                ]
-            },
-            {
-                id: 4,
-                title: "饮料促销活动",
-                dimension: "store_product",
-                objectType: "门店*产品",
-                storeCount: 2,
-                productCount: 2,
-                storeNames: ["北京朝阳店", "上海徐汇店"],
-                productNames: ["可口可乐", "雪碧"],
                 compareType: "time",
-                experimentPeriod: "2024-01-15 至 2024-01-21",
-                comparePeriod: "2024-01-08 至 2024-01-14",
-                beforeData: { sales: 45000, profit: 13500, margin: 30.0 },
-                afterData: { sales: 55000, profit: 16500, margin: 30.0 },
+                experimentPeriod: "2026-01-07 至 2026-01-14",
+                comparePeriod: "2025-12-31 至 2026-01-06",
+                compareObject: "时间对比",
+                salesCompare: "¥300,000/¥250,000 +20%",
+                profitCompare: "¥90,000/¥75,000 +20%",
+                storeContribution: "65%",
                 objectDetails: [
-                    { name: "北京朝阳店-可口可乐", beforeSales: 12000, afterSales: 15000, salesChange: 25.0, beforeProfit: 3600, afterProfit: 4500, profitChange: 25.0, beforeMargin: 30.0, afterMargin: 30.0, marginChange: 0.0 },
-                    { name: "北京朝阳店-雪碧", beforeSales: 9000, afterSales: 11000, salesChange: 22.2, beforeProfit: 2700, afterProfit: 3300, profitChange: 22.2, beforeMargin: 30.0, afterMargin: 30.0, marginChange: 0.0 },
-                    { name: "上海徐汇店-可口可乐", beforeSales: 13000, afterSales: 15000, salesChange: 15.4, beforeProfit: 3900, afterProfit: 4500, profitChange: 15.4, beforeMargin: 30.0, afterMargin: 30.0, marginChange: 0.0 },
-                    { name: "上海徐汇店-雪碧", beforeSales: 11000, afterSales: 14000, salesChange: 27.3, beforeProfit: 3300, afterProfit: 4200, profitChange: 27.3, beforeMargin: 30.0, afterMargin: 30.0, marginChange: 0.0 }
+                    { 
+                        name: "北京朝阳店", 
+                        experimentSales: 160000, 
+                        compareSales: 140000,
+                        experimentProfit: 48000,
+                        compareProfit: 42000,
+                        salesGrowthRate: 14.3,
+                        profitGrowthRate: 14.3
+                    },
+                    { 
+                        name: "上海徐汇店", 
+                        experimentSales: 140000, 
+                        compareSales: 110000,
+                        experimentProfit: 42000,
+                        compareProfit: 33000,
+                        salesGrowthRate: 27.3,
+                        profitGrowthRate: 27.3
+                    }
                 ]
             }
         ];
@@ -1126,21 +1153,27 @@
         ];
 
         const productOptions = [
-            { id: 101, name: "可口可乐", group: "饮料" },
-            { id: 102, name: "雪碧", group: "饮料" },
-            { id: 103, name: "矿泉水", group: "饮料" },
-            { id: 104, name: "百事可乐", group: "饮料" },
-            { id: 105, name: "芬达", group: "饮料" },
-            { id: 106, name: "苏打水", group: "饮料" },
-            { id: 107, name: "薯片", group: "零食" },
-            { id: 108, name: "巧克力", group: "零食" },
-            { id: 109, name: "饼干", group: "零食" },
-            { id: 110, name: "坚果", group: "零食" }
+            { id: 101, name: "手撕包", group: "现烤品类" },
+            { id: 102, name: "现烤品类", group: "现烤品类" },
+            { id: 103, name: "饮料品类", group: "饮料" },
+            { id: 104, name: "零食品类", group: "零食" },
+            { id: 105, name: "面包", group: "现烤品类" },
+            { id: 106, name: "蛋糕", group: "现烤品类" },
+            { id: 107, name: "饼干", group: "零食" },
+            { id: 108, name: "巧克力", group: "零食" }
+        ];
+
+        // 产品类别选项
+        const productCategoryOptions = [
+            { id: "现烤品类", name: "现烤品类" },
+            { id: "饮料", name: "饮料" },
+            { id: "零食", name: "零食" },
+            { id: "日用品", name: "日用品" },
+            { id: "冷冻食品", name: "冷冻食品" }
         ];
 
         // DOM元素
         const experimentTableBody = document.getElementById('experimentTableBody');
-        const experimentTableFooter = document.getElementById('experimentTableFooter');
         const experimentFormModal = document.getElementById('experimentFormModal');
         const detailModal = document.getElementById('detailModal');
         const addExperimentBtn = document.getElementById('addExperimentBtn');
@@ -1163,7 +1196,6 @@
         // 维度选择相关
         const dimensionStore = document.getElementById('dimensionStore');
         const dimensionProduct = document.getElementById('dimensionProduct');
-        const dimensionStoreProduct = document.getElementById('dimensionStoreProduct');
         
         // 门店选择相关
         const storeSelectionSection = document.getElementById('storeSelectionSection');
@@ -1171,6 +1203,7 @@
         const storeSelectionPanel = document.getElementById('storeSelectionPanel');
         const selectedStoreCount = document.getElementById('selectedStoreCount');
         const clearStoreSelection = document.getElementById('clearStoreSelection');
+        const selectAllStores = document.getElementById('selectAllStores');
         
         // 产品选择相关
         const productSelectionSection = document.getElementById('productSelectionSection');
@@ -1179,34 +1212,29 @@
         const selectedProductCount = document.getElementById('selectedProductCount');
         const clearProductSelection = document.getElementById('clearProductSelection');
         
-        // 门店*产品选择相关
-        const storeProductSelectionSection = document.getElementById('storeProductSelectionSection');
-        const step1 = document.getElementById('step1');
-        const step2 = document.getElementById('step2');
-        const storeProductStoreSearch = document.getElementById('storeProductStoreSearch');
-        const storeProductStorePanel = document.getElementById('storeProductStorePanel');
-        const selectedStoreProductStoreCount = document.getElementById('selectedStoreProductStoreCount');
-        const clearStoreProductStoreSelection = document.getElementById('clearStoreProductStoreSelection');
-        const storeProductProductSelection = document.getElementById('storeProductProductSelection');
-        const storeProductProductSearch = document.getElementById('storeProductProductSearch');
-        const storeProductProductPanel = document.getElementById('storeProductProductPanel');
-        const selectedStoreProductProductCount = document.getElementById('selectedStoreProductProductCount');
-        const clearStoreProductProductSelection = document.getElementById('clearStoreProductProductSelection');
-        const selectedStoreProductInfo = document.getElementById('selectedStoreProductInfo');
-        const nextStepBtn = document.getElementById('nextStepBtn');
-        const prevStepBtn = document.getElementById('prevStepBtn');
+        // 对比对象选择相关
+        const storeCompareSection = document.getElementById('storeCompareSection');
+        const productCompareSection = document.getElementById('productCompareSection');
+        const compareStoreSearch = document.getElementById('compareStoreSearch');
+        const compareStorePanel = document.getElementById('compareStorePanel');
+        const selectedCompareStoreCount = document.getElementById('selectedCompareStoreCount');
+        const clearCompareStoreSelection = document.getElementById('clearCompareStoreSelection');
+        const selectAllCompareStores = document.getElementById('selectAllCompareStores');
+        const compareProductOptions = document.getElementById('compareProductOptions');
+        const selectedCompareProductCount = document.getElementById('selectedCompareProductCount');
 
         // 当前选择的维度
         let currentDimension = 'store';
         // 当前选择的对象
         let selectedStores = [];
         let selectedProducts = [];
+        // 当前选择的对比对象
+        let selectedCompareStores = [];
+        let selectedCompareProductCategories = [];
         // 当前编辑的实验ID (null表示新增)
         let editingExperimentId = null;
         // 当前对比类型
         let currentCompareType = 'time';
-        // 门店*产品选择的当前步骤
-        let currentStep = 1;
         // 当前搜索关键词
         let currentSearchKeyword = '';
 
@@ -1245,6 +1273,9 @@
             
             compareStartDate.valueAsDate = compareStart;
             compareEndDate.valueAsDate = compareEnd;
+            
+            // 初始化产品类别选择
+            renderProductCategoryOptions();
         }
 
         // 渲染实验表格
@@ -1263,7 +1294,7 @@
             if (filteredExperiments.length === 0) {
                 experimentTableBody.innerHTML = `
                     <tr>
-                        <td colspan="8">
+                        <td colspan="6">
                             <div class="empty-state">
                                 <i class="fas fa-clipboard-list"></i>
                                 <h3>暂无实验记录</h3>
@@ -1272,9 +1303,6 @@
                         </td>
                     </tr>
                 `;
-                
-                // 清空合计行
-                experimentTableFooter.innerHTML = '';
                 
                 // 更新实验计数
                 experimentCount.textContent = `(0条记录)`;
@@ -1286,52 +1314,63 @@
             }
             
             // 计算合计数据
-            let totalBeforeSales = 0;
-            let totalAfterSales = 0;
-            let totalBeforeProfit = 0;
-            let totalAfterProfit = 0;
-            let totalMarginChange = 0;
-            let validMarginCount = 0;
+            let totalExperimentSales = 0;
+            let totalCompareSales = 0;
+            let totalExperimentProfit = 0;
+            let totalCompareProfit = 0;
             
+            // 先添加合计行
+            const summaryRow = document.createElement('tr');
+            summaryRow.className = 'summary-row';
+            
+            // 遍历实验数据计算合计
             filteredExperiments.forEach(experiment => {
-                // 计算变化率
-                const salesChangeRate = calculateChangeRate(experiment.beforeData.sales, experiment.afterData.sales);
-                const profitChangeRate = calculateChangeRate(experiment.beforeData.profit, experiment.afterData.profit);
-                const marginChangeRate = calculateChangeRate(experiment.beforeData.margin, experiment.afterData.margin);
-                
-                // 确定变化率样式类（红色增长，绿色下降）
-                const salesChangeClass = salesChangeRate >= 0 ? 'positive' : 'negative';
-                const profitChangeClass = profitChangeRate >= 0 ? 'positive' : 'negative';
-                const marginChangeClass = marginChangeRate >= 0 ? 'positive' : 'negative';
-                
-                // 变化率符号
-                const salesChangeSign = salesChangeRate >= 0 ? '+' : '';
-                const profitChangeSign = profitChangeRate >= 0 ? '+' : '';
-                const marginChangeSign = marginChangeRate >= 0 ? '+' : '';
-                
-                // 确定对比周期/对照组显示
-                let compareDisplay = '';
-                if (experiment.compareType === 'time') {
-                    compareDisplay = experiment.comparePeriod;
-                } else {
-                    compareDisplay = experiment.compareObject;
-                }
-                
+                // 提取数字部分用于合计
+                experiment.objectDetails.forEach(detail => {
+                    totalExperimentSales += detail.experimentSales || 0;
+                    totalCompareSales += detail.compareSales || 0;
+                    totalExperimentProfit += detail.experimentProfit || 0;
+                    totalCompareProfit += detail.compareProfit || 0;
+                });
+            });
+            
+            // 计算合计的变化率
+            const totalSalesGrowthRate = totalCompareSales > 0 ? 
+                ((totalExperimentSales - totalCompareSales) / totalCompareSales * 100).toFixed(1) : 0;
+            const totalProfitGrowthRate = totalCompareProfit > 0 ? 
+                ((totalExperimentProfit - totalCompareProfit) / totalCompareProfit * 100).toFixed(1) : 0;
+            
+            const totalSalesChangeClass = totalSalesGrowthRate >= 0 ? 'positive' : 'negative';
+            const totalProfitChangeClass = totalProfitGrowthRate >= 0 ? 'positive' : 'negative';
+            const totalSalesChangeSign = totalSalesGrowthRate >= 0 ? '+' : '';
+            const totalProfitChangeSign = totalProfitGrowthRate >= 0 ? '+' : '';
+            
+            summaryRow.innerHTML = `
+                <td class="summary-label">合计</td>
+                <td>${filteredExperiments.length}个实验</td>
+                <td class="data-compare-cell ${totalSalesChangeClass}">
+                    <span class="compare-value">¥${totalExperimentSales.toLocaleString()}/¥${totalCompareSales.toLocaleString()}</span>
+                    <span class="change-rate">${totalSalesChangeSign}${totalSalesGrowthRate}%</span>
+                </td>
+                <td class="data-compare-cell ${totalProfitChangeClass}">
+                    <span class="compare-value">¥${totalExperimentProfit.toLocaleString()}/¥${totalCompareProfit.toLocaleString()}</span>
+                    <span class="change-rate">${totalProfitChangeSign}${totalProfitGrowthRate}%</span>
+                </td>
+                <td>--</td>
+                <td>--</td>
+            `;
+            
+            experimentTableBody.appendChild(summaryRow);
+            
+            // 添加数据行
+            filteredExperiments.forEach(experiment => {
                 // 确定实验对象显示
                 let objectDisplay = '';
-                if (experiment.dimension === 'store_product') {
-                    objectDisplay = `${experiment.objectType}(${experiment.storeCount}×${experiment.productCount})`;
+                if (experiment.dimension === 'store') {
+                    objectDisplay = `${experiment.objectType}(${experiment.objectNames.length})`;
                 } else {
-                    objectDisplay = `${experiment.objectType}(${experiment.objectCount})`;
+                    objectDisplay = `${experiment.objectNames.join(', ')}`;
                 }
-                
-                // 累计合计数据
-                totalBeforeSales += experiment.beforeData.sales;
-                totalAfterSales += experiment.afterData.sales;
-                totalBeforeProfit += experiment.beforeData.profit;
-                totalAfterProfit += experiment.afterData.profit;
-                totalMarginChange += marginChangeRate;
-                validMarginCount++;
                 
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -1343,19 +1382,14 @@
                             ${objectDisplay}
                         </span>
                     </td>
-                    <td class="period-cell">${experiment.experimentPeriod}</td>
-                    <td class="period-cell">${compareDisplay}</td>
-                    <td class="data-compare-cell ${salesChangeClass}">
-                        <span class="compare-value">¥${experiment.beforeData.sales.toLocaleString()} / ¥${experiment.afterData.sales.toLocaleString()}</span>
-                        <span class="change-rate">${salesChangeSign}${salesChangeRate}%</span>
+                    <td class="data-compare-cell">
+                        ${experiment.salesCompare}
                     </td>
-                    <td class="data-compare-cell ${profitChangeClass}">
-                        <span class="compare-value">¥${experiment.beforeData.profit.toLocaleString()} / ¥${experiment.afterData.profit.toLocaleString()}</span>
-                        <span class="change-rate">${profitChangeSign}${profitChangeRate}%</span>
+                    <td class="data-compare-cell">
+                        ${experiment.profitCompare}
                     </td>
-                    <td class="data-compare-cell ${marginChangeClass}">
-                        <span class="compare-value">${experiment.beforeData.margin}% / ${experiment.afterData.margin}%</span>
-                        <span class="change-rate">${marginChangeSign}${marginChangeRate}%</span>
+                    <td>
+                        ${experiment.storeContribution}
                     </td>
                     <td>
                         <div class="actions">
@@ -1367,9 +1401,6 @@
                 
                 experimentTableBody.appendChild(row);
             });
-            
-            // 渲染合计行
-            renderSummaryRow(totalBeforeSales, totalAfterSales, totalBeforeProfit, totalAfterProfit, totalMarginChange, validMarginCount);
             
             // 更新实验计数
             const totalCount = experimentData.length;
@@ -1412,50 +1443,11 @@
                 });
             });
         }
-        
-        // 渲染合计行
-        function renderSummaryRow(totalBeforeSales, totalAfterSales, totalBeforeProfit, totalAfterProfit, totalMarginChange, validMarginCount) {
-            // 计算整体变化率
-            const totalSalesChangeRate = calculateChangeRate(totalBeforeSales, totalAfterSales);
-            const totalProfitChangeRate = calculateChangeRate(totalBeforeProfit, totalAfterProfit);
-            const avgMarginChange = validMarginCount > 0 ? totalMarginChange / validMarginCount : 0;
-            
-            // 确定变化率样式类
-            const salesChangeClass = totalSalesChangeRate >= 0 ? 'positive' : 'negative';
-            const profitChangeClass = totalProfitChangeRate >= 0 ? 'positive' : 'negative';
-            const marginChangeClass = avgMarginChange >= 0 ? 'positive' : 'negative';
-            
-            // 变化率符号
-            const salesChangeSign = totalSalesChangeRate >= 0 ? '+' : '';
-            const profitChangeSign = totalProfitChangeRate >= 0 ? '+' : '';
-            const marginChangeSign = avgMarginChange >= 0 ? '+' : '';
-            
-            experimentTableFooter.innerHTML = `
-                <tr class="summary-row">
-                    <td class="summary-label">合计 (${experimentData.length}个实验)</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td class="data-compare-cell ${salesChangeClass}">
-                        <span class="compare-value">¥${totalBeforeSales.toLocaleString()} / ¥${totalAfterSales.toLocaleString()}</span>
-                        <span class="change-rate">${salesChangeSign}${totalSalesChangeRate.toFixed(2)}%</span>
-                    </td>
-                    <td class="data-compare-cell ${profitChangeClass}">
-                        <span class="compare-value">¥${totalBeforeProfit.toLocaleString()} / ¥${totalAfterProfit.toLocaleString()}</span>
-                        <span class="change-rate">${profitChangeSign}${totalProfitChangeRate.toFixed(2)}%</span>
-                    </td>
-                    <td class="data-compare-cell ${marginChangeClass}">
-                        <span class="change-rate">${marginChangeSign}${avgMarginChange.toFixed(2)}%</span>
-                    </td>
-                    <td>--</td>
-                </tr>
-            `;
-        }
 
         // 计算变化率
         function calculateChangeRate(before, after) {
             if (before === 0) return 0;
-            return Math.round(((after - before) / before) * 100 * 100) / 100;
+            return Math.round(((after - before) / before) * 100 * 10) / 10;
         }
 
         // 设置事件监听器
@@ -1500,9 +1492,10 @@
                     selectedProducts = [];
                     updateStoreSelectionPanel();
                     updateProductSelectionPanel();
-                    updateStoreProductStorePanel();
-                    updateStoreProductProductPanel();
                     updateSelectedCounts();
+                    
+                    // 更新对比对象选择
+                    updateCompareObjectSelection();
                 });
             });
 
@@ -1516,19 +1509,21 @@
                 updateProductSelectionPanel();
             });
             
-            // 门店*产品门店搜索框
-            storeProductStoreSearch.addEventListener('input', function() {
-                updateStoreProductStorePanel();
-            });
-            
-            // 门店*产品产品搜索框
-            storeProductProductSearch.addEventListener('input', function() {
-                updateStoreProductProductPanel();
+            // 对比门店搜索框
+            compareStoreSearch.addEventListener('input', function() {
+                updateCompareStorePanel();
             });
 
             // 清除门店选择
             clearStoreSelection.addEventListener('click', function() {
                 selectedStores = [];
+                updateSelectedCounts();
+                updateStoreSelectionPanel();
+            });
+            
+            // 全选门店
+            selectAllStores.addEventListener('click', function() {
+                selectedStores = [...storeOptions];
                 updateSelectedCounts();
                 updateStoreSelectionPanel();
             });
@@ -1540,20 +1535,18 @@
                 updateProductSelectionPanel();
             });
             
-            // 清除门店*产品门店选择
-            clearStoreProductStoreSelection.addEventListener('click', function() {
-                selectedStores = [];
-                updateSelectedCounts();
-                updateStoreProductStorePanel();
-                updateStoreProductInfo();
+            // 清除对比门店选择
+            clearCompareStoreSelection.addEventListener('click', function() {
+                selectedCompareStores = [];
+                updateSelectedCompareCounts();
+                updateCompareStorePanel();
             });
             
-            // 清除门店*产品产品选择
-            clearStoreProductProductSelection.addEventListener('click', function() {
-                selectedProducts = [];
-                updateSelectedCounts();
-                updateStoreProductProductPanel();
-                updateStoreProductInfo();
+            // 全选对比门店
+            selectAllCompareStores.addEventListener('click', function() {
+                selectedCompareStores = [...storeOptions];
+                updateSelectedCompareCounts();
+                updateCompareStorePanel();
             });
             
             // 对比类型切换
@@ -1562,39 +1555,6 @@
                     const compareType = this.getAttribute('data-compare-type');
                     switchCompareType(compareType);
                 });
-            });
-            
-            // 门店*产品下一步按钮
-            nextStepBtn.addEventListener('click', function() {
-                if (selectedStores.length === 0) {
-                    alert('请先选择门店');
-                    return;
-                }
-                
-                currentStep = 2;
-                step1.classList.remove('active');
-                step1.classList.add('completed');
-                step2.classList.add('active');
-                
-                storeProductStoreSelection.style.display = 'none';
-                storeProductProductSelection.style.display = 'block';
-                nextStepBtn.style.display = 'none';
-                prevStepBtn.style.display = 'block';
-                
-                updateStoreProductProductPanel();
-            });
-            
-            // 门店*产品上一步按钮
-            prevStepBtn.addEventListener('click', function() {
-                currentStep = 1;
-                step1.classList.add('active');
-                step1.classList.remove('completed');
-                step2.classList.remove('active');
-                
-                storeProductStoreSelection.style.display = 'block';
-                storeProductProductSelection.style.display = 'none';
-                nextStepBtn.style.display = selectedStores.length > 0 ? 'block' : 'none';
-                prevStepBtn.style.display = 'none';
             });
             
             // 搜索框输入事件
@@ -1639,7 +1599,6 @@
             // 隐藏所有选择区域
             storeSelectionSection.style.display = 'none';
             productSelectionSection.style.display = 'none';
-            storeProductSelectionSection.style.display = 'none';
             
             // 根据当前维度显示对应选择区域
             if (currentDimension === 'store') {
@@ -1648,20 +1607,10 @@
             } else if (currentDimension === 'product') {
                 productSelectionSection.style.display = 'block';
                 updateProductSelectionPanel();
-            } else if (currentDimension === 'store_product') {
-                storeProductSelectionSection.style.display = 'block';
-                updateStoreProductStorePanel();
-                
-                // 重置步骤
-                currentStep = 1;
-                step1.classList.add('active');
-                step1.classList.remove('completed');
-                step2.classList.remove('active');
-                storeProductStoreSelection.style.display = 'block';
-                storeProductProductSelection.style.display = 'none';
-                nextStepBtn.style.display = selectedStores.length > 0 ? 'block' : 'none';
-                prevStepBtn.style.display = 'none';
             }
+            
+            // 更新对比对象选择
+            updateCompareObjectSelection();
         }
         
         // 更新门店选择面板
@@ -1784,10 +1733,23 @@
             });
         }
         
-        // 更新门店*产品门店选择面板
-        function updateStoreProductStorePanel() {
-            storeProductStorePanel.innerHTML = '';
-            const searchTerm = storeProductStoreSearch.value.toLowerCase();
+        // 更新对比对象选择
+        function updateCompareObjectSelection() {
+            if (currentDimension === 'store') {
+                storeCompareSection.style.display = 'block';
+                productCompareSection.style.display = 'none';
+                updateCompareStorePanel();
+            } else {
+                storeCompareSection.style.display = 'none';
+                productCompareSection.style.display = 'block';
+                updateProductCategoryOptions();
+            }
+        }
+        
+        // 更新对比门店面板
+        function updateCompareStorePanel() {
+            compareStorePanel.innerHTML = '';
+            const searchTerm = compareStoreSearch.value.toLowerCase();
             
             // 按组分类
             const groupedOptions = {};
@@ -1809,7 +1771,7 @@
                     groupHeader.style.color = '#1890ff';
                     groupHeader.style.cursor = 'default';
                     groupHeader.textContent = `▼ ${group} (${groupedOptions[group].length})`;
-                    storeProductStorePanel.appendChild(groupHeader);
+                    compareStorePanel.appendChild(groupHeader);
                 }
                 
                 // 组内选项
@@ -1819,93 +1781,100 @@
                         return;
                     }
                     
-                    const isSelected = selectedStores.some(store => store.id === option.id);
+                    // 检查是否是实验对象门店，如果是则禁用
+                    const isExperimentStore = selectedStores.some(store => store.id === option.id);
+                    const isSelected = selectedCompareStores.some(store => store.id === option.id);
+                    
                     const item = document.createElement('div');
                     item.className = 'selection-item';
+                    if (isExperimentStore) {
+                        item.style.opacity = '0.5';
+                        item.style.cursor = 'not-allowed';
+                    }
                     
                     item.innerHTML = `
-                        <input type="checkbox" id="store_product_store_${option.id}" ${isSelected ? 'checked' : ''}>
-                        <label for="store_product_store_${option.id}">${option.name}</label>
+                        <input type="checkbox" id="compare_store_${option.id}" ${isSelected ? 'checked' : ''} ${isExperimentStore ? 'disabled' : ''}>
+                        <label for="compare_store_${option.id}">${option.name}${isExperimentStore ? ' (实验对象)' : ''}</label>
                     `;
                     
                     // 添加事件监听器
                     const checkbox = item.querySelector('input');
-                    checkbox.addEventListener('change', function() {
-                        if (this.checked) {
-                            selectedStores.push(option);
-                        } else {
-                            selectedStores = selectedStores.filter(store => store.id !== option.id);
-                        }
-                        updateSelectedCounts();
-                        updateStoreProductInfo();
-                        
-                        // 显示/隐藏下一步按钮
-                        nextStepBtn.style.display = selectedStores.length > 0 ? 'block' : 'none';
-                    });
+                    if (!isExperimentStore) {
+                        checkbox.addEventListener('change', function() {
+                            if (this.checked) {
+                                selectedCompareStores.push(option);
+                            } else {
+                                selectedCompareStores = selectedCompareStores.filter(store => store.id !== option.id);
+                            }
+                            updateSelectedCompareCounts();
+                        });
+                    }
                     
-                    storeProductStorePanel.appendChild(item);
+                    compareStorePanel.appendChild(item);
                 });
             });
         }
         
-        // 更新门店*产品产品选择面板
-        function updateStoreProductProductPanel() {
-            storeProductProductPanel.innerHTML = '';
-            const searchTerm = storeProductProductSearch.value.toLowerCase();
+        // 渲染产品类别选项
+        function renderProductCategoryOptions() {
+            compareProductOptions.innerHTML = '';
             
-            // 按组分类
-            const groupedOptions = {};
-            productOptions.forEach(option => {
-                const group = option.group || '其他';
-                if (!groupedOptions[group]) {
-                    groupedOptions[group] = [];
-                }
-                groupedOptions[group].push(option);
+            productCategoryOptions.forEach(category => {
+                const isSelected = selectedCompareProductCategories.includes(category.id);
+                const option = document.createElement('div');
+                option.className = `compare-object-option ${isSelected ? 'selected' : ''}`;
+                option.textContent = category.name;
+                option.dataset.categoryId = category.id;
+                
+                option.addEventListener('click', function() {
+                    const categoryId = this.dataset.categoryId;
+                    if (selectedCompareProductCategories.includes(categoryId)) {
+                        selectedCompareProductCategories = selectedCompareProductCategories.filter(id => id !== categoryId);
+                    } else {
+                        selectedCompareProductCategories.push(categoryId);
+                    }
+                    updateSelectedCompareCounts();
+                    renderProductCategoryOptions();
+                });
+                
+                compareProductOptions.appendChild(option);
             });
+        }
+        
+        // 更新产品类别选项（检查是否是实验对象品类）
+        function updateProductCategoryOptions() {
+            compareProductOptions.innerHTML = '';
             
-            // 渲染分组
-            Object.keys(groupedOptions).forEach(group => {
-                // 组标题
-                if (group !== '其他') {
-                    const groupHeader = document.createElement('div');
-                    groupHeader.className = 'selection-item';
-                    groupHeader.style.fontWeight = '600';
-                    groupHeader.style.color = '#1890ff';
-                    groupHeader.style.cursor = 'default';
-                    groupHeader.textContent = `▼ ${group} (${groupedOptions[group].length})`;
-                    storeProductProductPanel.appendChild(groupHeader);
+            // 获取实验产品的品类
+            const experimentCategories = selectedProducts.map(product => product.group);
+            
+            productCategoryOptions.forEach(category => {
+                const isExperimentCategory = experimentCategories.includes(category.id);
+                const isSelected = selectedCompareProductCategories.includes(category.id);
+                
+                const option = document.createElement('div');
+                option.className = `compare-object-option ${isSelected ? 'selected' : ''}`;
+                if (isExperimentCategory) {
+                    option.style.opacity = '0.5';
+                    option.style.cursor = 'not-allowed';
+                }
+                option.textContent = category.name + (isExperimentCategory ? ' (实验对象)' : '');
+                option.dataset.categoryId = category.id;
+                
+                if (!isExperimentCategory) {
+                    option.addEventListener('click', function() {
+                        const categoryId = this.dataset.categoryId;
+                        if (selectedCompareProductCategories.includes(categoryId)) {
+                            selectedCompareProductCategories = selectedCompareProductCategories.filter(id => id !== categoryId);
+                        } else {
+                            selectedCompareProductCategories.push(categoryId);
+                        }
+                        updateSelectedCompareCounts();
+                        updateProductCategoryOptions();
+                    });
                 }
                 
-                // 组内选项
-                groupedOptions[group].forEach(option => {
-                    // 检查是否匹配搜索
-                    if (searchTerm && !option.name.toLowerCase().includes(searchTerm)) {
-                        return;
-                    }
-                    
-                    const isSelected = selectedProducts.some(product => product.id === option.id);
-                    const item = document.createElement('div');
-                    item.className = 'selection-item';
-                    
-                    item.innerHTML = `
-                        <input type="checkbox" id="store_product_product_${option.id}" ${isSelected ? 'checked' : ''}>
-                        <label for="store_product_product_${option.id}">${option.name}</label>
-                    `;
-                    
-                    // 添加事件监听器
-                    const checkbox = item.querySelector('input');
-                    checkbox.addEventListener('change', function() {
-                        if (this.checked) {
-                            selectedProducts.push(option);
-                        } else {
-                            selectedProducts = selectedProducts.filter(product => product.id !== option.id);
-                        }
-                        updateSelectedCounts();
-                        updateStoreProductInfo();
-                    });
-                    
-                    storeProductProductPanel.appendChild(item);
-                });
+                compareProductOptions.appendChild(option);
             });
         }
         
@@ -1913,16 +1882,12 @@
         function updateSelectedCounts() {
             selectedStoreCount.textContent = selectedStores.length;
             selectedProductCount.textContent = selectedProducts.length;
-            selectedStoreProductStoreCount.textContent = selectedStores.length;
-            selectedStoreProductProductCount.textContent = selectedProducts.length;
         }
         
-        // 更新门店*产品信息
-        function updateStoreProductInfo() {
-            const storeCount = selectedStores.length;
-            const productCount = selectedProducts.length;
-            const combinationCount = storeCount * productCount;
-            selectedStoreProductInfo.textContent = `${storeCount}个门店 × ${productCount}个产品 = ${combinationCount}种组合`;
+        // 更新对比对象已选择数量
+        function updateSelectedCompareCounts() {
+            selectedCompareStoreCount.textContent = selectedCompareStores.length;
+            selectedCompareProductCount.textContent = selectedCompareProductCategories.length;
         }
 
         // 重置表单
@@ -1930,9 +1895,10 @@
             experimentForm.reset();
             selectedStores = [];
             selectedProducts = [];
-            currentStep = 1;
+            selectedCompareStores = [];
+            selectedCompareProductCategories = [];
             updateSelectedCounts();
-            updateStoreProductInfo();
+            updateSelectedCompareCounts();
             
             // 设置默认维度为门店
             document.getElementById('dimensionStore').checked = true;
@@ -1983,6 +1949,9 @@
             
             compareStartDate.valueAsDate = compareStart;
             compareEndDate.valueAsDate = compareEnd;
+            
+            // 更新产品类别选择
+            updateProductCategoryOptions();
         }
 
         // 模拟从数据库获取数据
@@ -1990,306 +1959,321 @@
             // 模拟计算延迟
             return new Promise((resolve) => {
                 setTimeout(() => {
-                    let beforeData = { sales: 0, profit: 0, margin: 0 };
-                    let afterData = { sales: 0, profit: 0, margin: 0 };
-                    let objectDetails = [];
+                    let result = {
+                        objectDetails: [],
+                        compareObjectDetails: [],
+                        salesCompare: '',
+                        profitCompare: '',
+                        storeContribution: '--'
+                    };
                     
                     if (experimentInfo.compareType === 'time') {
-                        // 时间对比：计算实验前后数据
+                        // 时间对比：计算绝对值变化
                         const experimentPeriod = experimentInfo.experimentPeriod.split(' 至 ');
                         const comparePeriod = experimentInfo.comparePeriod.split(' 至 ');
                         
                         if (experimentInfo.dimension === 'store') {
-                            // 门店维度
+                            // 门店维度 - 时间对比
+                            let totalExperimentSales = 0;
+                            let totalCompareSales = 0;
+                            let totalExperimentProfit = 0;
+                            let totalCompareProfit = 0;
+                            
                             selectedStores.forEach(store => {
-                                const storeBeforeData = calculatePeriodDataForStore(
-                                    store.id,
-                                    comparePeriod[0], 
-                                    comparePeriod[1]
-                                );
-                                
-                                const storeAfterData = calculatePeriodDataForStore(
+                                const storeExperimentData = calculatePeriodDataForStore(
                                     store.id,
                                     experimentPeriod[0], 
                                     experimentPeriod[1]
                                 );
                                 
-                                beforeData.sales += storeBeforeData.sales;
-                                beforeData.profit += storeBeforeData.profit;
-                                beforeData.margin = storeBeforeData.margin; // 利润率相同
+                                const storeCompareData = calculatePeriodDataForStore(
+                                    store.id,
+                                    comparePeriod[0], 
+                                    comparePeriod[1]
+                                );
                                 
-                                afterData.sales += storeAfterData.sales;
-                                afterData.profit += storeAfterData.profit;
-                                afterData.margin = storeAfterData.margin; // 利润率相同
+                                totalExperimentSales += storeExperimentData.sales;
+                                totalCompareSales += storeCompareData.sales;
+                                totalExperimentProfit += storeExperimentData.profit;
+                                totalCompareProfit += storeCompareData.profit;
                                 
                                 // 添加门店详情
-                                objectDetails.push({
+                                result.objectDetails.push({
                                     name: store.name,
-                                    beforeSales: storeBeforeData.sales,
-                                    afterSales: storeAfterData.sales,
-                                    salesChange: calculateChangeRate(storeBeforeData.sales, storeAfterData.sales),
-                                    beforeProfit: storeBeforeData.profit,
-                                    afterProfit: storeAfterData.profit,
-                                    profitChange: calculateChangeRate(storeBeforeData.profit, storeAfterData.profit),
-                                    beforeMargin: storeBeforeData.margin,
-                                    afterMargin: storeAfterData.margin,
-                                    marginChange: calculateChangeRate(storeBeforeData.margin, storeAfterData.margin)
+                                    experimentSales: storeExperimentData.sales,
+                                    compareSales: storeCompareData.sales,
+                                    experimentProfit: storeExperimentData.profit,
+                                    compareProfit: storeCompareData.profit,
+                                    salesGrowthRate: calculateChangeRate(storeCompareData.sales, storeExperimentData.sales),
+                                    profitGrowthRate: calculateChangeRate(storeCompareData.profit, storeExperimentData.profit)
                                 });
                             });
                             
-                            // 计算整体利润率
-                            beforeData.margin = beforeData.sales > 0 ? (beforeData.profit / beforeData.sales) * 100 : 0;
-                            afterData.margin = afterData.sales > 0 ? (afterData.profit / afterData.sales) * 100 : 0;
+                            // 计算整体变化率
+                            const salesGrowthRate = calculateChangeRate(totalCompareSales, totalExperimentSales);
+                            const profitGrowthRate = calculateChangeRate(totalCompareProfit, totalExperimentProfit);
+                            
+                            // 格式化显示
+                            result.salesCompare = `¥${totalExperimentSales.toLocaleString()}/¥${totalCompareSales.toLocaleString()} ${salesGrowthRate >= 0 ? '+' : ''}${salesGrowthRate}%`;
+                            result.profitCompare = `¥${totalExperimentProfit.toLocaleString()}/¥${totalCompareProfit.toLocaleString()} ${profitGrowthRate >= 0 ? '+' : ''}${profitGrowthRate}%`;
+                            
+                            // 计算门店贡献
+                            if (selectedStores.length > 0) {
+                                result.storeContribution = '待计算';
+                            }
                             
                         } else if (experimentInfo.dimension === 'product') {
-                            // 产品维度
+                            // 产品维度 - 时间对比
+                            let totalExperimentSales = 0;
+                            let totalCompareSales = 0;
+                            let totalExperimentProfit = 0;
+                            let totalCompareProfit = 0;
+                            
                             selectedProducts.forEach(product => {
-                                const productBeforeData = calculatePeriodDataForProduct(
-                                    product.id,
-                                    comparePeriod[0], 
-                                    comparePeriod[1]
-                                );
-                                
-                                const productAfterData = calculatePeriodDataForProduct(
+                                const productExperimentData = calculatePeriodDataForProduct(
                                     product.id,
                                     experimentPeriod[0], 
                                     experimentPeriod[1]
                                 );
                                 
-                                beforeData.sales += productBeforeData.sales;
-                                beforeData.profit += productBeforeData.profit;
+                                const productCompareData = calculatePeriodDataForProduct(
+                                    product.id,
+                                    comparePeriod[0], 
+                                    comparePeriod[1]
+                                );
                                 
-                                afterData.sales += productAfterData.sales;
-                                afterData.profit += productAfterData.profit;
+                                totalExperimentSales += productExperimentData.sales;
+                                totalCompareSales += productCompareData.sales;
+                                totalExperimentProfit += productExperimentData.profit;
+                                totalCompareProfit += productCompareData.profit;
                                 
                                 // 添加产品详情
-                                objectDetails.push({
+                                result.objectDetails.push({
                                     name: product.name,
-                                    beforeSales: productBeforeData.sales,
-                                    afterSales: productAfterData.sales,
-                                    salesChange: calculateChangeRate(productBeforeData.sales, productAfterData.sales),
-                                    beforeProfit: productBeforeData.profit,
-                                    afterProfit: productAfterData.profit,
-                                    profitChange: calculateChangeRate(productBeforeData.profit, productAfterData.profit),
-                                    beforeMargin: productBeforeData.margin,
-                                    afterMargin: productAfterData.margin,
-                                    marginChange: calculateChangeRate(productBeforeData.margin, productAfterData.margin)
+                                    experimentSales: productExperimentData.sales,
+                                    compareSales: productCompareData.sales,
+                                    experimentProfit: productExperimentData.profit,
+                                    compareProfit: productCompareData.profit,
+                                    salesGrowthRate: calculateChangeRate(productCompareData.sales, productExperimentData.sales),
+                                    profitGrowthRate: calculateChangeRate(productCompareData.profit, productExperimentData.profit)
                                 });
                             });
                             
-                            // 计算整体利润率
-                            beforeData.margin = beforeData.sales > 0 ? (beforeData.profit / beforeData.sales) * 100 : 0;
-                            afterData.margin = afterData.sales > 0 ? (afterData.profit / afterData.sales) * 100 : 0;
+                            // 计算整体变化率
+                            const salesGrowthRate = calculateChangeRate(totalCompareSales, totalExperimentSales);
+                            const profitGrowthRate = calculateChangeRate(totalCompareProfit, totalExperimentProfit);
                             
-                        } else if (experimentInfo.dimension === 'store_product') {
-                            // 门店*产品维度
-                            selectedStores.forEach(store => {
-                                selectedProducts.forEach(product => {
-                                    // 模拟门店*产品组合数据
-                                    const storeMultiplier = historicalSalesData.stores[store.id] ? 0.7 : 0.5;
-                                    const productMultiplier = historicalSalesData.products[product.id] ? 0.3 : 0.5;
-                                    
-                                    const days = Math.floor(
-                                        (new Date(experimentPeriod[1]) - new Date(experimentPeriod[0])) / (1000 * 60 * 60 * 24)
-                                    ) + 1;
-                                    
-                                    // 生成模拟数据
-                                    const dailySales = Math.floor((10000 * storeMultiplier * productMultiplier) / days);
-                                    const dailyProfit = Math.floor(dailySales * 0.3);
-                                    
-                                    const beforeDailySales = Math.floor((9000 * storeMultiplier * productMultiplier) / days);
-                                    const beforeDailyProfit = Math.floor(beforeDailySales * 0.3);
-                                    
-                                    const storeProductBeforeData = {
-                                        sales: beforeDailySales * days,
-                                        profit: beforeDailyProfit * days,
-                                        margin: 30.0
-                                    };
-                                    
-                                    const storeProductAfterData = {
-                                        sales: dailySales * days,
-                                        profit: dailyProfit * days,
-                                        margin: 30.0
-                                    };
-                                    
-                                    beforeData.sales += storeProductBeforeData.sales;
-                                    beforeData.profit += storeProductBeforeData.profit;
-                                    
-                                    afterData.sales += storeProductAfterData.sales;
-                                    afterData.profit += storeProductAfterData.profit;
-                                    
-                                    // 添加门店*产品详情
-                                    objectDetails.push({
-                                        name: `${store.name}-${product.name}`,
-                                        beforeSales: storeProductBeforeData.sales,
-                                        afterSales: storeProductAfterData.sales,
-                                        salesChange: calculateChangeRate(storeProductBeforeData.sales, storeProductAfterData.sales),
-                                        beforeProfit: storeProductBeforeData.profit,
-                                        afterProfit: storeProductAfterData.profit,
-                                        profitChange: calculateChangeRate(storeProductBeforeData.profit, storeProductAfterData.profit),
-                                        beforeMargin: storeProductBeforeData.margin,
-                                        afterMargin: storeProductAfterData.margin,
-                                        marginChange: calculateChangeRate(storeProductBeforeData.margin, storeProductAfterData.margin)
-                                    });
-                                });
-                            });
+                            // 格式化显示
+                            result.salesCompare = `¥${totalExperimentSales.toLocaleString()}/¥${totalCompareSales.toLocaleString()} ${salesGrowthRate >= 0 ? '+' : ''}${salesGrowthRate}%`;
+                            result.profitCompare = `¥${totalExperimentProfit.toLocaleString()}/¥${totalCompareProfit.toLocaleString()} ${profitGrowthRate >= 0 ? '+' : ''}${profitGrowthRate}%`;
                             
-                            // 计算整体利润率
-                            beforeData.margin = beforeData.sales > 0 ? (beforeData.profit / beforeData.sales) * 100 : 0;
-                            afterData.margin = afterData.sales > 0 ? (afterData.profit / afterData.sales) * 100 : 0;
                         }
                         
                     } else {
-                        // 维度对比：计算实验组和对照组数据
+                        // 维度对比：计算环比变化率对比
                         const experimentPeriod = experimentInfo.experimentPeriod.split(' 至 ');
+                        const comparePeriod = experimentInfo.comparePeriod.split(' 至 ');
                         
-                        // 模拟计算实验组数据
                         if (experimentInfo.dimension === 'store') {
-                            // 门店维度
+                            // 门店维度 - 维度对比
+                            // 计算实验对象数据
+                            let experimentGroupExperimentSales = 0;
+                            let experimentGroupCompareSales = 0;
+                            let experimentGroupExperimentProfit = 0;
+                            let experimentGroupCompareProfit = 0;
+                            
                             selectedStores.forEach(store => {
-                                const storeData = calculatePeriodDataForStore(
+                                const storeExperimentData = calculatePeriodDataForStore(
                                     store.id,
                                     experimentPeriod[0], 
                                     experimentPeriod[1]
                                 );
                                 
-                                afterData.sales += storeData.sales;
-                                afterData.profit += storeData.profit;
-                                afterData.margin = storeData.margin; // 利润率相同
+                                const storeCompareData = calculatePeriodDataForStore(
+                                    store.id,
+                                    comparePeriod[0], 
+                                    comparePeriod[1]
+                                );
                                 
-                                // 添加门店详情
-                                objectDetails.push({
+                                experimentGroupExperimentSales += storeExperimentData.sales;
+                                experimentGroupCompareSales += storeCompareData.sales;
+                                experimentGroupExperimentProfit += storeExperimentData.profit;
+                                experimentGroupCompareProfit += storeCompareData.profit;
+                                
+                                // 添加实验门店详情
+                                result.objectDetails.push({
                                     name: store.name,
-                                    afterSales: storeData.sales,
-                                    afterProfit: storeData.profit,
-                                    afterMargin: storeData.margin,
-                                    // 维度对比没有before数据，这里用0表示
-                                    beforeSales: 0,
-                                    beforeProfit: 0,
-                                    beforeMargin: 0,
-                                    salesChange: 0,
-                                    profitChange: 0,
-                                    marginChange: 0
+                                    experimentSales: storeExperimentData.sales,
+                                    compareSales: storeCompareData.sales,
+                                    experimentProfit: storeExperimentData.profit,
+                                    compareProfit: storeCompareData.profit,
+                                    salesGrowthRate: calculateChangeRate(storeCompareData.sales, storeExperimentData.sales),
+                                    profitGrowthRate: calculateChangeRate(storeCompareData.profit, storeExperimentData.profit)
                                 });
                             });
                             
-                            // 计算整体利润率
-                            afterData.margin = afterData.sales > 0 ? (afterData.profit / afterData.sales) * 100 : 0;
+                            // 计算对比对象数据
+                            let compareGroupExperimentSales = 0;
+                            let compareGroupCompareSales = 0;
+                            let compareGroupExperimentProfit = 0;
+                            let compareGroupCompareProfit = 0;
                             
-                            // 模拟计算对照组数据（其他门店）
-                            beforeData.sales = Math.round(afterData.sales * 0.8); // 对照组是实验组的80%
-                            beforeData.profit = Math.round(beforeData.sales * 0.3); // 30%利润率
-                            beforeData.margin = 30.0;
+                            selectedCompareStores.forEach(store => {
+                                const storeExperimentData = calculatePeriodDataForStore(
+                                    store.id,
+                                    experimentPeriod[0], 
+                                    experimentPeriod[1]
+                                );
+                                
+                                const storeCompareData = calculatePeriodDataForStore(
+                                    store.id,
+                                    comparePeriod[0], 
+                                    comparePeriod[1]
+                                );
+                                
+                                compareGroupExperimentSales += storeExperimentData.sales;
+                                compareGroupCompareSales += storeCompareData.sales;
+                                compareGroupExperimentProfit += storeExperimentData.profit;
+                                compareGroupCompareProfit += storeCompareData.profit;
+                                
+                                // 添加对比门店详情
+                                result.compareObjectDetails.push({
+                                    name: store.name,
+                                    experimentSales: storeExperimentData.sales,
+                                    compareSales: storeCompareData.sales,
+                                    experimentProfit: storeExperimentData.profit,
+                                    compareProfit: storeCompareData.profit,
+                                    salesGrowthRate: calculateChangeRate(storeCompareData.sales, storeExperimentData.sales),
+                                    profitGrowthRate: calculateChangeRate(storeCompareData.profit, storeExperimentData.profit)
+                                });
+                            });
+                            
+                            // 计算增长率
+                            const experimentGroupSalesGrowthRate = calculateChangeRate(experimentGroupCompareSales, experimentGroupExperimentSales);
+                            const compareGroupSalesGrowthRate = calculateChangeRate(compareGroupCompareSales, compareGroupExperimentSales);
+                            const experimentGroupProfitGrowthRate = calculateChangeRate(experimentGroupCompareProfit, experimentGroupExperimentProfit);
+                            const compareGroupProfitGrowthRate = calculateChangeRate(compareGroupCompareProfit, compareGroupExperimentProfit);
+                            
+                            // 计算相对增长百分点
+                            const relativeSalesGrowth = (experimentGroupSalesGrowthRate - compareGroupSalesGrowthRate).toFixed(1);
+                            const relativeProfitGrowth = (experimentGroupProfitGrowthRate - compareGroupProfitGrowthRate).toFixed(1);
+                            
+                            // 格式化显示
+                            result.salesCompare = `${experimentGroupSalesGrowthRate}%/${compareGroupSalesGrowthRate}% ${parseFloat(relativeSalesGrowth) >= 0 ? '+' : ''}${relativeSalesGrowth}`;
+                            result.profitCompare = `${experimentGroupProfitGrowthRate}%/${compareGroupProfitGrowthRate}% ${parseFloat(relativeProfitGrowth) >= 0 ? '+' : ''}${relativeProfitGrowth}`;
+                            
+                            // 确定对比对象名称
+                            if (selectedCompareStores.length > 0) {
+                                experimentInfo.compareObject = selectedCompareStores.map(store => store.name).join(', ');
+                            }
                             
                         } else if (experimentInfo.dimension === 'product') {
-                            // 产品维度
+                            // 产品维度 - 维度对比
+                            // 计算实验对象数据
+                            let experimentGroupExperimentSales = 0;
+                            let experimentGroupCompareSales = 0;
+                            let experimentGroupExperimentProfit = 0;
+                            let experimentGroupCompareProfit = 0;
+                            
                             selectedProducts.forEach(product => {
-                                const productData = calculatePeriodDataForProduct(
+                                const productExperimentData = calculatePeriodDataForProduct(
                                     product.id,
                                     experimentPeriod[0], 
                                     experimentPeriod[1]
                                 );
                                 
-                                afterData.sales += productData.sales;
-                                afterData.profit += productData.profit;
+                                const productCompareData = calculatePeriodDataForProduct(
+                                    product.id,
+                                    comparePeriod[0], 
+                                    comparePeriod[1]
+                                );
                                 
-                                // 添加产品详情
-                                objectDetails.push({
+                                experimentGroupExperimentSales += productExperimentData.sales;
+                                experimentGroupCompareSales += productCompareData.sales;
+                                experimentGroupExperimentProfit += productExperimentData.profit;
+                                experimentGroupCompareProfit += productCompareData.profit;
+                                
+                                // 添加实验产品详情
+                                result.objectDetails.push({
                                     name: product.name,
-                                    afterSales: productData.sales,
-                                    afterProfit: productData.profit,
-                                    afterMargin: productData.margin,
-                                    // 维度对比没有before数据，这里用0表示
-                                    beforeSales: 0,
-                                    beforeProfit: 0,
-                                    beforeMargin: 0,
-                                    salesChange: 0,
-                                    profitChange: 0,
-                                    marginChange: 0
+                                    experimentSales: productExperimentData.sales,
+                                    compareSales: productCompareData.sales,
+                                    experimentProfit: productExperimentData.profit,
+                                    compareProfit: productCompareData.profit,
+                                    salesGrowthRate: calculateChangeRate(productCompareData.sales, productExperimentData.sales),
+                                    profitGrowthRate: calculateChangeRate(productCompareData.profit, productExperimentData.profit)
                                 });
                             });
                             
-                            // 计算整体利润率
-                            afterData.margin = afterData.sales > 0 ? (afterData.profit / afterData.sales) * 100 : 0;
+                            // 计算对比对象数据（基于产品类别）
+                            let compareGroupExperimentSales = 0;
+                            let compareGroupCompareSales = 0;
+                            let compareGroupExperimentProfit = 0;
+                            let compareGroupCompareProfit = 0;
                             
-                            // 检查实验产品是否同一品类
-                            const firstGroup = selectedProducts.length > 0 ? selectedProducts[0].group : null;
-                            const isSameCategory = selectedProducts.every(product => product.group === firstGroup);
+                            // 获取属于选中品类的所有产品
+                            const compareProducts = productOptions.filter(product => 
+                                selectedCompareProductCategories.includes(product.group)
+                            );
                             
-                            // 模拟计算对照组数据
-                            if (isSameCategory && firstGroup) {
-                                // 同一品类：对照同品类其他产品
-                                beforeData.sales = Math.round(afterData.sales * 0.75); // 对照组是实验组的75%
-                            } else {
-                                // 不同品类：对照所有其他产品
-                                beforeData.sales = Math.round(afterData.sales * 0.7); // 对照组是实验组的70%
-                            }
-                            beforeData.profit = Math.round(beforeData.sales * 0.3); // 30%利润率
-                            beforeData.margin = 30.0;
-                            
-                        } else if (experimentInfo.dimension === 'store_product') {
-                            // 门店*产品维度
-                            selectedStores.forEach(store => {
-                                selectedProducts.forEach(product => {
-                                    // 模拟门店*产品组合数据
-                                    const storeMultiplier = historicalSalesData.stores[store.id] ? 0.7 : 0.5;
-                                    const productMultiplier = historicalSalesData.products[product.id] ? 0.3 : 0.5;
+                            compareProducts.forEach(product => {
+                                // 排除实验产品
+                                if (!selectedProducts.some(p => p.id === product.id)) {
+                                    const productExperimentData = calculatePeriodDataForProduct(
+                                        product.id,
+                                        experimentPeriod[0], 
+                                        experimentPeriod[1]
+                                    );
                                     
-                                    const days = Math.floor(
-                                        (new Date(experimentPeriod[1]) - new Date(experimentPeriod[0])) / (1000 * 60 * 60 * 24)
-                                    ) + 1;
+                                    const productCompareData = calculatePeriodDataForProduct(
+                                        product.id,
+                                        comparePeriod[0], 
+                                        comparePeriod[1]
+                                    );
                                     
-                                    // 生成模拟数据
-                                    const dailySales = Math.floor((10000 * storeMultiplier * productMultiplier) / days);
-                                    const dailyProfit = Math.floor(dailySales * 0.3);
+                                    compareGroupExperimentSales += productExperimentData.sales;
+                                    compareGroupCompareSales += productCompareData.sales;
+                                    compareGroupExperimentProfit += productExperimentData.profit;
+                                    compareGroupCompareProfit += productCompareData.profit;
                                     
-                                    const storeProductData = {
-                                        sales: dailySales * days,
-                                        profit: dailyProfit * days,
-                                        margin: 30.0
-                                    };
-                                    
-                                    afterData.sales += storeProductData.sales;
-                                    afterData.profit += storeProductData.profit;
-                                    
-                                    // 添加门店*产品详情
-                                    objectDetails.push({
-                                        name: `${store.name}-${product.name}`,
-                                        afterSales: storeProductData.sales,
-                                        afterProfit: storeProductData.profit,
-                                        afterMargin: storeProductData.margin,
-                                        // 维度对比没有before数据，这里用0表示
-                                        beforeSales: 0,
-                                        beforeProfit: 0,
-                                        beforeMargin: 0,
-                                        salesChange: 0,
-                                        profitChange: 0,
-                                        marginChange: 0
+                                    // 添加对比产品详情
+                                    result.compareObjectDetails.push({
+                                        name: product.name,
+                                        experimentSales: productExperimentData.sales,
+                                        compareSales: productCompareData.sales,
+                                        experimentProfit: productExperimentData.profit,
+                                        compareProfit: productCompareData.profit,
+                                        salesGrowthRate: calculateChangeRate(productCompareData.sales, productExperimentData.sales),
+                                        profitGrowthRate: calculateChangeRate(productCompareData.profit, productExperimentData.profit)
                                     });
-                                });
+                                }
                             });
                             
-                            // 计算整体利润率
-                            afterData.margin = afterData.sales > 0 ? (afterData.profit / afterData.sales) * 100 : 0;
+                            // 计算增长率
+                            const experimentGroupSalesGrowthRate = calculateChangeRate(experimentGroupCompareSales, experimentGroupExperimentSales);
+                            const compareGroupSalesGrowthRate = calculateChangeRate(compareGroupCompareSales, compareGroupExperimentSales);
+                            const experimentGroupProfitGrowthRate = calculateChangeRate(experimentGroupCompareProfit, experimentGroupExperimentProfit);
+                            const compareGroupProfitGrowthRate = calculateChangeRate(compareGroupCompareProfit, compareGroupExperimentProfit);
                             
-                            // 检查实验产品是否同一品类
-                            const firstGroup = selectedProducts.length > 0 ? selectedProducts[0].group : null;
-                            const isSameCategory = selectedProducts.every(product => product.group === firstGroup);
+                            // 计算相对增长百分点
+                            const relativeSalesGrowth = (experimentGroupSalesGrowthRate - compareGroupSalesGrowthRate).toFixed(1);
+                            const relativeProfitGrowth = (experimentGroupProfitGrowthRate - compareGroupProfitGrowthRate).toFixed(1);
                             
-                            // 模拟计算对照组数据
-                            if (isSameCategory && firstGroup) {
-                                // 同一品类：对照同品类其他产品
-                                beforeData.sales = Math.round(afterData.sales * 0.75); // 对照组是实验组的75%
-                            } else {
-                                // 不同品类：对照所有其他产品
-                                beforeData.sales = Math.round(afterData.sales * 0.7); // 对照组是实验组的70%
+                            // 格式化显示
+                            result.salesCompare = `${experimentGroupSalesGrowthRate}%/${compareGroupSalesGrowthRate}% ${parseFloat(relativeSalesGrowth) >= 0 ? '+' : ''}${relativeSalesGrowth}`;
+                            result.profitCompare = `${experimentGroupProfitGrowthRate}%/${compareGroupProfitGrowthRate}% ${parseFloat(relativeProfitGrowth) >= 0 ? '+' : ''}${relativeProfitGrowth}`;
+                            
+                            // 确定对比对象名称
+                            if (selectedCompareProductCategories.length > 0) {
+                                experimentInfo.compareObject = selectedCompareProductCategories.map(cat => {
+                                    const category = productCategoryOptions.find(c => c.id === cat);
+                                    return category ? category.name : cat;
+                                }).join(', ');
                             }
-                            beforeData.profit = Math.round(beforeData.sales * 0.3); // 30%利润率
-                            beforeData.margin = 30.0;
                         }
                     }
                     
-                    resolve({ beforeData, afterData, objectDetails });
+                    resolve({ result, experimentInfo });
                 }, 1500); // 模拟1.5秒计算时间
             });
         }
@@ -2314,13 +2298,15 @@
                 }
             }
             
-            // 如果没有数据，生成随机数据
+            // 如果没有数据，生成模拟数据
             if (totalSales === 0) {
                 const start = new Date(startDate);
                 const end = new Date(endDate);
                 const days = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
                 
-                totalSales = days * 15000;
+                // 基于门店ID生成不同规模的数据
+                const baseSales = storeId * 5000;
+                totalSales = days * (baseSales + Math.floor(Math.random() * 5000));
                 totalProfit = Math.floor(totalSales * 0.3);
             }
             
@@ -2353,13 +2339,15 @@
                 }
             }
             
-            // 如果没有数据，生成随机数据
+            // 如果没有数据，生成模拟数据
             if (totalSales === 0) {
                 const start = new Date(startDate);
                 const end = new Date(endDate);
                 const days = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
                 
-                totalSales = days * 2000;
+                // 基于产品ID生成不同规模的数据
+                const baseSales = (productId % 100) * 100;
+                totalSales = days * (baseSales + Math.floor(Math.random() * 200));
                 totalProfit = Math.floor(totalSales * 0.3);
             }
             
@@ -2403,16 +2391,23 @@
                 return;
             }
             
-            if (dimension === 'store_product' && (selectedStores.length === 0 || selectedProducts.length === 0)) {
-                alert('请选择门店和产品');
-                return;
+            // 维度对比需要验证对比对象
+            if (currentCompareType === 'dimension') {
+                if (dimension === 'store' && selectedCompareStores.length === 0) {
+                    alert('请选择对比门店');
+                    return;
+                }
+                
+                if (dimension === 'product' && selectedCompareProductCategories.length === 0) {
+                    alert('请选择对比产品类别');
+                    return;
+                }
             }
             
             // 显示加载动画
             formLoading.classList.add('active');
             
             let experimentInfo;
-            let compareObject = '';
             
             if (currentCompareType === 'time') {
                 // 时间对比
@@ -2433,7 +2428,8 @@
                     selectedProducts: selectedProducts,
                     compareType: 'time',
                     experimentPeriod: `${formatDate(experimentStartDate)} 至 ${formatDate(experimentEndDate)}`,
-                    comparePeriod: `${formatDate(compareStartDate)} 至 ${formatDate(compareEndDate)}`
+                    comparePeriod: `${formatDate(compareStartDate)} 至 ${formatDate(compareEndDate)}`,
+                    compareObject: '时间对比'
                 };
             } else {
                 // 维度对比
@@ -2446,63 +2442,53 @@
                     return;
                 }
                 
-                // 自动生成对比对象描述
-                if (dimension === 'store') {
-                    compareObject = '除实验门店外的全部同公司门店';
-                } else if (dimension === 'product') {
-                    // 检查实验产品是否同一品类
-                    const firstGroup = selectedProducts.length > 0 ? selectedProducts[0].group : null;
-                    const isSameCategory = selectedProducts.every(product => product.group === firstGroup);
-                    
-                    if (isSameCategory && firstGroup) {
-                        compareObject = `除实验产品外同品类(${firstGroup})的产品`;
-                    } else {
-                        compareObject = '除实验产品外所有产品';
-                    }
-                } else {
-                    // 门店*产品
-                    const firstGroup = selectedProducts.length > 0 ? selectedProducts[0].group : null;
-                    const isSameCategory = selectedProducts.every(product => product.group === firstGroup);
-                    
-                    if (isSameCategory && firstGroup) {
-                        compareObject = `除实验产品外同品类(${firstGroup})的产品`;
-                    } else {
-                        compareObject = '除实验产品外所有产品';
-                    }
-                }
+                // 设置对比周期为实验周期前一周
+                const expStartDate = new Date(experimentStartDate);
+                const expEndDate = new Date(experimentEndDate);
+                const periodDays = Math.floor((expEndDate - expStartDate) / (1000 * 60 * 60 * 24)) + 1;
+                
+                const compareStart = new Date(expStartDate);
+                compareStart.setDate(compareStart.getDate() - periodDays);
+                const compareEnd = new Date(expStartDate);
+                compareEnd.setDate(compareEnd.getDate() - 1);
                 
                 experimentInfo = {
                     dimension: dimension,
                     selectedStores: selectedStores,
                     selectedProducts: selectedProducts,
+                    selectedCompareStores: selectedCompareStores,
+                    selectedCompareProductCategories: selectedCompareProductCategories,
                     compareType: 'dimension',
                     experimentPeriod: `${formatDate(experimentStartDate)} 至 ${formatDate(experimentEndDate)}`,
-                    compareObject: compareObject
+                    comparePeriod: `${formatDate(compareStart)} 至 ${formatDate(compareEnd)}`,
+                    compareObject: dimension === 'store' ? 
+                        selectedCompareStores.map(store => store.name).join(', ') :
+                        selectedCompareProductCategories.map(cat => {
+                            const category = productCategoryOptions.find(c => c.id === cat);
+                            return category ? category.name : cat;
+                        }).join(', ')
                 };
             }
             
             try {
                 // 模拟计算实验数据
-                const { beforeData, afterData, objectDetails } = await calculateExperimentData(experimentInfo);
+                const { result, experimentInfo: updatedExperimentInfo } = await calculateExperimentData(experimentInfo);
                 
                 // 创建实验对象
                 const experiment = {
                     id: editingExperimentId || experimentData.length + 1,
                     title: title,
                     dimension: dimension,
-                    objectType: dimension === 'store' ? '门店' : 
-                               dimension === 'product' ? '产品' : '门店*产品',
-                    objectCount: dimension === 'store_product' ? selectedStores.length * selectedProducts.length : 
-                                dimension === 'store' ? selectedStores.length : selectedProducts.length,
-                    storeCount: selectedStores.length,
-                    productCount: selectedProducts.length,
-                    storeNames: selectedStores.map(store => store.name),
-                    productNames: selectedProducts.map(product => product.name),
-                    compareType: currentCompareType,
-                    ...experimentInfo,
-                    beforeData: beforeData,
-                    afterData: afterData,
-                    objectDetails: objectDetails
+                    objectType: dimension === 'store' ? '门店' : '产品',
+                    objectNames: dimension === 'store' ? 
+                        selectedStores.map(store => store.name) : 
+                        selectedProducts.map(product => product.name),
+                    ...updatedExperimentInfo,
+                    salesCompare: result.salesCompare,
+                    profitCompare: result.profitCompare,
+                    storeContribution: result.storeContribution,
+                    objectDetails: result.objectDetails,
+                    compareObjectDetails: result.compareObjectDetails || []
                 };
                 
                 // 添加或更新实验数据
@@ -2548,26 +2534,24 @@
             if (experiment.dimension === 'store') {
                 document.getElementById('dimensionStore').checked = true;
                 currentDimension = 'store';
-            } else if (experiment.dimension === 'product') {
+                
+                // 设置门店选择
+                selectedStores = experiment.objectNames.map(name => {
+                    return storeOptions.find(opt => opt.name === name) || { id: Date.now(), name: name };
+                });
+            } else {
                 document.getElementById('dimensionProduct').checked = true;
                 currentDimension = 'product';
-            } else {
-                document.getElementById('dimensionStoreProduct').checked = true;
-                currentDimension = 'store_product';
+                
+                // 设置产品选择
+                selectedProducts = experiment.objectNames.map(name => {
+                    return productOptions.find(opt => opt.name === name) || { id: Date.now(), name: name };
+                });
             }
             
             // 设置对比类型
             currentCompareType = experiment.compareType;
             switchCompareType(experiment.compareType);
-            
-            // 设置实验对象
-            selectedStores = experiment.storeNames.map(name => {
-                return storeOptions.find(opt => opt.name === name) || { id: Date.now(), name: name };
-            });
-            
-            selectedProducts = experiment.productNames.map(name => {
-                return productOptions.find(opt => opt.name === name) || { id: Date.now(), name: name };
-            });
             
             if (experiment.compareType === 'time') {
                 // 设置日期
@@ -2583,12 +2567,26 @@
                 const experimentPeriodParts = experiment.experimentPeriod.split(' 至 ');
                 document.getElementById('dimensionExperimentStartDate').value = parseDateString(experimentPeriodParts[0]);
                 document.getElementById('dimensionExperimentEndDate').value = parseDateString(experimentPeriodParts[1]);
+                
+                // 设置对比对象
+                if (experiment.dimension === 'store') {
+                    // 门店维度对比
+                    selectedCompareStores = experiment.compareObject.split(', ').map(name => {
+                        return storeOptions.find(opt => opt.name === name) || { id: Date.now(), name: name };
+                    });
+                } else {
+                    // 产品维度对比
+                    selectedCompareProductCategories = experiment.compareObject.split(', ').map(name => {
+                        const category = productCategoryOptions.find(c => c.name === name);
+                        return category ? category.id : name;
+                    });
+                }
             }
             
             // 更新UI
             updateSelectionSections();
             updateSelectedCounts();
-            updateStoreProductInfo();
+            updateSelectedCompareCounts();
             
             // 显示表单弹窗
             experimentFormModal.classList.add('active');
@@ -2613,50 +2611,84 @@
             const experiment = experimentData.find(exp => exp.id === experimentId);
             if (!experiment) return;
             
-            detailModalTitle.textContent = `${experiment.title} - 实验对象详情`;
+            detailModalTitle.textContent = `${experiment.title} - 实验详情`;
             
             let detailsHTML = '';
             
-            if (experiment.dimension === 'store') {
-                detailsHTML = `
+            // 实验基本信息
+            detailsHTML += `
+                <div class="detail-item">
+                    <div class="detail-label">实验标题</div>
+                    <div class="detail-value">${experiment.title}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">实验对象</div>
+                    <div class="detail-value">${experiment.objectType}: ${experiment.objectNames.join(', ')}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">实验周期</div>
+                    <div class="detail-value">${experiment.experimentPeriod}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">对比${experiment.compareType === 'time' ? '周期' : '对象'}</div>
+                    <div class="detail-value">${experiment.compareObject}</div>
+                </div>
+                ${experiment.compareType === 'time' ? `
+                <div class="detail-item">
+                    <div class="detail-label">对比周期</div>
+                    <div class="detail-value">${experiment.comparePeriod}</div>
+                </div>
+                ` : ''}
+                <div class="detail-item">
+                    <div class="detail-label">销额对比</div>
+                    <div class="detail-value">${experiment.salesCompare}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">毛利额对比</div>
+                    <div class="detail-value">${experiment.profitCompare}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">门店贡献对比</div>
+                    <div class="detail-value">${experiment.storeContribution}</div>
+                </div>
+            `;
+            
+            // 实验对象详情表格
+            if (experiment.objectDetails && experiment.objectDetails.length > 0) {
+                detailsHTML += `
                     <div class="detail-item">
-                        <div class="detail-label">实验门店详情 (共${experiment.objectCount}个门店)</div>
+                        <div class="detail-label">实验对象详情</div>
                         <table class="object-detail-table">
                             <thead>
                                 <tr>
-                                    <th>门店名称</th>
-                                    <th>销额对比</th>
-                                    <th>毛利额对比</th>
-                                    <th>利润率对比</th>
+                                    <th>${experiment.objectType}名称</th>
+                                    <th>实验期销额</th>
+                                    <th>对比期销额</th>
+                                    <th>销额增长率</th>
+                                    <th>实验期毛利额</th>
+                                    <th>对比期毛利额</th>
+                                    <th>毛利额增长率</th>
                                 </tr>
                             </thead>
                             <tbody>
                 `;
                 
                 experiment.objectDetails.forEach(detail => {
-                    const salesChangeClass = detail.salesChange >= 0 ? 'positive' : 'negative';
-                    const profitChangeClass = detail.profitChange >= 0 ? 'positive' : 'negative';
-                    const marginChangeClass = detail.marginChange >= 0 ? 'positive' : 'negative';
+                    const salesChangeClass = detail.salesGrowthRate >= 0 ? 'positive' : 'negative';
+                    const profitChangeClass = detail.profitGrowthRate >= 0 ? 'positive' : 'negative';
                     
-                    const salesChangeSign = detail.salesChange >= 0 ? '+' : '';
-                    const profitChangeSign = detail.profitChange >= 0 ? '+' : '';
-                    const marginChangeSign = detail.marginChange >= 0 ? '+' : '';
+                    const salesChangeSign = detail.salesGrowthRate >= 0 ? '+' : '';
+                    const profitChangeSign = detail.profitGrowthRate >= 0 ? '+' : '';
                     
                     detailsHTML += `
                         <tr>
                             <td>${detail.name}</td>
-                            <td class="${salesChangeClass}">
-                                ¥${detail.beforeSales.toLocaleString()} → ¥${detail.afterSales.toLocaleString()}
-                                <br><small>${salesChangeSign}${detail.salesChange}%</small>
-                            </td>
-                            <td class="${profitChangeClass}">
-                                ¥${detail.beforeProfit.toLocaleString()} → ¥${detail.afterProfit.toLocaleString()}
-                                <br><small>${profitChangeSign}${detail.profitChange}%</small>
-                            </td>
-                            <td class="${marginChangeClass}">
-                                ${detail.beforeMargin}% → ${detail.afterMargin}%
-                                <br><small>${marginChangeSign}${detail.marginChange}%</small>
-                            </td>
+                            <td>¥${detail.experimentSales.toLocaleString()}</td>
+                            <td>¥${detail.compareSales.toLocaleString()}</td>
+                            <td class="${salesChangeClass}">${salesChangeSign}${detail.salesGrowthRate}%</td>
+                            <td>¥${detail.experimentProfit.toLocaleString()}</td>
+                            <td>¥${detail.compareProfit.toLocaleString()}</td>
+                            <td class="${profitChangeClass}">${profitChangeSign}${detail.profitGrowthRate}%</td>
                         </tr>
                     `;
                 });
@@ -2666,97 +2698,44 @@
                         </table>
                     </div>
                 `;
-                
-            } else if (experiment.dimension === 'product') {
-                detailsHTML = `
-                    <div class="detail-item">
-                        <div class="detail-label">实验产品详情 (共${experiment.objectCount}个产品)</div>
-                        <table class="object-detail-table">
-                            <thead>
-                                <tr>
-                                    <th>产品名称</th>
-                                    <th>销额对比</th>
-                                    <th>毛利额对比</th>
-                                    <th>利润率对比</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                `;
-                
-                experiment.objectDetails.forEach(detail => {
-                    const salesChangeClass = detail.salesChange >= 0 ? 'positive' : 'negative';
-                    const profitChangeClass = detail.profitChange >= 0 ? 'positive' : 'negative';
-                    const marginChangeClass = detail.marginChange >= 0 ? 'positive' : 'negative';
-                    
-                    const salesChangeSign = detail.salesChange >= 0 ? '+' : '';
-                    const profitChangeSign = detail.profitChange >= 0 ? '+' : '';
-                    const marginChangeSign = detail.marginChange >= 0 ? '+' : '';
-                    
-                    detailsHTML += `
-                        <tr>
-                            <td>${detail.name}</td>
-                            <td class="${salesChangeClass}">
-                                ¥${detail.beforeSales.toLocaleString()} → ¥${detail.afterSales.toLocaleString()}
-                                <br><small>${salesChangeSign}${detail.salesChange}%</small>
-                            </td>
-                            <td class="${profitChangeClass}">
-                                ¥${detail.beforeProfit.toLocaleString()} → ¥${detail.afterProfit.toLocaleString()}
-                                <br><small>${profitChangeSign}${detail.profitChange}%</small>
-                            </td>
-                            <td class="${marginChangeClass}">
-                                ${detail.beforeMargin}% → ${detail.afterMargin}%
-                                <br><small>${marginChangeSign}${detail.marginChange}%</small>
-                            </td>
-                        </tr>
-                    `;
-                });
-                
+            }
+            
+            // 对比对象详情表格（仅维度对比）
+            if (experiment.compareType === 'dimension' && experiment.compareObjectDetails && experiment.compareObjectDetails.length > 0) {
                 detailsHTML += `
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-                
-            } else if (experiment.dimension === 'store_product') {
-                detailsHTML = `
                     <div class="detail-item">
-                        <div class="detail-label">门店*产品组合详情 (共${experiment.storeCount}个门店 × ${experiment.productCount}个产品)</div>
+                        <div class="detail-label">对比对象详情</div>
                         <table class="object-detail-table">
                             <thead>
                                 <tr>
-                                    <th>门店-产品组合</th>
-                                    <th>销额对比</th>
-                                    <th>毛利额对比</th>
-                                    <th>利润率对比</th>
+                                    <th>对比对象名称</th>
+                                    <th>实验期销额</th>
+                                    <th>对比期销额</th>
+                                    <th>销额增长率</th>
+                                    <th>实验期毛利额</th>
+                                    <th>对比期毛利额</th>
+                                    <th>毛利额增长率</th>
                                 </tr>
                             </thead>
                             <tbody>
                 `;
                 
-                experiment.objectDetails.forEach(detail => {
-                    const salesChangeClass = detail.salesChange >= 0 ? 'positive' : 'negative';
-                    const profitChangeClass = detail.profitChange >= 0 ? 'positive' : 'negative';
-                    const marginChangeClass = detail.marginChange >= 0 ? 'positive' : 'negative';
+                experiment.compareObjectDetails.forEach(detail => {
+                    const salesChangeClass = detail.salesGrowthRate >= 0 ? 'positive' : 'negative';
+                    const profitChangeClass = detail.profitGrowthRate >= 0 ? 'positive' : 'negative';
                     
-                    const salesChangeSign = detail.salesChange >= 0 ? '+' : '';
-                    const profitChangeSign = detail.profitChange >= 0 ? '+' : '';
-                    const marginChangeSign = detail.marginChange >= 0 ? '+' : '';
+                    const salesChangeSign = detail.salesGrowthRate >= 0 ? '+' : '';
+                    const profitChangeSign = detail.profitGrowthRate >= 0 ? '+' : '';
                     
                     detailsHTML += `
                         <tr>
                             <td>${detail.name}</td>
-                            <td class="${salesChangeClass}">
-                                ¥${detail.beforeSales.toLocaleString()} → ¥${detail.afterSales.toLocaleString()}
-                                <br><small>${salesChangeSign}${detail.salesChange}%</small>
-                            </td>
-                            <td class="${profitChangeClass}">
-                                ¥${detail.beforeProfit.toLocaleString()} → ¥${detail.afterProfit.toLocaleString()}
-                                <br><small>${profitChangeSign}${detail.profitChange}%</small>
-                            </td>
-                            <td class="${marginChangeClass}">
-                                ${detail.beforeMargin}% → ${detail.afterMargin}%
-                                <br><small>${marginChangeSign}${detail.marginChange}%</small>
-                            </td>
+                            <td>¥${detail.experimentSales.toLocaleString()}</td>
+                            <td>¥${detail.compareSales.toLocaleString()}</td>
+                            <td class="${salesChangeClass}">${salesChangeSign}${detail.salesGrowthRate}%</td>
+                            <td>¥${detail.experimentProfit.toLocaleString()}</td>
+                            <td>¥${detail.compareProfit.toLocaleString()}</td>
+                            <td class="${profitChangeClass}">${profitChangeSign}${detail.profitGrowthRate}%</td>
                         </tr>
                     `;
                 });
@@ -2772,116 +2751,10 @@
             detailModal.classList.add('active');
         }
 
-        // 显示实验详情弹窗
+        // 显示实验详情弹窗（点击实验标题）
         function showExperimentDetailModal(experimentId) {
-            const experiment = experimentData.find(exp => exp.id === experimentId);
-            if (!experiment) return;
-            
-            // 计算变化率
-            const salesChangeRate = calculateChangeRate(experiment.beforeData.sales, experiment.afterData.sales);
-            const profitChangeRate = calculateChangeRate(experiment.beforeData.profit, experiment.afterData.profit);
-            const marginChangeRate = calculateChangeRate(experiment.beforeData.margin, experiment.afterData.margin);
-            
-            // 变化率符号
-            const salesChangeSign = salesChangeRate >= 0 ? '+' : '';
-            const profitChangeSign = profitChangeRate >= 0 ? '+' : '';
-            const marginChangeSign = marginChangeRate >= 0 ? '+' : '';
-            
-            detailModalTitle.textContent = experiment.title;
-            
-            let compareInfo = '';
-            if (experiment.compareType === 'time') {
-                compareInfo = `
-                    <div class="detail-item">
-                        <div class="detail-label">对比周期</div>
-                        <div class="detail-value">${experiment.comparePeriod}</div>
-                    </div>
-                `;
-            } else {
-                compareInfo = `
-                    <div class="detail-item">
-                        <div class="detail-label">对比对象</div>
-                        <div class="detail-value">${experiment.compareObject}</div>
-                    </div>
-                `;
-            }
-            
-            let beforeLabel = experiment.compareType === 'time' ? '实验前数据' : '对照组数据';
-            let afterLabel = experiment.compareType === 'time' ? '实验后数据' : '实验组数据';
-            
-            detailModalBody.innerHTML = `
-                <div class="detail-item">
-                    <div class="detail-label">实验标题</div>
-                    <div class="detail-value">${experiment.title}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">类型</div>
-                    <div class="detail-value">${experiment.dimension === 'store' ? '门店' : 
-                                             experiment.dimension === 'product' ? '产品' : '门店*产品'}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">对比类型</div>
-                    <div class="detail-value">${experiment.compareType === 'time' ? '时间对比' : '维度对比'}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">实验对象</div>
-                    <div class="detail-value">${experiment.objectType} (${experiment.dimension === 'store_product' ? 
-                        `${experiment.storeCount}个门店 × ${experiment.productCount}个产品` : `${experiment.objectCount}个`})</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">实验周期</div>
-                    <div class="detail-value">${experiment.experimentPeriod}</div>
-                </div>
-                ${compareInfo}
-                <div class="detail-item">
-                    <div class="detail-label">${beforeLabel}</div>
-                    <div class="detail-value">
-                        销额: ¥${experiment.beforeData.sales.toLocaleString()}<br>
-                        毛利: ¥${experiment.beforeData.profit.toLocaleString()}<br>
-                        利润率: ${experiment.beforeData.margin}%
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">${afterLabel}</div>
-                    <div class="detail-value">
-                        销额: ¥${experiment.afterData.sales.toLocaleString()}<br>
-                        毛利: ¥${experiment.afterData.profit.toLocaleString()}<br>
-                        利润率: ${experiment.afterData.margin}%
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">销额对比</div>
-                    <div class="detail-value">
-                        ¥${experiment.beforeData.sales.toLocaleString()} → ¥${experiment.afterData.sales.toLocaleString()}
-                        <br>
-                        <span class="${salesChangeRate >= 0 ? 'positive' : 'negative'}">变化率: ${salesChangeSign}${salesChangeRate}%</span>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">毛利额对比</div>
-                    <div class="detail-value">
-                        ¥${experiment.beforeData.profit.toLocaleString()} → ¥${experiment.afterData.profit.toLocaleString()}
-                        <br>
-                        <span class="${profitChangeRate >= 0 ? 'positive' : 'negative'}">变化率: ${profitChangeSign}${profitChangeRate}%</span>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">利润率对比</div>
-                    <div class="detail-value">
-                        ${experiment.beforeData.margin}% → ${experiment.afterData.margin}%
-                        <br>
-                        <span class="${marginChangeRate >= 0 ? 'positive' : 'negative'}">变化率: ${marginChangeSign}${marginChangeRate}%</span>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">数据来源</div>
-                    <div class="detail-value">
-                        <i class="fas fa-database"></i> 系统自动计算，基于销售数据库历史数据
-                    </div>
-                </div>
-            `;
-            
-            detailModal.classList.add('active');
+            // 这里可以显示更详细的信息，与showObjectDetailModal类似
+            showObjectDetailModal(experimentId);
         }
 
         // 辅助函数：格式化日期
