@@ -156,18 +156,43 @@
             font-weight: 600;
             color: #1890ff;
             cursor: pointer;
+            position: relative;
         }
         
-        .object-link {
-            color: #1890ff;
-            text-decoration: underline;
-            cursor: pointer;
-            font-weight: 500;
-        }
-        
-        .period-cell {
-            line-height: 1.4;
+        .experiment-title:hover::after {
+            content: '点击查看实验报告';
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            background: #333;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
             white-space: nowrap;
+            z-index: 10;
+        }
+        
+        .object-count {
+            color: #1890ff;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .object-count:hover::after {
+            content: attr(data-objects);
+            position: absolute;
+            bottom: -30px;
+            left: 0;
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10;
+            max-width: 200px;
+            text-align: left;
         }
         
         .data-compare-cell {
@@ -185,7 +210,7 @@
         }
         
         .negative {
-            color: #52c41a; /* 绿色表示下降 */
+            color: #333; /* 黑色表示下降 */
             font-weight: 500;
         }
         
@@ -204,8 +229,8 @@
         }
         
         .negative .change-rate {
-            background-color: #f6ffed;
-            border: 1px solid #b7eb8f;
+            background-color: #f5f5f5;
+            border: 1px solid #d9d9d9;
         }
         
         .actions {
@@ -279,7 +304,7 @@
             background-color: white;
             border-radius: 8px;
             width: 90%;
-            max-width: 800px;
+            max-width: 1200px;
             max-height: 90vh;
             overflow: hidden;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -314,43 +339,169 @@
             max-height: calc(90vh - 70px);
         }
         
-        .detail-item {
-            margin-bottom: 16px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #f0f0f0;
+        /* 实验报告样式 */
+        .report-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
         }
         
-        .detail-label {
+        .report-section:last-child {
+            border-bottom: none;
+        }
+        
+        .report-section-title {
+            font-size: 18px;
+            color: #1890ff;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .report-section-title i {
+            margin-right: 10px;
+        }
+        
+        .definition-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .definition-item {
+            margin-bottom: 15px;
+        }
+        
+        .definition-label {
             font-weight: 600;
             color: #666;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             font-size: 14px;
         }
         
-        .detail-value {
+        .definition-value {
             color: #333;
             font-size: 15px;
+            padding: 8px 12px;
+            background-color: #fafafa;
+            border-radius: 4px;
+            border-left: 4px solid #1890ff;
+        }
+        
+        .conclusion-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 1px solid #d9d9d9;
+            border-radius: 6px;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        
+        .conclusion-textarea:focus {
+            outline: none;
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+        
+        .data-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .data-overview-item {
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e8e8e8;
+            background-color: #fafafa;
+        }
+        
+        .data-overview-title {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .data-overview-value {
+            font-size: 22px;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .data-overview-change {
+            font-size: 14px;
         }
         
         .object-detail-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
-            font-size: 13px;
+            font-size: 14px;
         }
         
         .object-detail-table th {
             background-color: #fafafa;
-            padding: 10px;
+            padding: 14px 12px;
             font-weight: 600;
             color: #666;
             border: 1px solid #e8e8e8;
+            text-align: center;
+            white-space: nowrap;
         }
         
         .object-detail-table td {
-            padding: 10px;
+            padding: 14px 12px;
             border: 1px solid #f0f0f0;
             text-align: center;
+            vertical-align: middle;
+        }
+        
+        .object-detail-table tr:hover {
+            background-color: #fafafa;
+        }
+        
+        .report-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 30px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .download-btn:hover {
+            background: linear-gradient(135deg, #73d13d 0%, #52c41a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(82, 196, 26, 0.3);
+        }
+        
+        .download-btn i {
+            margin-right: 8px;
+        }
+        
+        .report-info {
+            color: #999;
+            font-size: 14px;
         }
         
         /* 表单样式 */
@@ -418,15 +569,15 @@
             font-size: 14px;
         }
         
-        .select-all-btn {
-            background: #1890ff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 5px 10px;
+        .select-all-option {
+            padding: 8px;
             cursor: pointer;
-            font-size: 13px;
-            margin-left: 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #1890ff;
+            background-color: #f0f7ff;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #e8e8e8;
         }
         
         .clear-btn {
@@ -496,7 +647,7 @@
             border-top: 1px solid #f0f0f0;
         }
         
-        .save-btn {
+        .generate-report-btn {
             background-color: #1890ff;
             color: white;
             border: none;
@@ -563,38 +714,6 @@
             display: block;
         }
         
-        .explanation {
-            background-color: #f6ffed;
-            border: 1px solid #b7eb8f;
-            border-radius: 6px;
-            padding: 12px 16px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            color: #666;
-            line-height: 1.5;
-        }
-        
-        .explanation i {
-            color: #52c41a;
-            margin-right: 8px;
-        }
-        
-        .info-message {
-            background-color: #fafafa;
-            border: 1px solid #e8e8e8;
-            border-radius: 6px;
-            padding: 12px 16px;
-            margin-top: 15px;
-            font-size: 14px;
-            color: #666;
-            line-height: 1.5;
-        }
-        
-        .info-message i {
-            color: #1890ff;
-            margin-right: 8px;
-        }
-        
         .loading {
             display: none;
             text-align: center;
@@ -651,6 +770,26 @@
             .search-container {
                 flex-direction: column;
             }
+            
+            .definition-grid,
+            .data-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .object-detail-table {
+                font-size: 12px;
+            }
+            
+            .object-detail-table th,
+            .object-detail-table td {
+                padding: 10px 8px;
+            }
+            
+            .report-footer {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
@@ -694,8 +833,7 @@
                         </tr>
                     </thead>
                     <tbody id="experimentTableBody">
-                        <!-- 合计行放在这里 -->
-                        <!-- 数据通过JavaScript动态生成 -->
+                        <!-- 合计行和数据行通过JavaScript动态生成 -->
                     </tbody>
                 </table>
             </div>
@@ -734,7 +872,6 @@
                         </div>
                         
                         <div style="margin: 10px 0;">
-                            <button type="button" class="select-all-btn" id="selectAllStores">一键全部门店</button>
                             <button type="button" class="clear-btn" id="clearStoreSelection">清除选择</button>
                         </div>
                         
@@ -780,11 +917,6 @@
                     
                     <!-- 时间对比部分 -->
                     <div id="timeCompareSection" class="compare-data-section active">
-                        <div class="explanation">
-                            <i class="fas fa-info-circle"></i>
-                            <strong>时间对比说明：</strong>对比实验对象实验前后的业绩数据，计算绝对值变化。
-                        </div>
-                        
                         <div class="form-group">
                             <div class="form-row">
                                 <div class="form-col">
@@ -816,11 +948,6 @@
                     
                     <!-- 维度对比部分 -->
                     <div id="dimensionCompareSection" class="compare-data-section">
-                        <div class="explanation">
-                            <i class="fas fa-info-circle"></i>
-                            <strong>维度对比说明：</strong>对比实验对象和对照对象的环比变化率。展示结果为：实验对象增长率/对照对象增长率 + 相对增长百分点。
-                        </div>
-                        
                         <div class="form-group">
                             <div class="form-row">
                                 <div class="form-col">
@@ -848,7 +975,6 @@
                                     </div>
                                     
                                     <div style="margin: 10px 0;">
-                                        <button type="button" class="select-all-btn" id="selectAllCompareStores">全选</button>
                                         <button type="button" class="clear-btn" id="clearCompareStoreSelection">清除</button>
                                     </div>
                                     
@@ -862,12 +988,22 @@
                                 </div>
                                 
                                 <div id="productCompareSection" style="display: none;">
-                                    <h4>选择对比产品类别</h4>
-                                    <div class="compare-object-options" id="compareProductOptions">
+                                    <h4>选择对比产品和品类</h4>
+                                    <div class="search-box">
+                                        <i class="fas fa-search"></i>
+                                        <input type="text" id="compareProductSearch" placeholder="搜索对比产品...">
+                                    </div>
+                                    
+                                    <div style="margin: 10px 0;">
+                                        <button type="button" class="clear-btn" id="clearCompareProductSelection">清除</button>
+                                    </div>
+                                    
+                                    <div class="selection-panel" id="compareProductPanel">
                                         <!-- 选项通过JavaScript动态生成 -->
                                     </div>
+                                    
                                     <div class="selected-count">
-                                        已选择对比产品类别: <span id="selectedCompareProductCount">0</span>个
+                                        已选择对比产品: <span id="selectedCompareProductCount">0</span>个
                                     </div>
                                 </div>
                             </div>
@@ -880,22 +1016,22 @@
                     
                     <div class="form-actions">
                         <button type="button" class="cancel-btn" id="cancelForm">取消</button>
-                        <button type="submit" class="save-btn">保存实验</button>
+                        <button type="submit" class="generate-report-btn">生成实验报告</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     
-    <!-- 详情弹窗 -->
-    <div class="modal" id="detailModal">
+    <!-- 实验报告弹窗 -->
+    <div class="modal" id="reportModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="detailModalTitle">详情</h3>
-                <button class="close-btn" id="closeDetailModal">&times;</button>
+                <h3 id="reportModalTitle">实验报告</h3>
+                <button class="close-btn" id="closeReportModal">&times;</button>
             </div>
-            <div class="modal-body" id="detailModalBody">
-                <!-- 详情内容通过JavaScript动态生成 -->
+            <div class="modal-body" id="reportModalBody">
+                <!-- 实验报告内容通过JavaScript动态生成 -->
             </div>
         </div>
     </div>
@@ -1079,6 +1215,7 @@
                 salesCompare: "15%/10% +5",
                 profitCompare: "25%/10% +15",
                 storeContribution: "--",
+                conclusion: "手撕包促销活动效果显著，销售额环比增长15%，相比对照品类高出5个百分点；毛利额增长25%，相比对照品类高出15个百分点。建议继续推广此促销策略。",
                 objectDetails: [
                     { 
                         name: "手撕包", 
@@ -1114,7 +1251,8 @@
                 compareObject: "时间对比",
                 salesCompare: "¥300,000/¥250,000 +20%",
                 profitCompare: "¥90,000/¥75,000 +20%",
-                storeContribution: "65%",
+                storeContribution: "65%/+10%",
+                conclusion: "周末门店促销活动取得良好效果，实验门店整体销售额增长20%，毛利额同步增长20%，门店贡献度达到65%。建议将此促销模式扩展到更多门店。",
                 objectDetails: [
                     { 
                         name: "北京朝阳店", 
@@ -1163,27 +1301,18 @@
             { id: 108, name: "巧克力", group: "零食" }
         ];
 
-        // 产品类别选项
-        const productCategoryOptions = [
-            { id: "现烤品类", name: "现烤品类" },
-            { id: "饮料", name: "饮料" },
-            { id: "零食", name: "零食" },
-            { id: "日用品", name: "日用品" },
-            { id: "冷冻食品", name: "冷冻食品" }
-        ];
-
         // DOM元素
         const experimentTableBody = document.getElementById('experimentTableBody');
         const experimentFormModal = document.getElementById('experimentFormModal');
-        const detailModal = document.getElementById('detailModal');
+        const reportModal = document.getElementById('reportModal');
         const addExperimentBtn = document.getElementById('addExperimentBtn');
         const closeFormModal = document.getElementById('closeFormModal');
-        const closeDetailModal = document.getElementById('closeDetailModal');
+        const closeReportModal = document.getElementById('closeReportModal');
         const cancelForm = document.getElementById('cancelForm');
         const experimentForm = document.getElementById('experimentForm');
         const formModalTitle = document.getElementById('formModalTitle');
-        const detailModalTitle = document.getElementById('detailModalTitle');
-        const detailModalBody = document.getElementById('detailModalBody');
+        const reportModalTitle = document.getElementById('reportModalTitle');
+        const reportModalBody = document.getElementById('reportModalBody');
         const timeCompareSection = document.getElementById('timeCompareSection');
         const dimensionCompareSection = document.getElementById('dimensionCompareSection');
         const formLoading = document.getElementById('formLoading');
@@ -1203,7 +1332,6 @@
         const storeSelectionPanel = document.getElementById('storeSelectionPanel');
         const selectedStoreCount = document.getElementById('selectedStoreCount');
         const clearStoreSelection = document.getElementById('clearStoreSelection');
-        const selectAllStores = document.getElementById('selectAllStores');
         
         // 产品选择相关
         const productSelectionSection = document.getElementById('productSelectionSection');
@@ -1219,9 +1347,10 @@
         const compareStorePanel = document.getElementById('compareStorePanel');
         const selectedCompareStoreCount = document.getElementById('selectedCompareStoreCount');
         const clearCompareStoreSelection = document.getElementById('clearCompareStoreSelection');
-        const selectAllCompareStores = document.getElementById('selectAllCompareStores');
-        const compareProductOptions = document.getElementById('compareProductOptions');
+        const compareProductSearch = document.getElementById('compareProductSearch');
+        const compareProductPanel = document.getElementById('compareProductPanel');
         const selectedCompareProductCount = document.getElementById('selectedCompareProductCount');
+        const clearCompareProductSelection = document.getElementById('clearCompareProductSelection');
 
         // 当前选择的维度
         let currentDimension = 'store';
@@ -1230,13 +1359,15 @@
         let selectedProducts = [];
         // 当前选择的对比对象
         let selectedCompareStores = [];
-        let selectedCompareProductCategories = [];
+        let selectedCompareProducts = [];
         // 当前编辑的实验ID (null表示新增)
         let editingExperimentId = null;
         // 当前对比类型
         let currentCompareType = 'time';
         // 当前搜索关键词
         let currentSearchKeyword = '';
+        // 当前查看的实验ID (用于实验报告)
+        let currentReportExperimentId = null;
 
         // 初始化页面
         function initPage() {
@@ -1273,9 +1404,6 @@
             
             compareStartDate.valueAsDate = compareStart;
             compareEndDate.valueAsDate = compareEnd;
-            
-            // 初始化产品类别选择
-            renderProductCategoryOptions();
         }
 
         // 渲染实验表格
@@ -1313,83 +1441,142 @@
                 return;
             }
             
-            // 计算合计数据
-            let totalExperimentSales = 0;
-            let totalCompareSales = 0;
-            let totalExperimentProfit = 0;
-            let totalCompareProfit = 0;
+            // 筛选出时间对比（绝对值对比）的实验
+            const timeCompareExperiments = filteredExperiments.filter(exp => exp.compareType === 'time');
             
-            // 先添加合计行
-            const summaryRow = document.createElement('tr');
-            summaryRow.className = 'summary-row';
-            
-            // 遍历实验数据计算合计
-            filteredExperiments.forEach(experiment => {
-                // 提取数字部分用于合计
-                experiment.objectDetails.forEach(detail => {
-                    totalExperimentSales += detail.experimentSales || 0;
-                    totalCompareSales += detail.compareSales || 0;
-                    totalExperimentProfit += detail.experimentProfit || 0;
-                    totalCompareProfit += detail.compareProfit || 0;
+            // 如果有时间对比实验，显示合计行
+            if (timeCompareExperiments.length > 0) {
+                // 计算时间对比实验的合计数据
+                let totalExperimentSales = 0;
+                let totalCompareSales = 0;
+                let totalExperimentProfit = 0;
+                let totalCompareProfit = 0;
+                
+                timeCompareExperiments.forEach(experiment => {
+                    experiment.objectDetails.forEach(detail => {
+                        totalExperimentSales += detail.experimentSales || 0;
+                        totalCompareSales += detail.compareSales || 0;
+                        totalExperimentProfit += detail.experimentProfit || 0;
+                        totalCompareProfit += detail.compareProfit || 0;
+                    });
                 });
-            });
+                
+                // 计算合计的变化率
+                const totalSalesGrowthRate = totalCompareSales > 0 ? 
+                    ((totalExperimentSales - totalCompareSales) / totalCompareSales * 100).toFixed(1) : 0;
+                const totalProfitGrowthRate = totalCompareProfit > 0 ? 
+                    ((totalExperimentProfit - totalCompareProfit) / totalCompareProfit * 100).toFixed(1) : 0;
+                
+                const totalSalesChangeClass = parseFloat(totalSalesGrowthRate) >= 0 ? 'positive' : 'negative';
+                const totalProfitChangeClass = parseFloat(totalProfitGrowthRate) >= 0 ? 'positive' : 'negative';
+                const totalSalesChangeSign = parseFloat(totalSalesGrowthRate) >= 0 ? '+' : '';
+                const totalProfitChangeSign = parseFloat(totalProfitGrowthRate) >= 0 ? '+' : '';
+                
+                // 渲染合计行
+                const summaryRow = document.createElement('tr');
+                summaryRow.className = 'summary-row';
+                
+                summaryRow.innerHTML = `
+                    <td class="summary-label">合计</td>
+                    <td>${timeCompareExperiments.length}个时间对比实验</td>
+                    <td class="data-compare-cell ${totalSalesChangeClass}">
+                        <span class="compare-value">¥${totalExperimentSales.toLocaleString()}/¥${totalCompareSales.toLocaleString()}</span>
+                        <span class="change-rate">${totalSalesChangeSign}${totalSalesGrowthRate}%</span>
+                    </td>
+                    <td class="data-compare-cell ${totalProfitChangeClass}">
+                        <span class="compare-value">¥${totalExperimentProfit.toLocaleString()}/¥${totalCompareProfit.toLocaleString()}</span>
+                        <span class="change-rate">${totalProfitChangeSign}${totalProfitGrowthRate}%</span>
+                    </td>
+                    <td>--</td>
+                    <td>--</td>
+                `;
+                
+                experimentTableBody.appendChild(summaryRow);
+            }
             
-            // 计算合计的变化率
-            const totalSalesGrowthRate = totalCompareSales > 0 ? 
-                ((totalExperimentSales - totalCompareSales) / totalCompareSales * 100).toFixed(1) : 0;
-            const totalProfitGrowthRate = totalCompareProfit > 0 ? 
-                ((totalExperimentProfit - totalCompareProfit) / totalCompareProfit * 100).toFixed(1) : 0;
-            
-            const totalSalesChangeClass = totalSalesGrowthRate >= 0 ? 'positive' : 'negative';
-            const totalProfitChangeClass = totalProfitGrowthRate >= 0 ? 'positive' : 'negative';
-            const totalSalesChangeSign = totalSalesGrowthRate >= 0 ? '+' : '';
-            const totalProfitChangeSign = totalProfitGrowthRate >= 0 ? '+' : '';
-            
-            summaryRow.innerHTML = `
-                <td class="summary-label">合计</td>
-                <td>${filteredExperiments.length}个实验</td>
-                <td class="data-compare-cell ${totalSalesChangeClass}">
-                    <span class="compare-value">¥${totalExperimentSales.toLocaleString()}/¥${totalCompareSales.toLocaleString()}</span>
-                    <span class="change-rate">${totalSalesChangeSign}${totalSalesGrowthRate}%</span>
-                </td>
-                <td class="data-compare-cell ${totalProfitChangeClass}">
-                    <span class="compare-value">¥${totalExperimentProfit.toLocaleString()}/¥${totalCompareProfit.toLocaleString()}</span>
-                    <span class="change-rate">${totalProfitChangeSign}${totalProfitGrowthRate}%</span>
-                </td>
-                <td>--</td>
-                <td>--</td>
-            `;
-            
-            experimentTableBody.appendChild(summaryRow);
-            
-            // 添加数据行
+            // 渲染所有实验数据行
             filteredExperiments.forEach(experiment => {
                 // 确定实验对象显示
                 let objectDisplay = '';
+                let objectCount = 0;
                 if (experiment.dimension === 'store') {
-                    objectDisplay = `${experiment.objectType}(${experiment.objectNames.length})`;
+                    objectDisplay = `门店(${experiment.objectNames.length})`;
+                    objectCount = experiment.objectNames.length;
                 } else {
-                    objectDisplay = `${experiment.objectNames.join(', ')}`;
+                    objectDisplay = `产品(${experiment.objectNames.length})`;
+                    objectCount = experiment.objectNames.length;
+                }
+                
+                // 解析销额对比数据
+                let salesCompareDisplay = experiment.salesCompare;
+                let salesChangeClass = '';
+                
+                if (experiment.compareType === 'time') {
+                    // 时间对比格式: ¥300,000/¥250,000 +20%
+                    const match = experiment.salesCompare.match(/([+\-])?(\d+(\.\d+)?)%/);
+                    if (match) {
+                        salesChangeClass = match[1] === '-' ? 'negative' : 'positive';
+                    }
+                } else {
+                    // 维度对比格式: 15%/10% +5
+                    const match = experiment.salesCompare.match(/([+\-])?(\d+(\.\d+)?)$/);
+                    if (match) {
+                        salesChangeClass = match[1] === '-' ? 'negative' : 'positive';
+                    }
+                }
+                
+                // 解析毛利额对比数据
+                let profitCompareDisplay = experiment.profitCompare;
+                let profitChangeClass = '';
+                
+                if (experiment.compareType === 'time') {
+                    const match = experiment.profitCompare.match(/([+\-])?(\d+(\.\d+)?)%/);
+                    if (match) {
+                        profitChangeClass = match[1] === '-' ? 'negative' : 'positive';
+                    }
+                } else {
+                    const match = experiment.profitCompare.match(/([+\-])?(\d+(\.\d+)?)$/);
+                    if (match) {
+                        profitChangeClass = match[1] === '-' ? 'negative' : 'positive';
+                    }
+                }
+                
+                // 解析门店贡献对比数据
+                let storeContributionDisplay = experiment.storeContribution;
+                let storeContributionClass = '';
+                
+                if (experiment.storeContribution !== '--') {
+                    if (experiment.compareType === 'time') {
+                        const match = experiment.storeContribution.match(/([+\-])?(\d+(\.\d+)?)%/);
+                        if (match) {
+                            storeContributionClass = match[1] === '-' ? 'negative' : 'positive';
+                        }
+                    } else {
+                        const match = experiment.storeContribution.match(/([+\-])?(\d+(\.\d+)?)$/);
+                        if (match) {
+                            storeContributionClass = match[1] === '-' ? 'negative' : 'positive';
+                        }
+                    }
                 }
                 
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>
-                        <div class="experiment-title">${experiment.title}</div>
+                        <div class="experiment-title" data-id="${experiment.id}">${experiment.title}</div>
                     </td>
                     <td>
-                        <span class="object-link" data-id="${experiment.id}" data-type="object">
+                        <span class="object-count" data-objects="${experiment.objectNames.join(', ')}">
                             ${objectDisplay}
                         </span>
                     </td>
-                    <td class="data-compare-cell">
-                        ${experiment.salesCompare}
+                    <td class="data-compare-cell ${salesChangeClass}">
+                        ${salesCompareDisplay}
                     </td>
-                    <td class="data-compare-cell">
-                        ${experiment.profitCompare}
+                    <td class="data-compare-cell ${profitChangeClass}">
+                        ${profitCompareDisplay}
                     </td>
-                    <td>
-                        ${experiment.storeContribution}
+                    <td class="data-compare-cell ${storeContributionClass}">
+                        ${storeContributionDisplay}
                     </td>
                     <td>
                         <div class="actions">
@@ -1405,7 +1592,23 @@
             // 更新实验计数
             const totalCount = experimentData.length;
             const filteredCount = filteredExperiments.length;
-            experimentCount.textContent = `(${filteredCount}条记录${currentSearchKeyword && filteredCount !== totalCount ? `，共${totalCount}条` : ''})`;
+            const timeCompareCount = timeCompareExperiments.length;
+            const dimensionCompareCount = filteredCount - timeCompareCount;
+            
+            let countText = `(${filteredCount}条记录`;
+            if (timeCompareCount > 0 && dimensionCompareCount > 0) {
+                countText += `，其中时间对比${timeCompareCount}条，维度对比${dimensionCompareCount}条`;
+            } else if (timeCompareCount > 0) {
+                countText += `，均为时间对比`;
+            } else if (dimensionCompareCount > 0) {
+                countText += `，均为维度对比`;
+            }
+            if (currentSearchKeyword && filteredCount !== totalCount) {
+                countText += `，共${totalCount}条`;
+            }
+            countText += `)`;
+            
+            experimentCount.textContent = countText;
             
             // 更新搜索结果显示
             if (currentSearchKeyword) {
@@ -1415,17 +1618,10 @@
             }
             
             // 添加事件监听器
-            document.querySelectorAll('.object-link').forEach(link => {
-                link.addEventListener('click', function() {
-                    const experimentId = parseInt(this.getAttribute('data-id'));
-                    showObjectDetailModal(experimentId);
-                });
-            });
-            
             document.querySelectorAll('.experiment-title').forEach(title => {
                 title.addEventListener('click', function() {
-                    const experimentId = parseInt(this.closest('tr').querySelector('.edit-btn').getAttribute('data-id'));
-                    showExperimentDetailModal(experimentId);
+                    const experimentId = parseInt(this.getAttribute('data-id'));
+                    showExperimentReport(experimentId);
                 });
             });
             
@@ -1465,9 +1661,9 @@
                 experimentFormModal.classList.remove('active');
             });
 
-            // 关闭详情弹窗
-            closeDetailModal.addEventListener('click', () => {
-                detailModal.classList.remove('active');
+            // 关闭报告弹窗
+            closeReportModal.addEventListener('click', () => {
+                reportModal.classList.remove('active');
             });
 
             // 取消表单
@@ -1513,17 +1709,15 @@
             compareStoreSearch.addEventListener('input', function() {
                 updateCompareStorePanel();
             });
+            
+            // 对比产品搜索框
+            compareProductSearch.addEventListener('input', function() {
+                updateCompareProductPanel();
+            });
 
             // 清除门店选择
             clearStoreSelection.addEventListener('click', function() {
                 selectedStores = [];
-                updateSelectedCounts();
-                updateStoreSelectionPanel();
-            });
-            
-            // 全选门店
-            selectAllStores.addEventListener('click', function() {
-                selectedStores = [...storeOptions];
                 updateSelectedCounts();
                 updateStoreSelectionPanel();
             });
@@ -1542,11 +1736,11 @@
                 updateCompareStorePanel();
             });
             
-            // 全选对比门店
-            selectAllCompareStores.addEventListener('click', function() {
-                selectedCompareStores = [...storeOptions];
+            // 清除对比产品选择
+            clearCompareProductSelection.addEventListener('click', function() {
+                selectedCompareProducts = [];
                 updateSelectedCompareCounts();
-                updateCompareStorePanel();
+                updateCompareProductPanel();
             });
             
             // 对比类型切换
@@ -1618,6 +1812,28 @@
             storeSelectionPanel.innerHTML = '';
             const searchTerm = storeSearch.value.toLowerCase();
             
+            // 添加全部门店选项
+            const selectAllItem = document.createElement('div');
+            selectAllItem.className = 'select-all-option';
+            const allStoresSelected = selectedStores.length === storeOptions.length;
+            selectAllItem.innerHTML = `
+                <input type="checkbox" id="select_all_stores" ${allStoresSelected ? 'checked' : ''}>
+                <label for="select_all_stores">全部门店</label>
+            `;
+            
+            const selectAllCheckbox = selectAllItem.querySelector('input');
+            selectAllCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    selectedStores = [...storeOptions];
+                } else {
+                    selectedStores = [];
+                }
+                updateSelectedCounts();
+                updateStoreSelectionPanel();
+            });
+            
+            storeSelectionPanel.appendChild(selectAllItem);
+            
             // 按组分类
             const groupedOptions = {};
             storeOptions.forEach(option => {
@@ -1666,6 +1882,13 @@
                             selectedStores = selectedStores.filter(store => store.id !== option.id);
                         }
                         updateSelectedCounts();
+                        
+                        // 更新全选状态
+                        const allSelected = selectedStores.length === storeOptions.length;
+                        const selectAllCheckbox = document.getElementById('select_all_stores');
+                        if (selectAllCheckbox) {
+                            selectAllCheckbox.checked = allSelected;
+                        }
                     });
                     
                     storeSelectionPanel.appendChild(item);
@@ -1677,6 +1900,28 @@
         function updateProductSelectionPanel() {
             productSelectionPanel.innerHTML = '';
             const searchTerm = productSearch.value.toLowerCase();
+            
+            // 添加全部产品选项
+            const selectAllItem = document.createElement('div');
+            selectAllItem.className = 'select-all-option';
+            const allProductsSelected = selectedProducts.length === productOptions.length;
+            selectAllItem.innerHTML = `
+                <input type="checkbox" id="select_all_products" ${allProductsSelected ? 'checked' : ''}>
+                <label for="select_all_products">全部产品</label>
+            `;
+            
+            const selectAllCheckbox = selectAllItem.querySelector('input');
+            selectAllCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    selectedProducts = [...productOptions];
+                } else {
+                    selectedProducts = [];
+                }
+                updateSelectedCounts();
+                updateProductSelectionPanel();
+            });
+            
+            productSelectionPanel.appendChild(selectAllItem);
             
             // 按组分类
             const groupedOptions = {};
@@ -1726,6 +1971,13 @@
                             selectedProducts = selectedProducts.filter(product => product.id !== option.id);
                         }
                         updateSelectedCounts();
+                        
+                        // 更新全选状态
+                        const allSelected = selectedProducts.length === productOptions.length;
+                        const selectAllCheckbox = document.getElementById('select_all_products');
+                        if (selectAllCheckbox) {
+                            selectAllCheckbox.checked = allSelected;
+                        }
                     });
                     
                     productSelectionPanel.appendChild(item);
@@ -1742,7 +1994,7 @@
             } else {
                 storeCompareSection.style.display = 'none';
                 productCompareSection.style.display = 'block';
-                updateProductCategoryOptions();
+                updateCompareProductPanel();
             }
         }
         
@@ -1750,6 +2002,31 @@
         function updateCompareStorePanel() {
             compareStorePanel.innerHTML = '';
             const searchTerm = compareStoreSearch.value.toLowerCase();
+            
+            // 添加全部对比门店选项
+            const selectAllItem = document.createElement('div');
+            selectAllItem.className = 'select-all-option';
+            const allCompareStoresSelected = selectedCompareStores.length === storeOptions.length;
+            selectAllItem.innerHTML = `
+                <input type="checkbox" id="select_all_compare_stores" ${allCompareStoresSelected ? 'checked' : ''}>
+                <label for="select_all_compare_stores">全部门店</label>
+            `;
+            
+            const selectAllCheckbox = selectAllItem.querySelector('input');
+            selectAllCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    // 排除实验门店
+                    selectedCompareStores = storeOptions.filter(store => 
+                        !selectedStores.some(s => s.id === store.id)
+                    );
+                } else {
+                    selectedCompareStores = [];
+                }
+                updateSelectedCompareCounts();
+                updateCompareStorePanel();
+            });
+            
+            compareStorePanel.appendChild(selectAllItem);
             
             // 按组分类
             const groupedOptions = {};
@@ -1807,6 +2084,13 @@
                                 selectedCompareStores = selectedCompareStores.filter(store => store.id !== option.id);
                             }
                             updateSelectedCompareCounts();
+                            
+                            // 更新全选状态
+                            const allSelected = selectedCompareStores.length === storeOptions.length - selectedStores.length;
+                            const selectAllCheckbox = document.getElementById('select_all_compare_stores');
+                            if (selectAllCheckbox) {
+                                selectAllCheckbox.checked = allSelected;
+                            }
                         });
                     }
                     
@@ -1815,66 +2099,104 @@
             });
         }
         
-        // 渲染产品类别选项
-        function renderProductCategoryOptions() {
-            compareProductOptions.innerHTML = '';
+        // 更新对比产品面板
+        function updateCompareProductPanel() {
+            compareProductPanel.innerHTML = '';
+            const searchTerm = compareProductSearch.value.toLowerCase();
             
-            productCategoryOptions.forEach(category => {
-                const isSelected = selectedCompareProductCategories.includes(category.id);
-                const option = document.createElement('div');
-                option.className = `compare-object-option ${isSelected ? 'selected' : ''}`;
-                option.textContent = category.name;
-                option.dataset.categoryId = category.id;
-                
-                option.addEventListener('click', function() {
-                    const categoryId = this.dataset.categoryId;
-                    if (selectedCompareProductCategories.includes(categoryId)) {
-                        selectedCompareProductCategories = selectedCompareProductCategories.filter(id => id !== categoryId);
-                    } else {
-                        selectedCompareProductCategories.push(categoryId);
-                    }
-                    updateSelectedCompareCounts();
-                    renderProductCategoryOptions();
-                });
-                
-                compareProductOptions.appendChild(option);
+            // 添加全部对比产品选项
+            const selectAllItem = document.createElement('div');
+            selectAllItem.className = 'select-all-option';
+            const allCompareProductsSelected = selectedCompareProducts.length === productOptions.length;
+            selectAllItem.innerHTML = `
+                <input type="checkbox" id="select_all_compare_products" ${allCompareProductsSelected ? 'checked' : ''}>
+                <label for="select_all_compare_products">全部产品</label>
+            `;
+            
+            const selectAllCheckbox = selectAllItem.querySelector('input');
+            selectAllCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    // 排除实验产品
+                    selectedCompareProducts = productOptions.filter(product => 
+                        !selectedProducts.some(p => p.id === product.id)
+                    );
+                } else {
+                    selectedCompareProducts = [];
+                }
+                updateSelectedCompareCounts();
+                updateCompareProductPanel();
             });
-        }
-        
-        // 更新产品类别选项（检查是否是实验对象品类）
-        function updateProductCategoryOptions() {
-            compareProductOptions.innerHTML = '';
             
-            // 获取实验产品的品类
-            const experimentCategories = selectedProducts.map(product => product.group);
+            compareProductPanel.appendChild(selectAllItem);
             
-            productCategoryOptions.forEach(category => {
-                const isExperimentCategory = experimentCategories.includes(category.id);
-                const isSelected = selectedCompareProductCategories.includes(category.id);
-                
-                const option = document.createElement('div');
-                option.className = `compare-object-option ${isSelected ? 'selected' : ''}`;
-                if (isExperimentCategory) {
-                    option.style.opacity = '0.5';
-                    option.style.cursor = 'not-allowed';
+            // 按组分类
+            const groupedOptions = {};
+            productOptions.forEach(option => {
+                const group = option.group || '其他';
+                if (!groupedOptions[group]) {
+                    groupedOptions[group] = [];
                 }
-                option.textContent = category.name + (isExperimentCategory ? ' (实验对象)' : '');
-                option.dataset.categoryId = category.id;
-                
-                if (!isExperimentCategory) {
-                    option.addEventListener('click', function() {
-                        const categoryId = this.dataset.categoryId;
-                        if (selectedCompareProductCategories.includes(categoryId)) {
-                            selectedCompareProductCategories = selectedCompareProductCategories.filter(id => id !== categoryId);
-                        } else {
-                            selectedCompareProductCategories.push(categoryId);
-                        }
-                        updateSelectedCompareCounts();
-                        updateProductCategoryOptions();
-                    });
+                groupedOptions[group].push(option);
+            });
+            
+            // 渲染分组
+            Object.keys(groupedOptions).forEach(group => {
+                // 组标题
+                if (group !== '其他') {
+                    const groupHeader = document.createElement('div');
+                    groupHeader.className = 'selection-item';
+                    groupHeader.style.fontWeight = '600';
+                    groupHeader.style.color = '#1890ff';
+                    groupHeader.style.cursor = 'default';
+                    groupHeader.textContent = `▼ ${group} (${groupedOptions[group].length})`;
+                    compareProductPanel.appendChild(groupHeader);
                 }
                 
-                compareProductOptions.appendChild(option);
+                // 组内选项
+                groupedOptions[group].forEach(option => {
+                    // 检查是否匹配搜索
+                    if (searchTerm && !option.name.toLowerCase().includes(searchTerm)) {
+                        return;
+                    }
+                    
+                    // 检查是否是实验对象产品，如果是则禁用
+                    const isExperimentProduct = selectedProducts.some(product => product.id === option.id);
+                    const isSelected = selectedCompareProducts.some(product => product.id === option.id);
+                    
+                    const item = document.createElement('div');
+                    item.className = 'selection-item';
+                    if (isExperimentProduct) {
+                        item.style.opacity = '0.5';
+                        item.style.cursor = 'not-allowed';
+                    }
+                    
+                    item.innerHTML = `
+                        <input type="checkbox" id="compare_product_${option.id}" ${isSelected ? 'checked' : ''} ${isExperimentProduct ? 'disabled' : ''}>
+                        <label for="compare_product_${option.id}">${option.name}${isExperimentProduct ? ' (实验对象)' : ''}</label>
+                    `;
+                    
+                    // 添加事件监听器
+                    const checkbox = item.querySelector('input');
+                    if (!isExperimentProduct) {
+                        checkbox.addEventListener('change', function() {
+                            if (this.checked) {
+                                selectedCompareProducts.push(option);
+                            } else {
+                                selectedCompareProducts = selectedCompareProducts.filter(product => product.id !== option.id);
+                            }
+                            updateSelectedCompareCounts();
+                            
+                            // 更新全选状态
+                            const allSelected = selectedCompareProducts.length === productOptions.length - selectedProducts.length;
+                            const selectAllCheckbox = document.getElementById('select_all_compare_products');
+                            if (selectAllCheckbox) {
+                                selectAllCheckbox.checked = allSelected;
+                            }
+                        });
+                    }
+                    
+                    compareProductPanel.appendChild(item);
+                });
             });
         }
         
@@ -1887,7 +2209,7 @@
         // 更新对比对象已选择数量
         function updateSelectedCompareCounts() {
             selectedCompareStoreCount.textContent = selectedCompareStores.length;
-            selectedCompareProductCount.textContent = selectedCompareProductCategories.length;
+            selectedCompareProductCount.textContent = selectedCompareProducts.length;
         }
 
         // 重置表单
@@ -1896,7 +2218,7 @@
             selectedStores = [];
             selectedProducts = [];
             selectedCompareStores = [];
-            selectedCompareProductCategories = [];
+            selectedCompareProducts = [];
             updateSelectedCounts();
             updateSelectedCompareCounts();
             
@@ -1949,9 +2271,6 @@
             
             compareStartDate.valueAsDate = compareStart;
             compareEndDate.valueAsDate = compareEnd;
-            
-            // 更新产品类别选择
-            updateProductCategoryOptions();
         }
 
         // 模拟从数据库获取数据
@@ -2014,12 +2333,22 @@
                             const profitGrowthRate = calculateChangeRate(totalCompareProfit, totalExperimentProfit);
                             
                             // 格式化显示
-                            result.salesCompare = `¥${totalExperimentSales.toLocaleString()}/¥${totalCompareSales.toLocaleString()} ${salesGrowthRate >= 0 ? '+' : ''}${salesGrowthRate}%`;
-                            result.profitCompare = `¥${totalExperimentProfit.toLocaleString()}/¥${totalCompareProfit.toLocaleString()} ${profitGrowthRate >= 0 ? '+' : ''}${profitGrowthRate}%`;
+                            const salesChangeSign = salesGrowthRate >= 0 ? '+' : '';
+                            const profitChangeSign = profitGrowthRate >= 0 ? '+' : '';
                             
-                            // 计算门店贡献
+                            result.salesCompare = `¥${totalExperimentSales.toLocaleString()}/¥${totalCompareSales.toLocaleString()} ${salesChangeSign}${salesGrowthRate}%`;
+                            result.profitCompare = `¥${totalExperimentProfit.toLocaleString()}/¥${totalCompareProfit.toLocaleString()} ${profitChangeSign}${profitGrowthRate}%`;
+                            
+                            // 计算门店贡献（简单示例：实验门店销额占总销额比例）
                             if (selectedStores.length > 0) {
-                                result.storeContribution = '待计算';
+                                // 模拟计算总销额
+                                const totalCompanySales = totalExperimentSales * 1.5; // 假设公司总销额是实验门店的1.5倍
+                                const storeContribution = ((totalExperimentSales / totalCompanySales) * 100).toFixed(1);
+                                const previousContribution = ((totalCompareSales / (totalCompareSales * 1.5)) * 100).toFixed(1);
+                                const contributionChange = (parseFloat(storeContribution) - parseFloat(previousContribution)).toFixed(1);
+                                const contributionChangeSign = contributionChange >= 0 ? '+' : '';
+                                
+                                result.storeContribution = `${storeContribution}%/${previousContribution}% ${contributionChangeSign}${Math.abs(contributionChange)}%`;
                             }
                             
                         } else if (experimentInfo.dimension === 'product') {
@@ -2064,8 +2393,11 @@
                             const profitGrowthRate = calculateChangeRate(totalCompareProfit, totalExperimentProfit);
                             
                             // 格式化显示
-                            result.salesCompare = `¥${totalExperimentSales.toLocaleString()}/¥${totalCompareSales.toLocaleString()} ${salesGrowthRate >= 0 ? '+' : ''}${salesGrowthRate}%`;
-                            result.profitCompare = `¥${totalExperimentProfit.toLocaleString()}/¥${totalCompareProfit.toLocaleString()} ${profitGrowthRate >= 0 ? '+' : ''}${profitGrowthRate}%`;
+                            const salesChangeSign = salesGrowthRate >= 0 ? '+' : '';
+                            const profitChangeSign = profitGrowthRate >= 0 ? '+' : '';
+                            
+                            result.salesCompare = `¥${totalExperimentSales.toLocaleString()}/¥${totalCompareSales.toLocaleString()} ${salesChangeSign}${salesGrowthRate}%`;
+                            result.profitCompare = `¥${totalExperimentProfit.toLocaleString()}/¥${totalCompareProfit.toLocaleString()} ${profitChangeSign}${profitGrowthRate}%`;
                             
                         }
                         
@@ -2159,12 +2491,26 @@
                             const relativeProfitGrowth = (experimentGroupProfitGrowthRate - compareGroupProfitGrowthRate).toFixed(1);
                             
                             // 格式化显示
-                            result.salesCompare = `${experimentGroupSalesGrowthRate}%/${compareGroupSalesGrowthRate}% ${parseFloat(relativeSalesGrowth) >= 0 ? '+' : ''}${relativeSalesGrowth}`;
-                            result.profitCompare = `${experimentGroupProfitGrowthRate}%/${compareGroupProfitGrowthRate}% ${parseFloat(relativeProfitGrowth) >= 0 ? '+' : ''}${relativeProfitGrowth}`;
+                            const salesChangeSign = parseFloat(relativeSalesGrowth) >= 0 ? '+' : '';
+                            const profitChangeSign = parseFloat(relativeProfitGrowth) >= 0 ? '+' : '';
+                            
+                            result.salesCompare = `${experimentGroupSalesGrowthRate}%/${compareGroupSalesGrowthRate}% ${salesChangeSign}${relativeSalesGrowth}`;
+                            result.profitCompare = `${experimentGroupProfitGrowthRate}%/${compareGroupProfitGrowthRate}% ${profitChangeSign}${relativeProfitGrowth}`;
                             
                             // 确定对比对象名称
                             if (selectedCompareStores.length > 0) {
                                 experimentInfo.compareObject = selectedCompareStores.map(store => store.name).join(', ');
+                            }
+                            
+                            // 门店贡献对比
+                            if (selectedStores.length > 0) {
+                                // 模拟计算实验门店贡献度
+                                const experimentGroupContribution = 65.0;
+                                const compareGroupContribution = 55.0;
+                                const contributionChange = (experimentGroupContribution - compareGroupContribution).toFixed(1);
+                                const contributionChangeSign = contributionChange >= 0 ? '+' : '';
+                                
+                                result.storeContribution = `${experimentGroupContribution}%/${compareGroupContribution}% ${contributionChangeSign}${Math.abs(contributionChange)}%`;
                             }
                             
                         } else if (experimentInfo.dimension === 'product') {
@@ -2205,48 +2551,40 @@
                                 });
                             });
                             
-                            // 计算对比对象数据（基于产品类别）
+                            // 计算对比对象数据
                             let compareGroupExperimentSales = 0;
                             let compareGroupCompareSales = 0;
                             let compareGroupExperimentProfit = 0;
                             let compareGroupCompareProfit = 0;
                             
-                            // 获取属于选中品类的所有产品
-                            const compareProducts = productOptions.filter(product => 
-                                selectedCompareProductCategories.includes(product.group)
-                            );
-                            
-                            compareProducts.forEach(product => {
-                                // 排除实验产品
-                                if (!selectedProducts.some(p => p.id === product.id)) {
-                                    const productExperimentData = calculatePeriodDataForProduct(
-                                        product.id,
-                                        experimentPeriod[0], 
-                                        experimentPeriod[1]
-                                    );
-                                    
-                                    const productCompareData = calculatePeriodDataForProduct(
-                                        product.id,
-                                        comparePeriod[0], 
-                                        comparePeriod[1]
-                                    );
-                                    
-                                    compareGroupExperimentSales += productExperimentData.sales;
-                                    compareGroupCompareSales += productCompareData.sales;
-                                    compareGroupExperimentProfit += productExperimentData.profit;
-                                    compareGroupCompareProfit += productCompareData.profit;
-                                    
-                                    // 添加对比产品详情
-                                    result.compareObjectDetails.push({
-                                        name: product.name,
-                                        experimentSales: productExperimentData.sales,
-                                        compareSales: productCompareData.sales,
-                                        experimentProfit: productExperimentData.profit,
-                                        compareProfit: productCompareData.profit,
-                                        salesGrowthRate: calculateChangeRate(productCompareData.sales, productExperimentData.sales),
-                                        profitGrowthRate: calculateChangeRate(productCompareData.profit, productExperimentData.profit)
-                                    });
-                                }
+                            selectedCompareProducts.forEach(product => {
+                                const productExperimentData = calculatePeriodDataForProduct(
+                                    product.id,
+                                    experimentPeriod[0], 
+                                    experimentPeriod[1]
+                                );
+                                
+                                const productCompareData = calculatePeriodDataForProduct(
+                                    product.id,
+                                    comparePeriod[0], 
+                                    comparePeriod[1]
+                                );
+                                
+                                compareGroupExperimentSales += productExperimentData.sales;
+                                compareGroupCompareSales += productCompareData.sales;
+                                compareGroupExperimentProfit += productExperimentData.profit;
+                                compareGroupCompareProfit += productCompareData.profit;
+                                
+                                // 添加对比产品详情
+                                result.compareObjectDetails.push({
+                                    name: product.name,
+                                    experimentSales: productExperimentData.sales,
+                                    compareSales: productCompareData.sales,
+                                    experimentProfit: productExperimentData.profit,
+                                    compareProfit: productCompareData.profit,
+                                    salesGrowthRate: calculateChangeRate(productCompareData.sales, productExperimentData.sales),
+                                    profitGrowthRate: calculateChangeRate(productCompareData.profit, productExperimentData.profit)
+                                });
                             });
                             
                             // 计算增长率
@@ -2260,15 +2598,15 @@
                             const relativeProfitGrowth = (experimentGroupProfitGrowthRate - compareGroupProfitGrowthRate).toFixed(1);
                             
                             // 格式化显示
-                            result.salesCompare = `${experimentGroupSalesGrowthRate}%/${compareGroupSalesGrowthRate}% ${parseFloat(relativeSalesGrowth) >= 0 ? '+' : ''}${relativeSalesGrowth}`;
-                            result.profitCompare = `${experimentGroupProfitGrowthRate}%/${compareGroupProfitGrowthRate}% ${parseFloat(relativeProfitGrowth) >= 0 ? '+' : ''}${relativeProfitGrowth}`;
+                            const salesChangeSign = parseFloat(relativeSalesGrowth) >= 0 ? '+' : '';
+                            const profitChangeSign = parseFloat(relativeProfitGrowth) >= 0 ? '+' : '';
+                            
+                            result.salesCompare = `${experimentGroupSalesGrowthRate}%/${compareGroupSalesGrowthRate}% ${salesChangeSign}${relativeSalesGrowth}`;
+                            result.profitCompare = `${experimentGroupProfitGrowthRate}%/${compareGroupProfitGrowthRate}% ${profitChangeSign}${relativeProfitGrowth}`;
                             
                             // 确定对比对象名称
-                            if (selectedCompareProductCategories.length > 0) {
-                                experimentInfo.compareObject = selectedCompareProductCategories.map(cat => {
-                                    const category = productCategoryOptions.find(c => c.id === cat);
-                                    return category ? category.name : cat;
-                                }).join(', ');
+                            if (selectedCompareProducts.length > 0) {
+                                experimentInfo.compareObject = selectedCompareProducts.map(product => product.name).join(', ');
                             }
                         }
                     }
@@ -2398,8 +2736,8 @@
                     return;
                 }
                 
-                if (dimension === 'product' && selectedCompareProductCategories.length === 0) {
-                    alert('请选择对比产品类别');
+                if (dimension === 'product' && selectedCompareProducts.length === 0) {
+                    alert('请选择对比产品');
                     return;
                 }
             }
@@ -2457,16 +2795,13 @@
                     selectedStores: selectedStores,
                     selectedProducts: selectedProducts,
                     selectedCompareStores: selectedCompareStores,
-                    selectedCompareProductCategories: selectedCompareProductCategories,
+                    selectedCompareProducts: selectedCompareProducts,
                     compareType: 'dimension',
                     experimentPeriod: `${formatDate(experimentStartDate)} 至 ${formatDate(experimentEndDate)}`,
                     comparePeriod: `${formatDate(compareStart)} 至 ${formatDate(compareEnd)}`,
                     compareObject: dimension === 'store' ? 
                         selectedCompareStores.map(store => store.name).join(', ') :
-                        selectedCompareProductCategories.map(cat => {
-                            const category = productCategoryOptions.find(c => c.id === cat);
-                            return category ? category.name : cat;
-                        }).join(', ')
+                        selectedCompareProducts.map(product => product.name).join(', ')
                 };
             }
             
@@ -2487,6 +2822,7 @@
                     salesCompare: result.salesCompare,
                     profitCompare: result.profitCompare,
                     storeContribution: result.storeContribution,
+                    conclusion: editingExperimentId ? experimentData.find(exp => exp.id === editingExperimentId)?.conclusion || '' : '',
                     objectDetails: result.objectDetails,
                     compareObjectDetails: result.compareObjectDetails || []
                 };
@@ -2510,8 +2846,8 @@
                 experimentFormModal.classList.remove('active');
                 formLoading.classList.remove('active');
                 
-                // 显示成功消息
-                alert(`实验"${title}"已成功${editingExperimentId ? '更新' : '添加'}！`);
+                // 显示实验报告
+                showExperimentReport(experiment.id);
             } catch (error) {
                 console.error('计算实验数据时出错:', error);
                 alert('计算实验数据时出错，请稍后重试');
@@ -2576,9 +2912,8 @@
                     });
                 } else {
                     // 产品维度对比
-                    selectedCompareProductCategories = experiment.compareObject.split(', ').map(name => {
-                        const category = productCategoryOptions.find(c => c.name === name);
-                        return category ? category.id : name;
+                    selectedCompareProducts = experiment.compareObject.split(', ').map(name => {
+                        return productOptions.find(opt => opt.name === name) || { id: Date.now(), name: name };
                     });
                 }
             }
@@ -2606,68 +2941,131 @@
             }
         }
 
-        // 显示实验对象详情弹窗
-        function showObjectDetailModal(experimentId) {
+        // 显示实验报告
+        function showExperimentReport(experimentId) {
             const experiment = experimentData.find(exp => exp.id === experimentId);
             if (!experiment) return;
             
-            detailModalTitle.textContent = `${experiment.title} - 实验详情`;
+            currentReportExperimentId = experimentId;
+            reportModalTitle.textContent = `实验报告 - ${experiment.title}`;
             
-            let detailsHTML = '';
+            let reportHTML = '';
             
-            // 实验基本信息
-            detailsHTML += `
-                <div class="detail-item">
-                    <div class="detail-label">实验标题</div>
-                    <div class="detail-value">${experiment.title}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">实验对象</div>
-                    <div class="detail-value">${experiment.objectType}: ${experiment.objectNames.join(', ')}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">实验周期</div>
-                    <div class="detail-value">${experiment.experimentPeriod}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">对比${experiment.compareType === 'time' ? '周期' : '对象'}</div>
-                    <div class="detail-value">${experiment.compareObject}</div>
-                </div>
-                ${experiment.compareType === 'time' ? `
-                <div class="detail-item">
-                    <div class="detail-label">对比周期</div>
-                    <div class="detail-value">${experiment.comparePeriod}</div>
-                </div>
-                ` : ''}
-                <div class="detail-item">
-                    <div class="detail-label">销额对比</div>
-                    <div class="detail-value">${experiment.salesCompare}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">毛利额对比</div>
-                    <div class="detail-value">${experiment.profitCompare}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">门店贡献对比</div>
-                    <div class="detail-value">${experiment.storeContribution}</div>
+            // 第一部分：实验定义
+            reportHTML += `
+                <div class="report-section">
+                    <div class="report-section-title">
+                        <i class="fas fa-clipboard-check"></i> 实验定义
+                    </div>
+                    <div class="definition-grid">
+                        <div class="definition-item">
+                            <div class="definition-label">实验标题</div>
+                            <div class="definition-value">${experiment.title}</div>
+                        </div>
+                        <div class="definition-item">
+                            <div class="definition-label">实验对象</div>
+                            <div class="definition-value">${experiment.objectType}: ${experiment.objectNames.join(', ')}</div>
+                        </div>
+                        <div class="definition-item">
+                            <div class="definition-label">实验周期</div>
+                            <div class="definition-value">${experiment.experimentPeriod}</div>
+                        </div>
+                        ${experiment.compareType === 'time' ? `
+                        <div class="definition-item">
+                            <div class="definition-label">对比周期</div>
+                            <div class="definition-value">${experiment.comparePeriod}</div>
+                        </div>
+                        <div class="definition-item">
+                            <div class="definition-label">对比类型</div>
+                            <div class="definition-value">${experiment.compareObject}</div>
+                        </div>
+                        ` : `
+                        <div class="definition-item">
+                            <div class="definition-label">对比对象</div>
+                            <div class="definition-value">${experiment.compareObject}</div>
+                        </div>
+                        <div class="definition-item">
+                            <div class="definition-label">对比周期</div>
+                            <div class="definition-value">${experiment.comparePeriod}</div>
+                        </div>
+                        `}
+                    </div>
                 </div>
             `;
             
-            // 实验对象详情表格
+            // 第二部分：实验结论
+            reportHTML += `
+                <div class="report-section">
+                    <div class="report-section-title">
+                        <i class="fas fa-chart-line"></i> 实验结论
+                    </div>
+                    <div class="definition-item">
+                        <div class="definition-label">实验结论分析</div>
+                        <textarea class="conclusion-textarea" id="conclusionTextarea" placeholder="请输入实验结论分析...">${experiment.conclusion || ''}</textarea>
+                        <button class="generate-report-btn" id="saveConclusionBtn" style="padding: 8px 20px; font-size: 14px;">
+                            <i class="fas fa-save"></i> 保存结论
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // 第三部分：实验数据
+            reportHTML += `
+                <div class="report-section">
+                    <div class="report-section-title">
+                        <i class="fas fa-table"></i> 实验数据
+                    </div>
+                    
+                    <div class="definition-item">
+                        <div class="definition-label">整体对比</div>
+                        <div class="data-overview">
+                            <div class="data-overview-item">
+                                <div class="data-overview-title">销额对比</div>
+                                <div class="data-overview-value ${experiment.salesCompare.includes('+') ? 'positive' : (experiment.salesCompare.includes('-') ? 'negative' : '')}">
+                                    ${experiment.salesCompare}
+                                </div>
+                                <div class="data-overview-change">
+                                    ${experiment.compareType === 'time' ? 
+                                        '实验期销额 vs 对比期销额' : 
+                                        '实验对象增长率 vs 对比对象增长率'}
+                                </div>
+                            </div>
+                            <div class="data-overview-item">
+                                <div class="data-overview-title">毛利额对比</div>
+                                <div class="data-overview-value ${experiment.profitCompare.includes('+') ? 'positive' : (experiment.profitCompare.includes('-') ? 'negative' : '')}">
+                                    ${experiment.profitCompare}
+                                </div>
+                                <div class="data-overview-change">
+                                    ${experiment.compareType === 'time' ? 
+                                        '实验期毛利额 vs 对比期毛利额' : 
+                                        '实验对象增长率 vs 对比对象增长率'}
+                                </div>
+                            </div>
+                            ${experiment.storeContribution !== '--' ? `
+                            <div class="data-overview-item">
+                                <div class="data-overview-title">门店贡献对比</div>
+                                <div class="data-overview-value ${experiment.storeContribution.includes('+') ? 'positive' : (experiment.storeContribution.includes('-') ? 'negative' : '')}">
+                                    ${experiment.storeContribution}
+                                </div>
+                                <div class="data-overview-change">${experiment.compareType === 'time' ? '实验期贡献 vs 对比期贡献' : '实验对象贡献 vs 对比对象贡献'}</div>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+            `;
+            
+            // 具体每个实验对象的对比
             if (experiment.objectDetails && experiment.objectDetails.length > 0) {
-                detailsHTML += `
-                    <div class="detail-item">
-                        <div class="detail-label">实验对象详情</div>
+                reportHTML += `
+                    <div class="definition-item">
+                        <div class="definition-label">具体对象对比</div>
                         <table class="object-detail-table">
                             <thead>
                                 <tr>
-                                    <th>${experiment.objectType}名称</th>
-                                    <th>实验期销额</th>
-                                    <th>对比期销额</th>
-                                    <th>销额增长率</th>
-                                    <th>实验期毛利额</th>
-                                    <th>对比期毛利额</th>
-                                    <th>毛利额增长率</th>
+                                    <th>${experiment.dimension === 'store' ? '门店名称' : '产品名称'}</th>
+                                    <th>销额对比</th>
+                                    <th>毛利额对比</th>
+                                    ${experiment.compareType === 'time' && experiment.storeContribution !== '--' ? '<th>门店贡献</th>' : ''}
                                 </tr>
                             </thead>
                             <tbody>
@@ -2676,85 +3074,134 @@
                 experiment.objectDetails.forEach(detail => {
                     const salesChangeClass = detail.salesGrowthRate >= 0 ? 'positive' : 'negative';
                     const profitChangeClass = detail.profitGrowthRate >= 0 ? 'positive' : 'negative';
-                    
                     const salesChangeSign = detail.salesGrowthRate >= 0 ? '+' : '';
                     const profitChangeSign = detail.profitGrowthRate >= 0 ? '+' : '';
                     
-                    detailsHTML += `
+                    reportHTML += `
                         <tr>
-                            <td>${detail.name}</td>
-                            <td>¥${detail.experimentSales.toLocaleString()}</td>
-                            <td>¥${detail.compareSales.toLocaleString()}</td>
-                            <td class="${salesChangeClass}">${salesChangeSign}${detail.salesGrowthRate}%</td>
-                            <td>¥${detail.experimentProfit.toLocaleString()}</td>
-                            <td>¥${detail.compareProfit.toLocaleString()}</td>
-                            <td class="${profitChangeClass}">${profitChangeSign}${detail.profitGrowthRate}%</td>
+                            <td><strong>${detail.name}</strong></td>
+                            <td>
+                                <div>¥${detail.experimentSales.toLocaleString()}/¥${detail.compareSales.toLocaleString()}</div>
+                                <div class="${salesChangeClass}" style="font-size: 13px; margin-top: 4px;">
+                                    ${salesChangeSign}${detail.salesGrowthRate}%
+                                </div>
+                            </td>
+                            <td>
+                                <div>¥${detail.experimentProfit.toLocaleString()}/¥${detail.compareProfit.toLocaleString()}</div>
+                                <div class="${profitChangeClass}" style="font-size: 13px; margin-top: 4px;">
+                                    ${profitChangeSign}${detail.profitGrowthRate}%
+                                </div>
+                            </td>
+                            ${experiment.compareType === 'time' && experiment.storeContribution !== '--' ? '<td>--</td>' : ''}
                         </tr>
                     `;
                 });
                 
-                detailsHTML += `
+                // 如果是维度对比且有对比对象，添加对比对象的具体对比
+                if (experiment.compareType === 'dimension' && experiment.compareObjectDetails && experiment.compareObjectDetails.length > 0) {
+                    reportHTML += `
+                        <tr style="background-color: #fafafa;">
+                            <td colspan="${experiment.dimension === 'store' ? (experiment.compareType === 'time' && experiment.storeContribution !== '--' ? 4 : 3) : 3}">
+                                <strong>对比对象详情</strong>
+                            </td>
+                        </tr>
+                    `;
+                    
+                    experiment.compareObjectDetails.forEach(detail => {
+                        const salesChangeClass = detail.salesGrowthRate >= 0 ? 'positive' : 'negative';
+                        const profitChangeClass = detail.profitGrowthRate >= 0 ? 'positive' : 'negative';
+                        const salesChangeSign = detail.salesGrowthRate >= 0 ? '+' : '';
+                        const profitChangeSign = detail.profitGrowthRate >= 0 ? '+' : '';
+                        
+                        reportHTML += `
+                            <tr>
+                                <td>${detail.name}</td>
+                                <td>
+                                    <div>¥${detail.experimentSales.toLocaleString()}/¥${detail.compareSales.toLocaleString()}</div>
+                                    <div class="${salesChangeClass}" style="font-size: 13px; margin-top: 4px;">
+                                        ${salesChangeSign}${detail.salesGrowthRate}%
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>¥${detail.experimentProfit.toLocaleString()}/¥${detail.compareProfit.toLocaleString()}</div>
+                                    <div class="${profitChangeClass}" style="font-size: 13px; margin-top: 4px;">
+                                        ${profitChangeSign}${detail.profitGrowthRate}%
+                                    </div>
+                                </td>
+                                ${experiment.dimension === 'store' && experiment.compareType === 'time' && experiment.storeContribution !== '--' ? '<td>--</td>' : ''}
+                            </tr>
+                        `;
+                    });
+                }
+                
+                reportHTML += `
                             </tbody>
                         </table>
                     </div>
                 `;
             }
             
-            // 对比对象详情表格（仅维度对比）
-            if (experiment.compareType === 'dimension' && experiment.compareObjectDetails && experiment.compareObjectDetails.length > 0) {
-                detailsHTML += `
-                    <div class="detail-item">
-                        <div class="detail-label">对比对象详情</div>
-                        <table class="object-detail-table">
-                            <thead>
-                                <tr>
-                                    <th>对比对象名称</th>
-                                    <th>实验期销额</th>
-                                    <th>对比期销额</th>
-                                    <th>销额增长率</th>
-                                    <th>实验期毛利额</th>
-                                    <th>对比期毛利额</th>
-                                    <th>毛利额增长率</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                `;
-                
-                experiment.compareObjectDetails.forEach(detail => {
-                    const salesChangeClass = detail.salesGrowthRate >= 0 ? 'positive' : 'negative';
-                    const profitChangeClass = detail.profitGrowthRate >= 0 ? 'positive' : 'negative';
-                    
-                    const salesChangeSign = detail.salesGrowthRate >= 0 ? '+' : '';
-                    const profitChangeSign = detail.profitGrowthRate >= 0 ? '+' : '';
-                    
-                    detailsHTML += `
-                        <tr>
-                            <td>${detail.name}</td>
-                            <td>¥${detail.experimentSales.toLocaleString()}</td>
-                            <td>¥${detail.compareSales.toLocaleString()}</td>
-                            <td class="${salesChangeClass}">${salesChangeSign}${detail.salesGrowthRate}%</td>
-                            <td>¥${detail.experimentProfit.toLocaleString()}</td>
-                            <td>¥${detail.compareProfit.toLocaleString()}</td>
-                            <td class="${profitChangeClass}">${profitChangeSign}${detail.profitGrowthRate}%</td>
-                        </tr>
-                    `;
-                });
-                
-                detailsHTML += `
-                            </tbody>
-                        </table>
+            reportHTML += `</div>`; // 关闭实验数据部分
+            
+            // 报告底部：下载按钮
+            reportHTML += `
+                <div class="report-footer">
+                    <div class="report-info">
+                        <i class="fas fa-info-circle"></i> 报告生成时间: ${new Date().toLocaleString('zh-CN')}
                     </div>
-                `;
+                    <button class="download-btn" id="downloadReportBtn">
+                        <i class="fas fa-download"></i> 下载报告 (Excel)
+                    </button>
+                </div>
+            `;
+            
+            reportModalBody.innerHTML = reportHTML;
+            
+            // 添加事件监听器
+            const saveConclusionBtn = document.getElementById('saveConclusionBtn');
+            const downloadReportBtn = document.getElementById('downloadReportBtn');
+            
+            if (saveConclusionBtn) {
+                saveConclusionBtn.addEventListener('click', function() {
+                    saveConclusion(experimentId);
+                });
             }
             
-            detailModalBody.innerHTML = detailsHTML;
-            detailModal.classList.add('active');
+            if (downloadReportBtn) {
+                downloadReportBtn.addEventListener('click', function() {
+                    downloadReport(experimentId);
+                });
+            }
+            
+            reportModal.classList.add('active');
         }
 
-        // 显示实验详情弹窗（点击实验标题）
-        function showExperimentDetailModal(experimentId) {
-            // 这里可以显示更详细的信息，与showObjectDetailModal类似
-            showObjectDetailModal(experimentId);
+        // 保存实验结论
+        function saveConclusion(experimentId) {
+            const conclusionTextarea = document.getElementById('conclusionTextarea');
+            if (!conclusionTextarea) return;
+            
+            const conclusion = conclusionTextarea.value.trim();
+            
+            const experiment = experimentData.find(exp => exp.id === experimentId);
+            if (!experiment) return;
+            
+            experiment.conclusion = conclusion;
+            
+            // 显示成功消息
+            alert('实验结论已保存');
+        }
+
+        // 下载实验报告（模拟功能）
+        function downloadReport(experimentId) {
+            const experiment = experimentData.find(exp => exp.id === experimentId);
+            if (!experiment) return;
+            
+            // 模拟下载功能
+            alert(`实验报告"${experiment.title}"下载功能仅原型展示，实际开发中将导出Excel文件。`);
+            
+            console.log(`准备下载实验报告: ${experiment.title}`);
+            console.log('实验数据:', experiment);
         }
 
         // 辅助函数：格式化日期
