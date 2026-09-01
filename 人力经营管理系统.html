@@ -580,6 +580,7 @@
             color: var(--primary);
         }
 
+        /* ===== 待办事项（店长一日） ===== */
         .todo-item {
             display: flex;
             flex-direction: column;
@@ -818,6 +819,109 @@
         }
         .metric .change.down {
             color: var(--success);
+        }
+
+        /* ===== 销售预测 ===== */
+        .forecast-item {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 12px;
+            gap: 4px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .forecast-item:hover {
+            background: #fafafa;
+        }
+        .forecast-item .day {
+            font-weight: 600;
+            width: 44px;
+        }
+        .forecast-item .date {
+            color: var(--gray-500);
+            width: 60px;
+        }
+        .forecast-item .weather {
+            width: 40px;
+        }
+        .forecast-item .pred input {
+            width: 60px;
+            padding: 2px 4px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            text-align: center;
+            font-size: 12px;
+        }
+        .forecast-item .actual {
+            width: 60px;
+        }
+        .forecast-item .acc {
+            width: 50px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .forecast-item .expand-icon {
+            margin-left: auto;
+            color: var(--gray-400);
+            font-size: 11px;
+        }
+
+        .forecast-detail {
+            margin: 6px 0 10px 0;
+            padding: 10px 12px;
+            background: #fafafa;
+            border-radius: 4px;
+            border-left: 2px solid var(--primary);
+            display: none;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        .forecast-detail.open {
+            display: block;
+        }
+        .forecast-detail .detail-section {
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px solid #eee;
+        }
+        .forecast-detail .detail-section:first-child {
+            border-top: none;
+            margin-top: 0;
+            padding-top: 0;
+        }
+        .forecast-detail .detail-section .section-title {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+        .forecast-detail .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+            font-size: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        .forecast-detail .detail-row:last-child {
+            border-bottom: none;
+        }
+        .forecast-detail .detail-row .dlbl {
+            color: var(--gray-500);
+        }
+        .forecast-detail .detail-row .dval {
+            font-weight: 500;
+            color: var(--text);
+        }
+        .forecast-detail .detail-row .dval.link {
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .forecast-detail .detail-row .dval.link:hover {
+            text-decoration: none;
         }
 
         /* ===== 排班管理（午市/晚市） ===== */
@@ -1480,7 +1584,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- ===== 一店一策（已覆盖为第二个文件的完整版本） ===== -->
                         <div class="tab-content hidden" id="store-strategy">
                             <div class="card">
                                 <div style="font-weight:600;font-size:14px;margin-bottom:6px;">月度建议</div>
@@ -1590,10 +1693,118 @@
                             <button class="tab-btn" data-tab="ops-schedule">排班管理</button>
                             <button class="tab-btn" data-tab="ops-happiness">幸福表</button>
                         </div>
+                        <!-- ===== 店长一日（已合并第二个文件内容） ===== -->
                         <div class="tab-content" id="ops-day">
-                            <div class="card" style="margin-top:0;"><div style="font-weight:600;font-size:14px;margin-bottom:6px;">日常待办</div><div id="manager-day-tasks"></div><button class="btn btn-sm btn-outline" style="margin-top:4px;" onclick="addNewTodo()">+ 添加待办</button></div>
+                            <div class="card" style="margin-top:0;">
+                                <div style="font-weight:600;font-size:14px;margin-bottom:6px;">日常待办</div>
+                                <div id="manager-day-tasks"></div>
+                                <div style="margin-top:4px;"><button class="btn btn-sm btn-outline" onclick="addNewTodo()">+ 添加待办</button></div>
+                            </div>
                         </div>
-                        <div class="tab-content hidden" id="ops-forecast"><div class="card"><p style="color:var(--gray-400);">预测数据已省略</p></div></div>
+                        <!-- ===== 销售预测（已合并第二个文件内容） ===== -->
+                        <div class="tab-content hidden" id="ops-forecast">
+                            <div class="card">
+                                <div style="font-weight:600;font-size:14px;margin-bottom:6px;">销售预测（未来一周）</div>
+                                <!-- 周一 -->
+                                <div class="forecast-item" onclick="toggleForecastDetail('detail1')">
+                                    <span class="day">周一</span><span class="date">8/19</span><span class="weather">晴</span>
+                                    <span class="pred"><input type="number" value="5200" disabled style="background:#f5f5f5;"></span>
+                                    <span class="actual">¥5100</span><span class="acc">98%</span>
+                                    <span class="expand-icon">▼</span>
+                                </div>
+                                <div id="detail1" class="forecast-detail">
+                                    <div class="detail-section">
+                                        <div class="section-title">销额明细</div>
+                                        <div class="detail-row"><span class="dlbl">外卖销额</span><span class="dval">¥2,800</span></div>
+                                        <div class="detail-row"><span class="dlbl">堂食销额</span><span class="dval">¥2,300</span></div>
+                                    </div>
+                                    <div class="detail-section">
+                                        <div class="section-title">工序预估（工时 / 人数）<span class="clickable" onclick="switchToSchedule()" style="font-size:11px;font-weight:400;">去排班</span></div>
+                                        <div class="detail-row"><span class="dlbl">收货</span><span class="dval">1.5h / 1人</span></div>
+                                        <div class="detail-row"><span class="dlbl">开档</span><span class="dval">2.0h / 2人</span></div>
+                                        <div class="detail-row"><span class="dlbl">传菜</span><span class="dval">3.5h / 3人</span></div>
+                                        <div class="detail-row"><span class="dlbl">收餐</span><span class="dval">2.0h / 2人</span></div>
+                                        <div class="detail-row"><span class="dlbl">洗碗</span><span class="dval">1.5h / 1人</span></div>
+                                    </div>
+                                    <div class="detail-section">
+                                        <div class="section-title">档口 / 菜品 / 理论报货单</div>
+                                        <div class="detail-row"><span class="dlbl">热菜档口</span><span class="dval">红烧肉 15份 · 清蒸鱼 10份</span></div>
+                                        <div class="detail-row"><span class="dlbl">凉菜档口</span><span class="dval">凉拌黄瓜 20份 · 皮蛋豆腐 12份</span></div>
+                                        <div class="detail-row"><span class="dlbl">面点档口</span><span class="dval">馒头 30个 · 面条 15碗</span></div>
+                                        <div class="detail-row" style="border-bottom:none;padding-top:4px;border-top:1px solid #eee;margin-top:4px;">
+                                            <span class="dlbl" style="font-weight:500;">理论报货单</span>
+                                            <span class="dval link" onclick="alert('展开报货单详情')">查看详情</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 周二 -->
+                                <div class="forecast-item" onclick="toggleForecastDetail('detail2')">
+                                    <span class="day">周二</span><span class="date">8/20</span><span class="weather">多云</span>
+                                    <span class="pred"><input type="number" value="5800" disabled style="background:#f5f5f5;"></span>
+                                    <span class="actual">¥6000</span><span class="acc">96%</span>
+                                    <span class="expand-icon">▼</span>
+                                </div>
+                                <div id="detail2" class="forecast-detail">
+                                    <div class="detail-section">
+                                        <div class="section-title">销额明细</div>
+                                        <div class="detail-row"><span class="dlbl">外卖销额</span><span class="dval">¥3,200</span></div>
+                                        <div class="detail-row"><span class="dlbl">堂食销额</span><span class="dval">¥2,800</span></div>
+                                    </div>
+                                    <div class="detail-section">
+                                        <div class="section-title">工序预估（工时 / 人数）<span class="clickable" onclick="switchToSchedule()" style="font-size:11px;font-weight:400;">去排班</span></div>
+                                        <div class="detail-row"><span class="dlbl">收货</span><span class="dval">1.8h / 1人</span></div>
+                                        <div class="detail-row"><span class="dlbl">开档</span><span class="dval">2.2h / 2人</span></div>
+                                        <div class="detail-row"><span class="dlbl">传菜</span><span class="dval">4.0h / 3人</span></div>
+                                        <div class="detail-row"><span class="dlbl">收餐</span><span class="dval">2.2h / 2人</span></div>
+                                        <div class="detail-row"><span class="dlbl">洗碗</span><span class="dval">1.8h / 1人</span></div>
+                                    </div>
+                                    <div class="detail-section">
+                                        <div class="section-title">档口 / 菜品 / 理论报货单</div>
+                                        <div class="detail-row"><span class="dlbl">热菜档口</span><span class="dval">红烧肉 18份 · 清蒸鱼 12份</span></div>
+                                        <div class="detail-row"><span class="dlbl">凉菜档口</span><span class="dval">凉拌黄瓜 22份 · 皮蛋豆腐 15份</span></div>
+                                        <div class="detail-row"><span class="dlbl">面点档口</span><span class="dval">馒头 35个 · 面条 18碗</span></div>
+                                        <div class="detail-row" style="border-bottom:none;padding-top:4px;border-top:1px solid #eee;margin-top:4px;">
+                                            <span class="dlbl" style="font-weight:500;">理论报货单</span>
+                                            <span class="dval link" onclick="alert('展开报货单详情')">查看详情</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 周三 -->
+                                <div class="forecast-item" onclick="toggleForecastDetail('detail3')">
+                                    <span class="day">周三</span><span class="date">8/21</span><span class="weather">雨</span>
+                                    <span class="pred"><input type="number" value="4900"></span>
+                                    <span class="actual">-</span><span class="acc">-</span>
+                                    <span class="expand-icon">▼</span>
+                                </div>
+                                <div id="detail3" class="forecast-detail">
+                                    <div class="detail-section">
+                                        <div class="section-title">销额明细</div>
+                                        <div class="detail-row"><span class="dlbl">外卖销额</span><span class="dval">¥2,500</span></div>
+                                        <div class="detail-row"><span class="dlbl">堂食销额</span><span class="dval">¥2,400</span></div>
+                                    </div>
+                                    <div class="detail-section">
+                                        <div class="section-title">工序预估（工时 / 人数）<span class="clickable" onclick="switchToSchedule()" style="font-size:11px;font-weight:400;">去排班</span></div>
+                                        <div class="detail-row"><span class="dlbl">收货</span><span class="dval">1.2h / 1人</span></div>
+                                        <div class="detail-row"><span class="dlbl">开档</span><span class="dval">1.8h / 2人</span></div>
+                                        <div class="detail-row"><span class="dlbl">传菜</span><span class="dval">3.0h / 2人</span></div>
+                                        <div class="detail-row"><span class="dlbl">收餐</span><span class="dval">1.8h / 2人</span></div>
+                                        <div class="detail-row"><span class="dlbl">洗碗</span><span class="dval">1.2h / 1人</span></div>
+                                    </div>
+                                    <div class="detail-section">
+                                        <div class="section-title">档口 / 菜品 / 理论报货单</div>
+                                        <div class="detail-row"><span class="dlbl">热菜档口</span><span class="dval">红烧肉 12份 · 清蒸鱼 8份</span></div>
+                                        <div class="detail-row"><span class="dlbl">凉菜档口</span><span class="dval">凉拌黄瓜 18份 · 皮蛋豆腐 10份</span></div>
+                                        <div class="detail-row"><span class="dlbl">面点档口</span><span class="dval">馒头 25个 · 面条 12碗</span></div>
+                                        <div class="detail-row" style="border-bottom:none;padding-top:4px;border-top:1px solid #eee;margin-top:4px;">
+                                            <span class="dlbl" style="font-weight:500;">理论报货单</span>
+                                            <span class="dval link" onclick="alert('展开报货单详情')">查看详情</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="font-size:11px;color:var(--gray-400);margin-top:4px;">点击日期展开详情</div>
+                                <button class="btn" style="margin-top:6px;" onclick="alert('已保存调整')">保存调整</button>
+                            </div>
+                        </div>
                         <!-- ===== 排班管理（午市/晚市） ===== -->
                         <div class="tab-content hidden" id="ops-schedule">
                             <div class="card" style="margin-top:0;padding:12px 14px;">
@@ -1682,7 +1893,7 @@
                         <div class="tab-content hidden" id="my-docs"><div class="card"><p style="color:var(--gray-400);">文档管理</p></div></div>
                         <div class="tab-content hidden" id="my-profile"><div class="card"><p style="color:var(--gray-400);">个人档案</p></div></div>
                     </div>
-                    <!-- ===== PDCA 页面（从第二个文件完整移植） ===== -->
+                    <!-- ===== PDCA 页面 ===== -->
                     <div class="mgr-page page-pdca hidden">
                         <div class="card" style="margin-top:0;">
                             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
@@ -1911,7 +2122,7 @@
 
     <script>
         // ================================================================
-        // 全局任务数据
+        // 全局任务数据（合并后）
         // ================================================================
         var globalTasks = [{
             id: 't1',
@@ -2193,6 +2404,14 @@
                     var sub = container.querySelector('.app-header .sub');
                     if (h2) h2.textContent = this.dataset.title || this.textContent.trim();
                     if (sub) sub.textContent = '万象城店 · 王芳 · 资深店长';
+                    // 切换到运营工具时，默认显示店长一日并刷新待办
+                    if (pageName === 'ops-tools') {
+                        setTimeout(function() {
+                            refreshDayTasks();
+                            var opsDayTab = document.querySelector('#mgr-ops-tabs .tab-btn[data-tab="ops-day"]');
+                            if (opsDayTab) opsDayTab.click();
+                        }, 50);
+                    }
                 });
             });
         }
@@ -2265,6 +2484,9 @@
                         if (tabId === 'ops-schedule') {
                             renderSchedule();
                         }
+                        if (tabId === 'ops-day') {
+                            refreshDayTasks();
+                        }
                     });
                 });
             });
@@ -2302,7 +2524,7 @@
         }
 
         // ================================================================
-        // PDCA 页面（从第二个文件完整移植）
+        // PDCA 页面
         // ================================================================
         function showPdca(goal) {
             if (goal !== 'satisfaction') {
@@ -2475,7 +2697,7 @@
         }
 
         // ================================================================
-        // 刷新店长一日和员工一日任务
+        // 刷新店长一日和员工一日任务（合并后）
         // ================================================================
         function refreshDayTasks() {
             var mgrContainer = document.getElementById('manager-day-tasks');
@@ -2492,6 +2714,9 @@
                                     <input type="checkbox" id="mgr_${task.id}" class="todo-checkbox">
                                     <span class="todo-text">${task.text}</span>
                                     <span class="todo-at" style="font-size:11px;color:var(--gray-400);">@ ${task.at || ''}</span>
+                                    <div class="todo-actions">
+                                        <button class="btn btn-sm btn-outline" onclick="openCheckModal('${task.id}')">执行检查</button>
+                                    </div>
                                 </div>
                             </div>
                         `;
@@ -3051,6 +3276,38 @@
         }
 
         // ================================================================
+        // 销售预测 - 展开/折叠详情（新增）
+        // ================================================================
+        function toggleForecastDetail(detailId) {
+            var detail = document.getElementById(detailId);
+            if (detail) {
+                detail.classList.toggle('open');
+                var parent = detail.previousElementSibling;
+                if (parent && parent.classList.contains('forecast-item')) {
+                    var arrow = parent.querySelector('.expand-icon');
+                    if (arrow) arrow.textContent = detail.classList.contains('open') ? '▲' : '▼';
+                }
+            }
+        }
+
+        // ================================================================
+        // 跳转到排班管理（销售预测中“去排班”按钮）
+        // ================================================================
+        function switchToSchedule() {
+            var navItems = document.querySelectorAll('#phone-manager .bottom-nav .nav-item');
+            navItems.forEach(function(n) {
+                if (n.dataset.page === 'ops-tools') n.click();
+            });
+            setTimeout(function() {
+                var opsTabs = document.querySelectorAll('#mgr-ops-tabs .tab-btn');
+                opsTabs.forEach(function(t) {
+                    if (t.dataset.tab === 'ops-schedule') t.click();
+                });
+                renderSchedule();
+            }, 100);
+        }
+
+        // ================================================================
         // 通用 - 角色切换
         // ================================================================
         var roleBtns = document.querySelectorAll('.role-btn');
@@ -3085,6 +3342,9 @@
                         if (scheduleTab && scheduleTab.classList.contains('active')) {
                             renderSchedule();
                         }
+                        setTimeout(function() {
+                            refreshDayTasks();
+                        }, 100);
                     }
                 }
                 if (role === 'manager') {
@@ -3212,7 +3472,7 @@
             }
 
             renderExecutiveEval();
-            console.log('✅ 系统已启动，店长页「一店一策-PDCA」已完整覆盖。');
+            console.log('✅ 系统已启动，店长页「店长一日」和「销售预测」已完整合并。');
         });
 
         // ================================================================
@@ -3253,6 +3513,9 @@
         window.confirmStaffSelect = confirmStaffSelect;
         window.toggleStaffCheck = toggleStaffCheck;
         window.publishSchedule = publishSchedule;
+        window.toggleForecastDetail = toggleForecastDetail;
+        window.switchToSchedule = switchToSchedule;
+        window.refreshDayTasks = refreshDayTasks;
     </script>
 </body>
 </html>
