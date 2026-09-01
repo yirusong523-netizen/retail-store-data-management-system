@@ -1,0 +1,3258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>连锁餐饮人力经营系统</title>
+    <style>
+        /* ========== 全局重置 ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        :root {
+            --primary: #c62828;
+            --primary-light: #ef5350;
+            --primary-bg: #fbe9e7;
+            --success: #2e7d32;
+            --warning: #e65100;
+            --gray-100: #f5f5f5;
+            --gray-200: #e8e8e8;
+            --gray-300: #d0d0d0;
+            --gray-400: #999;
+            --gray-500: #666;
+            --gray-600: #444;
+            --gray-700: #222;
+            --text: #1a1a1a;
+            --text-secondary: #666;
+            --border: #e8e8e8;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --radius: 12px;
+        }
+
+        body {
+            background: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 12px;
+            min-height: 100vh;
+        }
+
+        /* ===== 角色切换栏 ===== */
+        .role-switcher {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            justify-content: center;
+            background: #fff;
+            padding: 6px 10px;
+            border-radius: 30px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+        .role-btn {
+            padding: 6px 18px;
+            border: none;
+            border-radius: 20px;
+            background: transparent;
+            color: #888;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.25s;
+            letter-spacing: 0.5px;
+        }
+        .role-btn.active {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(198, 40, 40, 0.25);
+        }
+        .role-btn:hover:not(.active) {
+            color: var(--primary);
+            background: var(--primary-bg);
+        }
+
+        /* ===== 手机容器 ===== */
+        .phone-wrapper {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .phone-container {
+            width: 390px;
+            height: 820px;
+            background: #fff;
+            border-radius: 38px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.10), 0 0 0 8px #1a1a1a;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            position: relative;
+        }
+        .phone-container.active {
+            display: flex;
+        }
+
+        .status-bar {
+            height: 30px;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .app-header {
+            padding: 10px 18px 8px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .app-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: 0.3px;
+        }
+        .app-header .sub {
+            font-size: 11px;
+            color: var(--gray-400);
+            margin-top: 2px;
+            font-weight: 400;
+        }
+
+        .phone-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fa;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+        .phone-screen::-webkit-scrollbar {
+            display: none;
+        }
+
+        .content {
+            flex: 1;
+            padding: 14px 16px 10px;
+            overflow-y: auto;
+        }
+
+        /* ===== 卡片系统 ===== */
+        .card {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: box-shadow 0.2s;
+        }
+        .card:hover {
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: 0.3px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .card-title .sub-label {
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--gray-400);
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 13px;
+        }
+        .row:last-child {
+            border-bottom: none;
+        }
+        .row .label {
+            color: var(--gray-500);
+            font-weight: 400;
+        }
+        .row .value {
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .badge {
+            font-size: 10px;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-weight: 500;
+            background: var(--gray-100);
+            color: var(--gray-500);
+            letter-spacing: 0.3px;
+            display: inline-block;
+        }
+        .badge-green {
+            background: #e8f5e9;
+            color: var(--success);
+        }
+        .badge-orange {
+            background: #fff3e0;
+            color: var(--warning);
+        }
+        .badge-red {
+            background: #fce4ec;
+            color: var(--primary);
+        }
+        .badge-gray {
+            background: #f5f5f5;
+            color: #888;
+        }
+        .badge-blue {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 7px 18px;
+            border: none;
+            border-radius: 6px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            letter-spacing: 0.3px;
+        }
+        .btn:hover:not(:disabled) {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .btn-outline {
+            background: #fff;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        .btn-outline:hover:not(:disabled) {
+            background: var(--primary-bg);
+        }
+        .btn-sm {
+            padding: 4px 14px;
+            font-size: 11px;
+        }
+        .btn-xs {
+            padding: 2px 10px;
+            font-size: 10px;
+        }
+
+        .clickable {
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .clickable:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ===== 底部导航 ===== */
+        .bottom-nav {
+            display: flex;
+            background: #fff;
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+            padding: 4px 0 8px;
+        }
+        .bottom-nav .nav-item {
+            flex: 1;
+            text-align: center;
+            font-size: 9px;
+            color: var(--gray-400);
+            cursor: pointer;
+            padding: 4px 0 2px;
+            transition: color 0.2s;
+            line-height: 1.3;
+            border: none;
+            background: none;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+        .bottom-nav .nav-item .icon {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 1px;
+            font-weight: 300;
+        }
+        .bottom-nav .nav-item.active {
+            color: var(--primary);
+        }
+
+        /* ===== 高管 - 店长评价 ===== */
+        .exec-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .exec-summary .stat {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 12px 6px;
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+        .exec-summary .stat .num {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.2;
+        }
+        .exec-summary .stat .label {
+            font-size: 10px;
+            color: var(--gray-400);
+            margin-top: 2px;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .manager-eval-item {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: box-shadow 0.2s;
+        }
+        .manager-eval-item:hover {
+            box-shadow: 0 6px 28px rgba(0, 0, 0, 0.08);
+        }
+        .manager-eval-item .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        .manager-eval-item .header .name {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text);
+            letter-spacing: 0.3px;
+        }
+        .manager-eval-item .header .tenure {
+            font-size: 12px;
+            color: var(--gray-400);
+            background: var(--gray-100);
+            padding: 1px 14px;
+            border-radius: 30px;
+            font-weight: 400;
+        }
+        .manager-eval-item .total-score-badge {
+            display: inline-block;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 2px 0 6px 0;
+            letter-spacing: 0.5px;
+        }
+        .manager-eval-item .total-score-badge .denominator {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--gray-400);
+        }
+        .manager-eval-item .scores-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px 16px;
+            margin: 6px 0 4px 0;
+            font-size: 12px;
+        }
+        .manager-eval-item .scores-grid .s-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px dashed #f0f0f0;
+            font-size: 12px;
+        }
+        .manager-eval-item .scores-grid .s-item .s-label {
+            color: var(--gray-400);
+            font-weight: 400;
+        }
+        .manager-eval-item .scores-grid .s-item .s-value {
+            font-weight: 500;
+            color: var(--text);
+        }
+        .manager-eval-item .scores-grid .s-item .s-value.good {
+            color: var(--success);
+        }
+        .manager-eval-item .scores-grid .s-item .s-value.bad {
+            color: var(--primary);
+        }
+        .manager-eval-item .scores-grid .s-item .s-value.neutral {
+            color: var(--gray-500);
+        }
+        .manager-eval-item .action-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 6px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+        .manager-eval-item .action-row .btn-sm {
+            font-size: 10px;
+            padding: 3px 14px;
+        }
+
+        .manager-eval-item .eval-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 2px 12px;
+            border-radius: 30px;
+            background: var(--gray-100);
+            color: var(--gray-500);
+        }
+        .manager-eval-item .eval-status.promote {
+            background: #e8f5e9;
+            color: var(--success);
+        }
+        .manager-eval-item .eval-status.warning {
+            background: #fff3e0;
+            color: var(--warning);
+        }
+        .manager-eval-item .eval-status.danger {
+            background: #fce4ec;
+            color: var(--primary);
+        }
+
+        /* ===== 员工/小时工页面 ===== */
+        .rotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 6px;
+            margin: 6px 0;
+        }
+        .rotation-item {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 8px 2px;
+            text-align: center;
+            border: 1px solid #e8e8e8;
+            font-size: 11px;
+            color: #aaa;
+            transition: all 0.15s;
+        }
+        .rotation-item.done {
+            background: #e8f5e9;
+            border-color: #81c784;
+            color: var(--success);
+            font-weight: 500;
+        }
+        .rotation-item .icon {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 1px;
+            font-weight: 300;
+        }
+        .rotation-item.done .icon {
+            color: var(--success);
+        }
+
+        /* ===== 简约薪资行（员工 & 店长通用） ===== */
+        .salary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 7px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s;
+        }
+        .salary-row:hover {
+            background: #fafafa;
+        }
+        .salary-row .label {
+            color: var(--gray-500);
+            font-weight: 400;
+        }
+        .salary-row .value {
+            font-weight: 500;
+            color: var(--text);
+        }
+        .salary-row .arrow {
+            font-size: 10px;
+            color: #bbb;
+            margin-left: 8px;
+            transition: transform 0.25s;
+            flex-shrink: 0;
+        }
+        .salary-row .arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .salary-detail-simple {
+            padding: 8px 12px 10px 12px;
+            background: #f8f8f8;
+            border-radius: 6px;
+            font-size: 12px;
+            display: none;
+            border-left: 2px solid var(--primary);
+            margin-top: 0;
+            margin-bottom: 2px;
+        }
+        .salary-detail-simple.open {
+            display: block;
+        }
+        .salary-detail-simple .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 12px;
+        }
+        .salary-detail-simple .detail-row:last-child {
+            border-bottom: none;
+        }
+        .salary-detail-simple .detail-row .dlabel {
+            color: var(--gray-500);
+        }
+        .salary-detail-simple .detail-row .dvalue {
+            font-weight: 500;
+            color: var(--text);
+        }
+        .salary-detail-simple .detail-total {
+            border-top: 1px solid var(--border);
+            margin-top: 2px;
+            padding-top: 4px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+        }
+
+        .salary-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0 0;
+            margin-top: 4px;
+            border-top: 2px solid var(--border);
+            font-size: 14px;
+        }
+        .salary-total .label {
+            font-weight: 600;
+            color: var(--text);
+        }
+        .salary-total .value {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .todo-item {
+            display: flex;
+            flex-direction: column;
+            padding: 6px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .todo-item:last-child {
+            border-bottom: none;
+        }
+        .todo-item .todo-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        .todo-item .todo-row .todo-checkbox {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .todo-item .todo-row .todo-text {
+            flex: 1;
+            font-size: 13px;
+            color: var(--text);
+            min-width: 80px;
+        }
+        .todo-item .todo-row .todo-actions {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        .todo-item .todo-row .todo-actions .btn-sm {
+            font-size: 10px;
+            padding: 2px 10px;
+        }
+
+        .staff-list-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            gap: 10px;
+        }
+        .staff-list-item:last-child {
+            border-bottom: none;
+        }
+        .staff-list-item .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--primary-bg);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .archive-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .archive-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        .archive-tabs .tab-btn {
+            flex-shrink: 0;
+            padding: 3px 14px;
+            border-radius: 4px;
+            background: #fff;
+            color: var(--gray-500);
+            border: 1px solid var(--border);
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .archive-tabs .tab-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .func-tabs {
+            display: flex;
+            gap: 4px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding: 4px 0 10px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 12px;
+            scrollbar-width: none;
+        }
+        .func-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        .func-tabs .tab-btn {
+            flex-shrink: 0;
+            padding: 4px 16px;
+            border-radius: 6px;
+            background: #fff;
+            color: var(--gray-500);
+            border: 1px solid var(--border);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .func-tabs .tab-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .hr-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+        }
+        .hr-stat {
+            background: #fafafa;
+            border-radius: 6px;
+            padding: 8px 4px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        .hr-stat .num {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .hr-stat .num.primary {
+            color: var(--primary);
+        }
+        .hr-stat .label {
+            font-size: 10px;
+            color: var(--gray-400);
+            margin-top: 1px;
+        }
+
+        .cadre-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 6px 0;
+        }
+        .cadre-summary .cadre-item {
+            background: #fafafa;
+            border-radius: 6px;
+            padding: 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .cadre-summary .cadre-item:hover {
+            border-color: var(--primary);
+        }
+        .cadre-summary .cadre-item .num {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .cadre-summary .cadre-item .label {
+            font-size: 11px;
+            color: var(--gray-500);
+        }
+
+        .incentive-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+            margin: 6px 0;
+        }
+        .incentive-stats .stat {
+            background: #fafafa;
+            border-radius: 6px;
+            padding: 8px 4px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        .incentive-stats .stat .num {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .incentive-stats .stat .label {
+            font-size: 10px;
+            color: var(--gray-400);
+            margin-top: 1px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .metric {
+            background: #fafafa;
+            border-radius: 6px;
+            padding: 10px 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        .metric .num {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .metric .num.primary {
+            color: var(--primary);
+        }
+        .metric .label {
+            font-size: 11px;
+            color: var(--gray-400);
+            margin-top: 2px;
+        }
+        .metric .change {
+            font-size: 11px;
+            margin-top: 2px;
+        }
+        .metric .change.up {
+            color: var(--primary);
+        }
+        .metric .change.down {
+            color: var(--success);
+        }
+
+        /* ===== 排班管理（午市/晚市） ===== */
+        .shift-group-title {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text);
+            padding: 8px 0 4px 0;
+            margin-top: 4px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .shift-group-title .shift-badge {
+            font-size: 10px;
+            padding: 1px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        .shift-group-title .shift-badge.lunch {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .shift-group-title .shift-badge.dinner {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .schedule-date-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 0 10px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 10px;
+        }
+        .schedule-date-nav .date-display {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text);
+        }
+        .schedule-date-nav .date-arrow {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-light);
+            transition: all 0.2s;
+        }
+        .schedule-date-nav .date-arrow:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .schedule-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .schedule-metrics .s-metric {
+            background: #fafafa;
+            border-radius: 6px;
+            padding: 10px 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        .schedule-metrics .s-metric .num {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .schedule-metrics .s-metric .num.primary {
+            color: var(--primary);
+        }
+        .schedule-metrics .s-metric .label {
+            font-size: 10px;
+            color: var(--gray-400);
+            margin-top: 2px;
+        }
+
+        .schedule-process {
+            margin: 2px 0 6px;
+        }
+        .schedule-process .process-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 12px;
+        }
+        .schedule-process .process-item:last-child {
+            border-bottom: none;
+        }
+        .schedule-process .process-item .pname {
+            color: var(--text-light);
+        }
+        .schedule-process .process-item .pvalue {
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .schedule-positions {
+            margin: 2px 0 6px;
+        }
+        .schedule-positions .pos-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            border-bottom: 1px solid #f5f5f5;
+            cursor: pointer;
+            transition: background 0.15s;
+            border-radius: 4px;
+        }
+        .schedule-positions .pos-item:hover {
+            background: #f9f9f9;
+        }
+        .schedule-positions .pos-item:last-child {
+            border-bottom: none;
+        }
+        .schedule-positions .pos-item .pos-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
+        }
+        .schedule-positions .pos-item .pos-info .pos-name {
+            font-weight: 500;
+            font-size: 13px;
+            color: var(--text);
+            white-space: nowrap;
+        }
+        .schedule-positions .pos-item .pos-info .pos-suggest {
+            font-size: 11px;
+            color: var(--gray-400);
+            background: #f0f0f0;
+            padding: 0 8px;
+            border-radius: 10px;
+            white-space: nowrap;
+        }
+        .schedule-positions .pos-item .pos-selected {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: wrap;
+            flex: 1;
+            justify-content: flex-end;
+            min-width: 60px;
+        }
+        .schedule-positions .pos-item .pos-selected .sel-tag {
+            font-size: 10px;
+            background: var(--primary-bg);
+            color: var(--primary);
+            padding: 1px 8px;
+            border-radius: 10px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .schedule-positions .pos-item .pos-selected .sel-tag.pt {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        .schedule-positions .pos-item .pos-selected .sel-tag.empty {
+            background: #f5f5f5;
+            color: #aaa;
+            font-weight: 400;
+        }
+        .schedule-positions .pos-item .pos-arrow {
+            color: #ccc;
+            font-size: 12px;
+            margin-left: 4px;
+        }
+
+        .publish-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0 0;
+            border-top: 1px solid var(--border);
+            margin-top: 6px;
+        }
+        .publish-status .status-text {
+            font-size: 12px;
+            color: var(--gray-400);
+        }
+        .publish-status .status-text .highlight {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* 人员选择模态框 */
+        .staff-select-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            border-radius: 38px;
+            overflow: hidden;
+        }
+        .staff-select-modal.open {
+            display: flex;
+        }
+        .staff-select-modal .modal-box {
+            background: #fff;
+            border-radius: 14px;
+            padding: 20px 18px;
+            width: 92%;
+            max-height: 82%;
+            overflow-y: auto;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.20);
+        }
+        .staff-select-modal .modal-box .modal-title {
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 12px;
+        }
+        .staff-select-modal .modal-box .modal-title .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--gray-400);
+            padding: 0 4px;
+        }
+        .staff-select-modal .modal-box .staff-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 4px;
+            border-bottom: 1px solid #f5f5f5;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .staff-select-modal .modal-box .staff-option:hover {
+            background: #f9f9f9;
+        }
+        .staff-select-modal .modal-box .staff-option .s-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary-bg);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+        .staff-select-modal .modal-box .staff-option .s-name {
+            flex: 1;
+            font-size: 13px;
+            color: var(--text);
+        }
+        .staff-select-modal .modal-box .staff-option .s-check {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+        .staff-select-modal .modal-box .modal-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+        .staff-select-modal .modal-box .modal-actions .btn {
+            flex: 1;
+        }
+        .staff-select-modal .modal-box .modal-actions .btn-outline {
+            flex: 1;
+        }
+
+        /* ===== 模态框 ===== */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            border-radius: 38px;
+            overflow: hidden;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal-box {
+            background: #fff;
+            border-radius: 14px;
+            padding: 20px 18px;
+            width: 92%;
+            max-height: 82%;
+            overflow-y: auto;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.20);
+        }
+        .modal-box .modal-title {
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 12px;
+        }
+        .modal-box .modal-title .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--gray-400);
+            padding: 0 4px;
+        }
+        .modal-box .field {
+            margin-bottom: 14px;
+        }
+        .modal-box .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+        .modal-box .field input,
+        .modal-box .field select,
+        .modal-box .field textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 13px;
+            outline: none;
+            background: #fff;
+            transition: border-color 0.2s;
+        }
+        .modal-box .field input:focus,
+        .modal-box .field select:focus,
+        .modal-box .field textarea:focus {
+            border-color: var(--primary);
+        }
+        .modal-box .field textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .modal-box .modal-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+        .modal-box .modal-actions .btn {
+            flex: 1;
+        }
+        .modal-box .modal-actions .btn-outline {
+            flex: 1;
+        }
+
+        .upload-area {
+            border: 1px dashed var(--border);
+            border-radius: 6px;
+            padding: 16px;
+            text-align: center;
+            color: var(--gray-400);
+            font-size: 12px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .upload-area:hover {
+            border-color: var(--primary);
+        }
+        .upload-area input[type="file"] {
+            display: none;
+        }
+
+        /* ===== PDCA 样式 ===== */
+        .pdca-section {
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: #fff;
+        }
+        .pdca-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: #fafafa;
+            cursor: pointer;
+            transition: background 0.15s;
+            border-bottom: 1px solid var(--border);
+        }
+        .pdca-header:hover {
+            background: #f0f0f0;
+        }
+        .pdca-header .pdca-toggle {
+            font-size: 11px;
+            color: var(--gray-400);
+            transition: transform 0.25s;
+        }
+        .pdca-header .pdca-toggle.open {
+            transform: rotate(180deg);
+        }
+        .pdca-body {
+            padding: 12px 14px;
+            display: block;
+            background: #fff;
+        }
+
+        .goal-card {
+            border-left: 3px solid var(--primary);
+            padding: 10px 14px;
+            background: #fafafa;
+            border-radius: 6px;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 420px) {
+            .phone-container {
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+                border: none;
+                box-shadow: none;
+            }
+            .phone-container .status-bar {
+                border-radius: 0;
+            }
+            .modal-overlay,
+            .staff-select-modal {
+                border-radius: 0;
+            }
+            body {
+                padding: 0;
+            }
+            .role-switcher {
+                border-radius: 0;
+                margin-bottom: 0;
+                padding: 8px 12px;
+                width: 100%;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== 角色切换 ===== -->
+    <div class="role-switcher">
+        <button class="role-btn active" data-role="employee">员工</button>
+        <button class="role-btn" data-role="manager">店长</button>
+        <button class="role-btn" data-role="hr">人事</button>
+        <button class="role-btn" data-role="parttime">小时工</button>
+        <button class="role-btn" data-role="executive">高管</button>
+    </div>
+
+    <div class="phone-wrapper">
+
+        <!-- ================================ 员工 ================================ -->
+        <div class="phone-container active" id="phone-employee" data-store="万象城店" data-name="张三" data-rank="高级服务员">
+            <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+            <div class="phone-screen">
+                <div class="app-header"><h2 id="emp-header-title">首页</h2><div class="sub" id="emp-header-sub">万象城店 · 张三 · 高级服务员</div></div>
+                <div class="content" id="emp-content">
+                    <div class="emp-page page-home">
+                        <div class="card">
+                            <div class="row"><span class="label">姓名</span><span class="value">张三</span></div>
+                            <div class="row"><span class="label">门店</span><span class="value">万象城店</span></div>
+                            <div class="row"><span class="label">岗位</span><span class="value">前厅服务</span></div>
+                            <div class="row"><span class="label">职级</span><span class="clickable" onclick="togglePromotion()">高级服务员</span></div>
+                            <div id="promotionDetail" class="hidden" style="margin-top:8px;border-top:1px solid var(--border);padding-top:8px;">
+                                <div style="font-weight:600;font-size:13px;margin-bottom:4px;">晋升路径</div>
+                                <div style="display:flex;align-items:center;gap:4px;font-size:12px;flex-wrap:wrap;color:var(--gray-600);">
+                                    初级 → 中级 → <span style="color:var(--primary);font-weight:600;">高级</span> → 值班经理 → 店长
+                                </div>
+                                <div style="font-weight:600;font-size:13px;margin:8px 0 4px;">晋级要求</div>
+                                <div class="row" style="cursor:pointer;" onclick="switchEmployeeTab('train')">
+                                    <span class="label">培训进度</span>
+                                    <span class="value clickable">85%</span>
+                                </div>
+                                <div style="background:#f0f0f0;height:4px;border-radius:2px;margin:2px 0 6px;"><div style="width:85%;background:var(--primary);height:4px;border-radius:2px;"></div></div>
+                                <div style="font-weight:500;font-size:13px;margin:8px 0 4px;">轮岗完成程度</div>
+                                <div class="rotation-grid">
+                                    <div class="rotation-item done"><span class="icon">✓</span><span>人事专员</span></div>
+                                    <div class="rotation-item"><span class="icon">○</span><span>外卖专员</span></div>
+                                    <div class="rotation-item"><span class="icon">○</span><span>财务专员</span></div>
+                                    <div class="rotation-item"><span class="icon">○</span><span>工程专员</span></div>
+                                </div>
+                                <div class="row"><span class="label">业绩达成</span><span class="value">102%</span></div>
+                                <div style="background:#f0f0f0;height:4px;border-radius:2px;margin:2px 0 6px;"><div style="width:100%;background:var(--primary);height:4px;border-radius:2px;"></div></div>
+                                <div class="row"><span class="label">带教新人</span><span class="value">1/2</span></div>
+                                <div style="background:#f0f0f0;height:4px;border-radius:2px;margin:2px 0 6px;"><div style="width:50%;background:var(--primary);height:4px;border-radius:2px;"></div></div>
+                                <div class="row"><span class="label">综合进度</span><span class="value">78%</span></div>
+                                <div style="background:#f0f0f0;height:4px;border-radius:2px;margin:2px 0;"><div style="width:78%;background:var(--success);height:4px;border-radius:2px;"></div></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">今日班表 <span class="badge">早班 08:00-14:00</span></div>
+                            <div class="row"><span class="label">状态</span><span class="value">已打卡 07:55</span></div>
+                            <div style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px;">
+                                <button class="btn btn-sm btn-outline" style="flex:1;">请假</button>
+                                <button class="btn btn-sm btn-outline" style="flex:1;">工时上报</button>
+                                <button class="btn btn-sm btn-outline" style="flex:1;">未来班表</button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">提醒</div>
+                            <div class="row" style="font-size:12px;color:var(--primary);">健康证 30天后到期</div>
+                            <div class="row" style="font-size:12px;color:var(--primary);">培训任务 2项未完成</div>
+                        </div>
+                    </div>
+                    <div class="emp-page page-day hidden">
+                        <div class="card" style="margin-top:0;">
+                            <div style="font-weight:600;font-size:14px;margin-bottom:6px;">今日待办</div>
+                            <div id="emp-day-tasks"></div>
+                        </div>
+                    </div>
+                    <div class="emp-page page-train hidden">
+                        <div class="card">
+                            <div class="card-title">培训中心 <span class="badge badge-orange">待学: 3</span></div>
+                            <div class="row" style="font-size:12px;">食品安全基础 <span class="badge badge-green">已通过</span></div>
+                            <div class="row" style="font-size:12px;">服务SOP实操 <span class="badge">待考核</span></div>
+                            <div class="row" style="font-size:12px;border-top:1px solid var(--border);padding-top:6px;margin-top:4px;">值班管理 <span class="badge">未开始</span></div>
+                            <div class="row" style="font-size:12px;">排班基础 <span class="badge">未开始</span></div>
+                        </div>
+                    </div>
+                    <!-- ===== 员工薪资（简约格式 + 销额分成 & 店长奖励 明细） ===== -->
+                    <div class="emp-page page-salary hidden">
+                        <div class="card">
+                            <div class="card-title">本月薪资（预估）</div>
+                            <!-- 基本工资 -->
+                            <div class="row" style="border-bottom:1px solid #f0f0f0;padding:7px 0;">
+                                <span class="label">基本工资</span>
+                                <span class="value">¥3,500</span>
+                            </div>
+                            <!-- 绩效奖金 -->
+                            <div class="salary-row" onclick="toggleSalaryDetail(this)">
+                                <span class="label">绩效奖金</span>
+                                <span style="display:flex;align-items:center;gap:6px;"><span class="value">¥300</span><span class="arrow">▼</span></span>
+                            </div>
+                            <div class="salary-detail-simple">
+                                <div class="detail-row"><span class="dlabel">绩效总额</span><span class="dvalue">¥500</span></div>
+                                <div class="detail-row"><span class="dlabel">差评扣减</span><span class="dvalue" style="color:var(--primary);">-¥200</span></div>
+                                <div class="detail-total"><span class="dlabel">实得绩效</span><span class="dvalue">¥300</span></div>
+                            </div>
+                            <!-- 销额分成（带明细） -->
+                            <div class="salary-row" onclick="toggleSalaryDetail(this)">
+                                <span class="label">销额分成</span>
+                                <span style="display:flex;align-items:center;gap:6px;"><span class="value" style="color:var(--success);">+¥300</span><span class="arrow">▼</span></span>
+                            </div>
+                            <div class="salary-detail-simple">
+                                <div class="detail-row"><span class="dlabel">本月个人销额</span><span class="dvalue">¥15,000</span></div>
+                                <div class="detail-row"><span class="dlabel">分成比例</span><span class="dvalue">2%</span></div>
+                                <div class="detail-total"><span class="dlabel">分成金额</span><span class="dvalue" style="color:var(--success);">+¥300</span></div>
+                            </div>
+                            <!-- 店长奖励（带明细） -->
+                            <div class="salary-row" onclick="toggleSalaryDetail(this)">
+                                <span class="label">店长奖励</span>
+                                <span style="display:flex;align-items:center;gap:6px;"><span class="value" style="color:var(--success);">+¥100</span><span class="arrow">▼</span></span>
+                            </div>
+                            <div class="salary-detail-simple">
+                                <div class="detail-row"><span class="dlabel">奖励原因</span><span class="dvalue">本月优秀服务</span></div>
+                                <div class="detail-row"><span class="dlabel">发放人</span><span class="dvalue">店长 王芳</span></div>
+                                <div class="detail-total"><span class="dlabel">奖励金额</span><span class="dvalue" style="color:var(--success);">+¥100</span></div>
+                            </div>
+                            <!-- 实发合计 -->
+                            <div class="salary-total"><span class="label">实发合计</span><span class="value">¥4,200</span></div>
+                        </div>
+                    </div>
+                    <div class="emp-page page-profile hidden">
+                        <div class="card"><div class="row"><span class="label">姓名</span><span class="value">张三</span></div><div class="row"><span class="label">职级</span><span class="value">高级服务员</span></div><div class="row"><span class="label">门店</span><span class="value">万象城店</span></div></div>
+                        <div class="card"><div class="card-title">电子文档</div><div class="row" style="font-size:12px;">健康证 <button class="btn btn-sm">查看</button></div><div class="row" style="font-size:12px;">劳动合同 <button class="btn btn-sm">查看</button></div></div>
+                    </div>
+                </div>
+                <div class="bottom-nav" id="emp-bottom-nav">
+                    <div class="nav-item active" data-page="home" data-title="首页"><span class="icon">⌂</span>首页</div>
+                    <div class="nav-item" data-page="day" data-title="一日"><span class="icon">◻</span>一日</div>
+                    <div class="nav-item" data-page="train" data-title="培训"><span class="icon">◈</span>培训</div>
+                    <div class="nav-item" data-page="salary" data-title="薪资"><span class="icon">¥</span>薪资</div>
+                    <div class="nav-item" data-page="profile" data-title="我的"><span class="icon">◉</span>我的</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================================ 店长（薪资已改为简约格式） ================================ -->
+        <div class="phone-container" id="phone-manager" data-store="万象城店" data-name="王芳" data-rank="资深店长">
+            <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+            <div class="phone-screen">
+                <div class="app-header"><h2 id="mgr-header-title">门店经营</h2><div class="sub" id="mgr-header-sub">万象城店 · 王芳 · 资深店长</div></div>
+                <div class="content" id="mgr-content">
+                    <!-- 门店经营 -->
+                    <div class="mgr-page page-store-mgmt">
+                        <div class="func-tabs" id="mgr-store-tabs">
+                            <button class="tab-btn active" data-tab="store-data">经营数据</button>
+                            <button class="tab-btn" data-tab="store-strategy">一店一策</button>
+                            <button class="tab-btn" data-tab="store-training">培训学习</button>
+                            <button class="tab-btn" data-tab="store-team">团队建设</button>
+                        </div>
+                        <div class="tab-content" id="store-data">
+                            <div class="card" style="padding:14px;">
+                                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                                    <span style="font-weight:600;font-size:14px;">昨日概览</span>
+                                    <span style="font-size:11px;color:var(--gray-400);">2025-08-27</span>
+                                </div>
+                                <div class="grid-2">
+                                    <div class="metric" style="text-align:left;">
+                                        <div style="font-size:11px;color:var(--gray-400);">销额</div>
+                                        <div class="num" style="font-size:18px;">28.5万</div>
+                                        <div class="change up">+5.2%</div>
+                                        <div style="font-size:11px;color:var(--gray-500);margin-top:4px;">堂食 18.0万 <span style="color:var(--text);">-7.1%</span></div>
+                                        <div style="font-size:11px;color:var(--gray-500);">外卖 10.5万 <span style="color:var(--primary);">+20.1%</span></div>
+                                    </div>
+                                    <div class="metric" style="text-align:left;">
+                                        <div style="font-size:11px;color:var(--gray-400);">经营利润</div>
+                                        <div class="num" style="font-size:18px;">4.2万</div>
+                                        <div class="change up">+8.1%</div>
+                                    </div>
+                                    <div class="metric" style="text-align:left;">
+                                        <div style="font-size:11px;color:var(--gray-400);">毛利额</div>
+                                        <div class="num" style="font-size:18px;">19.2万</div>
+                                        <div class="change up">+3.0%</div>
+                                        <div style="font-size:11px;color:var(--gray-400);">毛利率 32.5%</div>
+                                    </div>
+                                    <div class="metric" style="text-align:left;">
+                                        <div style="font-size:11px;color:var(--gray-400);">人力成本</div>
+                                        <div class="num" style="font-size:18px;">18.5%</div>
+                                        <div class="change down">-1.2%</div>
+                                        <div style="font-size:11px;color:var(--gray-400);">人时销额 ¥61.4</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ===== 一店一策（已覆盖为第二个文件的完整版本） ===== -->
+                        <div class="tab-content hidden" id="store-strategy">
+                            <div class="card">
+                                <div style="font-weight:600;font-size:14px;margin-bottom:6px;">月度建议</div>
+                                <div style="font-size:13px;line-height:1.6;color:var(--text);">
+                                    <div style="margin-bottom:6px;"><strong>1. 提高外卖销额</strong> 外卖销额同比低于同类门店，建议本月外卖销额提高至15万元，<span class="clickable" onclick="switchManagerTab('store-training')">查看最佳实践</span></div>
+                                    <div><strong>2. 降租</strong> 当前1.2万元月租较高，建议降月租至1万元。</div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div style="font-weight:600;font-size:14px;margin-bottom:6px;">每日建议</div>
+                                <div class="goal-card">
+                                    <div style="font-weight:600;font-size:14px;color:var(--text);">提高客户满意度，减少差评</div>
+                                    <div style="font-size:12px;color:var(--gray-400);margin-top:2px;">差评目标: 10 条 | 实际: 12 条</div>
+                                    <div style="margin-top:6px;"><button class="btn btn-sm" onclick="showPdca('satisfaction')">查看 PDCA</button></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content hidden" id="store-training">
+                            <div class="card">
+                                <div style="font-weight:600;font-size:14px;margin-bottom:6px;">培训学习 <span class="badge badge-blue">待学: 3</span></div>
+                                <div style="display:flex;gap:4px;margin:6px 0 10px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;">
+                                    <button class="tab-btn active" data-cat="storefront" style="padding:3px 14px;border-radius:4px;border:1px solid var(--border);background:#fff;font-size:11px;cursor:pointer;white-space:nowrap;">提升进店率</button>
+                                    <button class="tab-btn" data-cat="delivery" style="padding:3px 14px;border-radius:4px;border:1px solid var(--border);background:#fff;font-size:11px;cursor:pointer;white-space:nowrap;">提高外卖销额</button>
+                                    <button class="tab-btn" data-cat="satisfaction" style="padding:3px 14px;border-radius:4px;border:1px solid var(--border);background:#fff;font-size:11px;cursor:pointer;white-space:nowrap;">提高客户满意度</button>
+                                </div>
+                                <div id="trainingCourseList"></div>
+                            </div>
+                        </div>
+                        <div class="tab-content hidden" id="store-team">
+                            <div class="card">
+                                <div style="display:flex;justify-content:space-between;align-items:center;">
+                                    <span style="font-weight:600;font-size:14px;">人力概览</span>
+                                    <span class="clickable" onclick="alert('展示组织架构图')">查看组织架构</span>
+                                </div>
+                                <div class="hr-stats">
+                                    <div class="hr-stat"><div class="num">24</div><div class="label">实际在岗</div></div>
+                                    <div class="hr-stat"><div class="num">28</div><div class="label">平均年龄</div></div>
+                                    <div class="hr-stat"><div class="num">4</div><div class="label">小时工人数</div><div class="label" style="font-size:9px;color:var(--gray-400);">储备 2人</div></div>
+                                    <div class="hr-stat"><div class="num primary">3</div><div class="label">干部人数</div><div class="label" style="font-size:9px;color:var(--gray-400);">储备 2人</div></div>
+                                    <div class="hr-stat"><div class="num primary">85%</div><div class="label">干部培养率</div></div>
+                                    <div class="hr-stat"><div class="num" style="color:var(--primary);">8%</div><div class="label">干部流失率</div></div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div style="font-weight:600;font-size:14px;margin-bottom:6px;">干部储备</div>
+                                <div class="cadre-summary">
+                                    <div class="cadre-item" onclick="toggleCadreDetail('front')"><div class="num">2</div><div class="label">前厅干部</div><div style="font-size:9px;color:var(--gray-400);margin-top:2px;">点击展开</div></div>
+                                    <div class="cadre-item" onclick="toggleCadreDetail('back')"><div class="num">1</div><div class="label">后厨干部</div><div style="font-size:9px;color:var(--gray-400);margin-top:2px;">点击展开</div></div>
+                                </div>
+                                <div id="cadre-front" class="hidden" style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);">
+                                    <div style="font-weight:500;font-size:13px;margin-bottom:4px;">前厅干部</div>
+                                    <div class="row" style="font-size:12px;padding:3px 0;">张三 · 高级服务员 <span class="badge badge-green">储备中</span></div>
+                                    <div class="row" style="font-size:12px;padding:3px 0;">李四 · 中级服务员 <span class="badge badge-orange">培训中</span></div>
+                                </div>
+                                <div id="cadre-back" class="hidden" style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);">
+                                    <div style="font-weight:500;font-size:13px;margin-bottom:4px;">后厨干部</div>
+                                    <div class="row" style="font-size:12px;padding:3px 0;">王五 · 后厨主管 <span class="badge badge-green">储备中</span></div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div style="font-weight:600;font-size:14px;margin-bottom:6px;">干部培训与晋升</div>
+                                <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid #f5f5f5;font-size:12px;">
+                                    <span style="font-weight:500;">张三</span>
+                                    <span style="color:var(--gray-500);">培训 85% · 考试 70%</span>
+                                    <span class="badge badge-blue">晋升目标：值班经理</span>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid #f5f5f5;font-size:12px;">
+                                    <span style="font-weight:500;">李四</span>
+                                    <span style="color:var(--gray-500);">培训 60% · 考试 50%</span>
+                                    <span class="badge badge-orange">晋升目标：高级服务员</span>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid #f5f5f5;font-size:12px;">
+                                    <span style="font-weight:500;">王五</span>
+                                    <span style="color:var(--gray-500);">培训 90% · 考试 80%</span>
+                                    <span class="badge badge-green">晋升目标：后厨主管</span>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:12px;">
+                                    <span style="font-weight:500;">赵六</span>
+                                    <span style="color:var(--gray-500);">培训 40% · 考试 35%</span>
+                                    <span class="badge">晋升目标：领班</span>
+                                </div>
+                                <div style="margin-top:6px;font-size:11px;color:var(--gray-400);text-align:right;">预计晋升周期：张三 2个月 · 李四 4个月 · 王五 1个月 · 赵六 6个月</div>
+                            </div>
+                            <div class="card">
+                                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                                    <span style="font-weight:600;font-size:14px;">员工激励</span>
+                                    <button class="btn btn-sm" onclick="openIncentiveModal()">发放激励</button>
+                                </div>
+                                <div class="incentive-stats">
+                                    <div class="stat"><div class="num" id="totalIncentive">¥12,800</div><div class="label">总激励金额</div></div>
+                                    <div class="stat"><div class="num" id="avgIncentive">¥1,067</div><div class="label">人均激励</div></div>
+                                    <div class="stat"><div class="num" id="incentivePeople">12人</div><div class="label">获激励人数</div></div>
+                                </div>
+                                <div style="font-size:12px;color:var(--gray-500);margin-top:4px;">
+                                    <div class="row" style="font-size:12px;padding:3px 0;">团队建设 <span class="value">¥3,200</span></div>
+                                    <div class="row" style="font-size:12px;padding:3px 0;">招聘/培训高级员工 <span class="value">¥4,600</span></div>
+                                    <div class="row" style="font-size:12px;padding:3px 0;">分享最佳实践 <span class="value">¥5,000</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 运营工具 -->
+                    <div class="mgr-page page-ops-tools hidden">
+                        <div class="func-tabs" id="mgr-ops-tabs">
+                            <button class="tab-btn active" data-tab="ops-day">店长一日</button>
+                            <button class="tab-btn" data-tab="ops-forecast">销售预测</button>
+                            <button class="tab-btn" data-tab="ops-schedule">排班管理</button>
+                            <button class="tab-btn" data-tab="ops-happiness">幸福表</button>
+                        </div>
+                        <div class="tab-content" id="ops-day">
+                            <div class="card" style="margin-top:0;"><div style="font-weight:600;font-size:14px;margin-bottom:6px;">日常待办</div><div id="manager-day-tasks"></div><button class="btn btn-sm btn-outline" style="margin-top:4px;" onclick="addNewTodo()">+ 添加待办</button></div>
+                        </div>
+                        <div class="tab-content hidden" id="ops-forecast"><div class="card"><p style="color:var(--gray-400);">预测数据已省略</p></div></div>
+                        <!-- ===== 排班管理（午市/晚市） ===== -->
+                        <div class="tab-content hidden" id="ops-schedule">
+                            <div class="card" style="margin-top:0;padding:12px 14px;">
+                                <div class="schedule-date-nav">
+                                    <button class="date-arrow" onclick="changeScheduleDate(-1)">‹</button>
+                                    <span class="date-display" id="scheduleDateDisplay">2025-08-28 周三</span>
+                                    <button class="date-arrow" onclick="changeScheduleDate(1)">›</button>
+                                </div>
+                                <div class="schedule-metrics" id="scheduleMetrics">
+                                    <div class="s-metric"><div class="num primary" id="metricSales">¥28,500</div><div class="label">预估销额</div></div>
+                                    <div class="s-metric"><div class="num" id="metricTotalHours">68.5h</div><div class="label">预估总工时</div></div>
+                                    <div class="s-metric"><div class="num primary" id="metricLaborCost">¥6,850</div><div class="label">预估人力成本</div></div>
+                                    <div class="s-metric"><div class="num" id="metricLaborRatio">24.0%</div><div class="label">人工费用占比</div></div>
+                                </div>
+                                <div style="display:flex;gap:6px;margin:10px 0 8px;border-bottom:1px solid var(--border);padding-bottom:6px;">
+                                    <button class="btn btn-sm shift-tab active" data-shift="all" style="flex:1;background:var(--primary);color:#fff;border:none;" onclick="filterScheduleShift('all')">全部</button>
+                                    <button class="btn btn-sm shift-tab" data-shift="lunch" style="flex:1;background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7;" onclick="filterScheduleShift('lunch')">午市</button>
+                                    <button class="btn btn-sm shift-tab" data-shift="dinner" style="flex:1;background:#fff3e0;color:#e65100;border:1px solid #ffcc80;" onclick="filterScheduleShift('dinner')">晚市</button>
+                                </div>
+                                <div style="font-weight:600;font-size:13px;color:var(--text);margin:6px 0 4px;">工序预估</div>
+                                <div class="schedule-process" id="scheduleProcessList"></div>
+                                <div style="font-weight:600;font-size:13px;color:var(--text);margin:10px 0 4px;">人员配置 <span style="font-weight:400;font-size:11px;color:var(--gray-400);">点击岗位选择人员</span></div>
+                                <div class="schedule-positions" id="schedulePositions"></div>
+                                <div class="publish-status">
+                                    <span class="status-text" id="publishStatusText">⏳ 未发布</span>
+                                    <button class="btn btn-sm" id="publishScheduleBtn" onclick="publishSchedule()">📤 发布排班</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content hidden" id="ops-happiness"><div class="card"><p style="color:var(--gray-400);">日报数据已省略</p></div></div>
+                    </div>
+                    <!-- 我的 -->
+                    <div class="mgr-page page-my hidden">
+                        <div class="func-tabs" id="mgr-my-tabs">
+                            <button class="tab-btn active" data-tab="my-salary">薪资详情</button>
+                            <button class="tab-btn" data-tab="my-docs">文档管理</button>
+                            <button class="tab-btn" data-tab="my-profile">个人档案</button>
+                        </div>
+                        <!-- ===== 店长薪资（简约格式，与员工一致） ===== -->
+                        <div class="tab-content" id="my-salary">
+                            <div class="card">
+                                <div class="card-title">本月薪资（预估）</div>
+                                <!-- 基本工资 -->
+                                <div class="row" style="border-bottom:1px solid #f0f0f0;padding:7px 0;">
+                                    <span class="label">基本工资</span>
+                                    <span class="value">¥8,000</span>
+                                </div>
+                                <!-- 绩效奖金 -->
+                                <div class="salary-row" onclick="toggleSalaryDetail(this)">
+                                    <span class="label">绩效奖金</span>
+                                    <span style="display:flex;align-items:center;gap:6px;"><span class="value" style="color:var(--success);">¥2,500</span><span class="arrow">▼</span></span>
+                                </div>
+                                <div class="salary-detail-simple">
+                                    <div class="detail-row"><span class="dlabel">绩效总额</span><span class="dvalue">¥3,000</span></div>
+                                    <div class="detail-row"><span class="dlabel">顾客满意度</span><span class="dvalue">95% ✅</span></div>
+                                    <div class="detail-row"><span class="dlabel">差评扣减</span><span class="dvalue" style="color:var(--primary);">-¥500</span></div>
+                                    <div class="detail-total"><span class="dlabel">实得绩效</span><span class="dvalue" style="color:var(--success);">¥2,500</span></div>
+                                </div>
+                                <!-- 预估利润分成 -->
+                                <div class="salary-row" onclick="toggleSalaryDetail(this)">
+                                    <span class="label">预估利润分成</span>
+                                    <span style="display:flex;align-items:center;gap:6px;"><span class="value" style="color:var(--success);">+¥1,200</span><span class="arrow">▼</span></span>
+                                </div>
+                                <div class="salary-detail-simple">
+                                    <div class="detail-row"><span class="dlabel">当月预测利润</span><span class="dvalue">¥128,000</span></div>
+                                    <div class="detail-row"><span class="dlabel">分成比例</span><span class="dvalue">2.5%</span></div>
+                                    <div class="detail-row"><span class="dlabel">预计分成</span><span class="dvalue">¥3,200</span></div>
+                                    <div class="detail-row"><span class="dlabel">预发</span><span class="dvalue" style="font-weight:700;">¥1,200</span></div>
+                                    <div class="detail-row" style="border-bottom:none;font-size:10px;color:var(--gray-400);">季度末补发差额</div>
+                                </div>
+                                <!-- 其他激励 -->
+                                <div class="salary-row" onclick="toggleSalaryDetail(this)">
+                                    <span class="label">其他激励</span>
+                                    <span style="display:flex;align-items:center;gap:6px;"><span class="value" style="color:var(--success);">+¥1,100</span><span class="arrow">▼</span></span>
+                                </div>
+                                <div class="salary-detail-simple">
+                                    <div class="detail-row"><span class="dlabel">团队建设</span><span class="dvalue">¥300</span></div>
+                                    <div class="detail-row"><span class="dlabel">招聘/培训高级员工</span><span class="dvalue">¥400</span></div>
+                                    <div class="detail-row"><span class="dlabel">分享最佳实践</span><span class="dvalue">¥400</span></div>
+                                    <div class="detail-total"><span class="dlabel">合计</span><span class="dvalue" style="color:var(--success);">+¥1,100</span></div>
+                                </div>
+                                <!-- 实发合计 -->
+                                <div class="salary-total"><span class="label">实发合计</span><span class="value">¥12,800</span></div>
+                            </div>
+                        </div>
+                        <div class="tab-content hidden" id="my-docs"><div class="card"><p style="color:var(--gray-400);">文档管理</p></div></div>
+                        <div class="tab-content hidden" id="my-profile"><div class="card"><p style="color:var(--gray-400);">个人档案</p></div></div>
+                    </div>
+                    <!-- ===== PDCA 页面（从第二个文件完整移植） ===== -->
+                    <div class="mgr-page page-pdca hidden">
+                        <div class="card" style="margin-top:0;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                                <span style="font-weight:600;font-size:16px;" id="pdca-title">PDCA 循环</span>
+                                <button class="btn btn-sm btn-outline" onclick="switchManagerTab('store-strategy')">← 返回策略</button>
+                            </div>
+                            <div id="pdca-content"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom-nav" id="mgr-bottom-nav">
+                    <button class="nav-item active" data-page="store-mgmt" data-title="门店经营"><span class="icon">◈</span>门店经营</button>
+                    <button class="nav-item" data-page="ops-tools" data-title="运营工具"><span class="icon">◉</span>运营工具</button>
+                    <button class="nav-item" data-page="my" data-title="我的"><span class="icon">◉</span>我的</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================================ 人事 ================================ -->
+        <div class="phone-container" id="phone-hr" data-store="万象城店" data-name="李丽" data-rank="人事专员">
+            <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+            <div class="phone-screen">
+                <div class="app-header"><h2 id="hr-header-title">工作台</h2><div class="sub" id="hr-header-sub">万象城店 · 李丽 · 人事专员</div></div>
+                <div class="content" id="hr-content">
+                    <div class="hr-page page-hr-home">
+                        <div class="card">
+                            <div style="font-weight:600;font-size:14px;margin-bottom:6px;">核心人力指标</div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+                                <div style="background:#fafafa;border-radius:6px;padding:8px;text-align:center;border:1px solid var(--border);"><div style="font-size:18px;font-weight:600;color:var(--primary);">32.5%</div><div style="font-size:11px;color:var(--gray-400);">人工费用占比</div><div style="font-size:10px;color:var(--gray-400);">较上月 -0.8%</div></div>
+                                <div style="background:#fafafa;border-radius:6px;padding:8px;text-align:center;border:1px solid var(--border);"><div style="font-size:18px;font-weight:600;color:var(--primary);">15%</div><div style="font-size:11px;color:var(--gray-400);">小时工占比</div><div style="font-size:10px;color:var(--gray-400);">较上月 +2%</div></div>
+                                <div style="background:#fafafa;border-radius:6px;padding:8px;text-align:center;border:1px solid var(--border);"><div style="font-size:18px;font-weight:600;color:var(--primary);">3</div><div style="font-size:11px;color:var(--gray-400);">核心人员缺失</div><div style="font-size:10px;color:var(--gray-400);">店长缺1 · 厨师长缺2</div></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div style="font-weight:600;font-size:14px;margin-bottom:6px;">快速处理</div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+                                <div style="background:#fafafa;border-radius:6px;padding:10px;text-align:center;border:1px solid var(--border);cursor:pointer;" onclick="switchHrTab('recruit')"><div style="font-size:12px;font-weight:500;">招聘管理</div><div style="font-size:10px;color:var(--gray-400);">在招 5个</div><span class="badge badge-orange" style="font-size:10px;">3人待面试</span></div>
+                                <div style="background:#fafafa;border-radius:6px;padding:10px;text-align:center;border:1px solid var(--border);cursor:pointer;" onclick="switchHrTab('salary-confirm')"><div style="font-size:12px;font-weight:500;">薪资确认</div><div style="font-size:10px;color:var(--gray-400);">待确认 3个门店</div><span class="badge" style="font-size:10px;">需处理</span></div>
+                                <div style="background:#fafafa;border-radius:6px;padding:10px;text-align:center;border:1px solid var(--border);cursor:pointer;" onclick="switchHrTab('approval')"><div style="font-size:12px;font-weight:500;">审批中心</div><div style="font-size:10px;color:var(--gray-400);">待审批 6项</div><span class="badge badge-orange" style="font-size:10px;">2项紧急</span></div>
+                                <div style="background:#fafafa;border-radius:6px;padding:10px;text-align:center;border:1px solid var(--border);cursor:pointer;" onclick="toggleHrArchive()"><div style="font-size:12px;font-weight:500;">人员档案</div><div style="font-size:10px;color:var(--gray-400);">在职 22人</div><span class="badge badge-green" style="font-size:10px;">查看</span></div>
+                            </div>
+                        </div>
+                        <div class="card" style="background:#fff8e1;border-color:#ffe082;">
+                            <div style="font-size:13px;color:var(--warning);"><strong>自动化提醒</strong></div>
+                            <div style="font-size:12px;color:#795548;margin-top:4px;line-height:1.5;">店长岗位空缺 7天 · 万象城店小时工占比 18% 超警戒 · 本月薪资表已生成</div>
+                        </div>
+                        <div id="hr-archive-container" class="hidden" style="margin-top:8px;"><div class="card"><div style="font-weight:500;font-size:13px;margin-bottom:6px;">人员档案（全公司）</div><div id="hr-archive-list"></div></div></div>
+                    </div>
+                    <div class="hr-page page-recruit hidden"><div class="card"><div class="row" style="font-size:13px;">万象城店 · 服务员 <span class="value">需求 1人</span></div><div class="row" style="font-size:12px;color:var(--gray-400);">已收简历 12 | 面试 4 | Offer 1</div></div><div class="card"><div class="row" style="font-size:13px;">万象城店 · 小时工 <span class="value">需求 3人</span></div><div class="row" style="font-size:12px;color:var(--gray-400);">已收简历 8 | 到岗 2</div></div></div>
+                    <div class="hr-page page-salary-confirm hidden"><div class="card"><div class="row" style="font-size:13px;">万象城店 2025-08 <span class="value">¥68,500</span> <button class="btn btn-sm">确认</button></div><div class="row" style="font-size:13px;">恒隆广场店 2025-08 <span class="value">¥72,300</span> <button class="btn btn-sm">确认</button></div></div></div>
+                    <div class="hr-page page-approval hidden"><div class="card"><div class="row" style="font-size:13px;">调班申请 <span class="badge badge-red">紧急</span></div><div class="row" style="font-size:13px;">请假申请</div><div class="row" style="font-size:13px;">晋升申请</div><button class="btn" style="margin-top:6px;">全部处理</button></div></div>
+                </div>
+                <div class="bottom-nav">
+                    <div class="nav-item active" data-page="hr-home" data-title="工作台"><span class="icon">◈</span>工作台</div>
+                    <div class="nav-item" data-page="recruit" data-title="招聘"><span class="icon">◻</span>招聘</div>
+                    <div class="nav-item" data-page="salary-confirm" data-title="薪资确认"><span class="icon">✓</span>薪资确认</div>
+                    <div class="nav-item" data-page="approval" data-title="审批"><span class="icon">◻</span>审批</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================================ 小时工 ================================ -->
+        <div class="phone-container" id="phone-parttime" data-store="万象城店" data-name="李四" data-rank="中级小时工">
+            <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+            <div class="phone-screen">
+                <div class="app-header"><h2 id="pt-header-title">首页</h2><div class="sub" id="pt-header-sub">万象城店 · 李四 · 中级小时工</div></div>
+                <div class="content" id="pt-content">
+                    <div class="pt-page page-pt-home">
+                        <div class="card">
+                            <div class="row"><span class="label">姓名</span><span class="value">李四</span></div>
+                            <div class="row"><span class="label">服务范围</span><span class="value">万象城店、恒隆广场店、万达店</span></div>
+                            <div class="row"><span class="label">等级</span><span class="clickable" onclick="togglePtLevel()">中级小时工</span></div>
+                            <div class="row"><span class="label">带教人</span><span class="value">孙丽（高级服务员）</span></div>
+                            <div id="ptLevelDetail" class="hidden" style="margin-top:6px;border-top:1px solid var(--border);padding-top:6px;">
+                                <div style="font-weight:500;font-size:13px;">升级要求</div>
+                                <div class="row" style="font-size:12px;"><span class="label">累计工时</span><span class="value">368/500</span></div>
+                                <div style="background:#f0f0f0;height:3px;border-radius:2px;margin:2px 0 4px;"><div style="width:73.6%;background:var(--primary);height:3px;border-radius:2px;"></div></div>
+                                <div class="row" style="font-size:12px;"><span class="label">技能认证</span><span class="value">2/3</span></div>
+                                <div style="background:#f0f0f0;height:3px;border-radius:2px;margin:2px 0;"><div style="width:66.7%;background:var(--primary);height:3px;border-radius:2px;"></div></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">今日班表 <span class="badge">2个班次</span></div>
+                            <div class="row" style="font-size:12px;flex-wrap:wrap;gap:4px;">
+                                <span class="label" style="flex:1;min-width:60px;">万象城店</span>
+                                <span class="value" style="font-weight:400;color:var(--gray-500);">10:00-14:00</span>
+                                <span class="badge" style="font-size:10px;background:#e3f2fd;color:#1565c0;">开档、备料、洗碗</span>
+                            </div>
+                            <div class="row" style="font-size:12px;flex-wrap:wrap;gap:4px;border-bottom:none;">
+                                <span class="label" style="flex:1;min-width:60px;">万象城店</span>
+                                <span class="value" style="font-weight:400;color:var(--gray-500);">17:00-21:00</span>
+                                <span class="badge" style="font-size:10px;background:#fff3e0;color:var(--warning);">闭档、清洁、收货</span>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">招募班次</div>
+                            <div class="row" style="font-size:12px;">万象城店 明日晚班 <button class="btn btn-sm">接单</button></div>
+                            <div class="row" style="font-size:12px;">万象城店 周末早班 <button class="btn btn-sm">接单</button></div>
+                        </div>
+                        <button class="btn" id="pt-report-hours-btn" style="margin:6px 0;" onclick="handlePartTimeReportHours()">上报工时</button>
+                    </div>
+                    <div class="pt-page page-pt-train hidden">
+                        <div id="pt-training-warning" class="card" style="background:#fff3e0;border-color:#ffcc80;display:none;">
+                            <div style="font-size:13px;color:var(--warning);"><strong>无法上岗</strong></div>
+                            <div style="font-size:12px;color:#795548;margin-top:4px;line-height:1.5;">缺失以下上岗必备培训：<span id="pt-missing-training-list"></span></div>
+                        </div>
+                        <div class="card"><div class="card-title">培训中心 <span class="badge badge-orange">待学: 2</span></div>
+                            <div class="row" style="font-size:12px;">食品安全认证 <span class="badge badge-green">已获得</span></div>
+                            <div class="row" style="font-size:12px;">前厅服务认证 <span class="badge badge-green">已获得</span></div>
+                            <div class="row" style="font-size:12px;">后厨基础认证 <span class="badge">待考核</span></div>
+                            <div class="row" style="font-size:12px;border-top:1px solid var(--border);padding-top:6px;margin-top:4px;">高级小时工培训 <span class="badge">未开始</span></div>
+                        </div>
+                    </div>
+                    <div class="pt-page page-pt-salary hidden">
+                        <div class="card">
+                            <div class="card-title">本月薪资（预估）</div>
+                            <div class="salary-row" onclick="toggleSalaryDetail(this)">
+                                <span class="label">基本时薪</span>
+                                <span style="display:flex;align-items:center;gap:6px;"><span class="value">¥22/h</span><span class="arrow">▼</span></span>
+                            </div>
+                            <div class="salary-detail-simple">
+                                <div class="detail-row"><span class="dlabel">基础时薪</span><span class="dvalue">¥20</span></div>
+                                <div class="detail-row"><span class="dlabel">技能津贴</span><span class="dvalue">¥2</span></div>
+                                <div class="detail-total"><span class="dlabel">合计</span><span class="dvalue">¥22/h</span></div>
+                            </div>
+                            <div class="salary-row" onclick="toggleSalaryDetail(this)">
+                                <span class="label">预估工时</span>
+                                <span style="display:flex;align-items:center;gap:6px;"><span class="value">58h</span><span class="arrow">▼</span></span>
+                            </div>
+                            <div class="salary-detail-simple">
+                                <div class="detail-row"><span class="dlabel">已排班工时</span><span class="dvalue">52h</span></div>
+                                <div class="detail-row"><span class="dlabel">加班工时</span><span class="dvalue">6h</span></div>
+                                <div class="detail-total"><span class="dlabel">总计</span><span class="dvalue">58h</span></div>
+                            </div>
+                            <div class="salary-row" onclick="toggleSalaryDetail(this)">
+                                <span class="label">其他补贴</span>
+                                <span style="display:flex;align-items:center;gap:6px;"><span class="value">+¥120</span><span class="arrow">▼</span></span>
+                            </div>
+                            <div class="salary-detail-simple">
+                                <div class="detail-row"><span class="dlabel">交通补贴</span><span class="dvalue">¥80</span></div>
+                                <div class="detail-row"><span class="dlabel">餐补</span><span class="dvalue">¥40</span></div>
+                                <div class="detail-total"><span class="dlabel">合计</span><span class="dvalue">+¥120</span></div>
+                            </div>
+                            <div class="salary-total"><span class="label">预估合计</span><span class="value">¥1,396</span></div>
+                        </div>
+                    </div>
+                    <div class="pt-page page-pt-profile hidden">
+                        <div class="card">
+                            <div class="row"><span class="label">姓名</span><span class="value">李四</span></div>
+                            <div class="row"><span class="label">等级</span><span class="value">中级小时工</span></div>
+                            <div class="row"><span class="label">服务范围</span><span class="value">万象城店、恒隆广场店、万达店</span></div>
+                            <div class="row"><span class="label">带教人</span><span class="value">孙丽（高级服务员）</span></div>
+                        </div>
+                        <div class="card"><div class="card-title">电子文档</div><div class="row" style="font-size:12px;">健康证 <button class="btn btn-sm">查看</button></div><div class="row" style="font-size:12px;">小时工协议 <button class="btn btn-sm">查看</button></div></div>
+                    </div>
+                </div>
+                <div class="bottom-nav" id="pt-bottom-nav">
+                    <div class="nav-item active" data-page="pt-home" data-title="首页"><span class="icon">⌂</span>首页</div>
+                    <div class="nav-item" data-page="pt-train" data-title="培训"><span class="icon">◈</span>培训</div>
+                    <div class="nav-item" data-page="pt-salary" data-title="薪资"><span class="icon">¥</span>薪资</div>
+                    <div class="nav-item" data-page="pt-profile" data-title="我的"><span class="icon">◉</span>我的</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================================ 高管 - 店长评价 ================================ -->
+        <div class="phone-container" id="phone-executive" data-store="总部" data-name="陈总" data-rank="CEO">
+            <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+            <div class="phone-screen">
+                <div class="app-header"><h2 id="exec-header-title">店长评价</h2><div class="sub" id="exec-header-sub">总部 · 陈总 · CEO</div></div>
+                <div class="content" id="exec-content">
+                    <!-- 概览统计 -->
+                    <div class="exec-summary">
+                        <div class="stat"><div class="num" id="exec-total">2</div><div class="label">总店长数</div></div>
+                        <div class="stat"><div class="num" id="exec-promotable">1</div><div class="label">可晋升</div></div>
+                        <div class="stat"><div class="num" id="exec-atrisk">0</div><div class="label">需关注</div></div>
+                    </div>
+                    <!-- 店长评价卡片 -->
+                    <div id="exec-manager-list"></div>
+                </div>
+                <div class="bottom-nav">
+                    <div class="nav-item active" data-page="exec-eval" data-title="评价"><span class="icon">◈</span>评价</div>
+                    <div class="nav-item" data-page="exec-history" data-title="历史"><span class="icon">◻</span>历史</div>
+                    <div class="nav-item" data-page="exec-my" data-title="我的"><span class="icon">◉</span>我的</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===== 模态框 ===== -->
+    <div class="modal-overlay" id="submitCheckModal">
+        <div class="modal-box">
+            <div class="modal-title"><span id="submitCheckTitle">提交检查</span><button class="close-btn" onclick="closeSubmitCheck()">×</button></div>
+            <div class="field"><label>任务内容</label><div style="font-size:13px;color:var(--text);padding:4px 0;" id="submitTaskText"></div></div>
+            <div class="field"><label>检查说明 / 备注</label><textarea id="submitCheckDesc" placeholder="请输入检查结果或描述..."></textarea></div>
+            <div class="field"><label>上传附件（可选）</label><div class="upload-area" onclick="document.getElementById('submitFileInput').click()">点击上传图片或文件<input type="file" id="submitFileInput" accept="image/*,.pdf,.doc,.docx" /></div><div id="submitFileName" style="font-size:11px;color:var(--gray-400);margin-top:4px;"></div></div>
+            <div class="modal-actions"><button class="btn" onclick="confirmSubmitCheck()">提交</button><button class="btn btn-outline" onclick="closeSubmitCheck()">取消</button></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="incentiveModal">
+        <div class="modal-box">
+            <div class="modal-title"><span>发放激励</span><button class="close-btn" onclick="closeIncentiveModal()">×</button></div>
+            <div class="field"><label>选择员工</label><select id="incentiveStaffSelect"><option value="">-- 请选择 --</option></select></div>
+            <div class="field"><label>金额（元）</label><input type="number" id="incentiveAmount" placeholder="输入金额" min="1" step="1" /></div>
+            <div class="field"><label>发放理由</label><textarea id="incentiveReason" placeholder="请输入激励理由（选填）"></textarea></div>
+            <div class="modal-actions"><button class="btn" onclick="confirmIncentive()">确认发放</button><button class="btn btn-outline" onclick="closeIncentiveModal()">取消</button></div>
+        </div>
+    </div>
+
+    <!-- ===== 人员选择模态框（排班用） ===== -->
+    <div class="staff-select-modal" id="staffSelectModal">
+        <div class="modal-box">
+            <div class="modal-title">
+                <span id="modalStaffTitle">选择人员</span>
+                <button class="close-btn" onclick="closeStaffSelect()">×</button>
+            </div>
+            <div id="staffSelectList"></div>
+            <div class="modal-actions">
+                <button class="btn" onclick="confirmStaffSelect()">确认选择</button>
+                <button class="btn btn-outline" onclick="closeStaffSelect()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ================================================================
+        // 全局任务数据
+        // ================================================================
+        var globalTasks = [{
+            id: 't1',
+            text: '差评申诉和分析',
+            category: 'satisfaction',
+            at: '张三',
+            checkType: 'data',
+            checkData: { '今日差评': '3条', '已申诉': '1条', '申诉成功率': '33%' },
+            upload: true
+        }, {
+            id: 't2',
+            text: '开档流程优化',
+            category: 'satisfaction',
+            at: '李四',
+            checkType: 'self',
+            checkData: '请上传优化后的开档流程照片或文字说明'
+        }, {
+            id: 't3',
+            text: '桌桌寻台，慢菜提醒',
+            category: 'satisfaction',
+            at: '王五',
+            checkType: 'ai',
+            checkData: { '寻台率': '95%', '慢菜提醒覆盖率': '88%', '员工响应时长': '平均 15秒' }
+        }];
+
+        // ================================================================
+        // 高管 - 店长评价数据
+        // ================================================================
+        var managerEvalData = [{
+            id: 'm1',
+            name: '王芳',
+            store: '万象城店',
+            tenure: '2年3个月',
+            totalScore: 8.7,
+            performance: { salesYoY: '+12.5%', salesMoM: '+3.8%' },
+            hiredSenior: 3,
+            satisfaction: { rating: 4.8, negativeReviews: 4, visitRate: '68%', repurchaseRate: '42%' },
+            decision: '晋升推荐'
+        }, {
+            id: 'm2',
+            name: '李刚',
+            store: '恒隆广场店',
+            tenure: '1年8个月',
+            totalScore: 6.4,
+            performance: { salesYoY: '+3.2%', salesMoM: '-1.5%' },
+            hiredSenior: 1,
+            satisfaction: { rating: 3.9, negativeReviews: 12, visitRate: '52%', repurchaseRate: '31%' },
+            decision: '需辅导'
+        }];
+
+        // ================================================================
+        // 排班管理数据（午市/晚市）
+        // ================================================================
+        var scheduleData = {
+            date: new Date(),
+            metrics: { sales: 28500, totalHours: 68.5, laborCost: 6850, laborRatio: 24.0 },
+            processes: [
+                { shift: 'lunch', name: '收货', hours: 1.5, people: 1 },
+                { shift: 'lunch', name: '开档', hours: 2.0, people: 2 },
+                { shift: 'lunch', name: '传菜', hours: 3.5, people: 3 },
+                { shift: 'lunch', name: '收餐', hours: 2.0, people: 2 },
+                { shift: 'lunch', name: '洗碗', hours: 1.5, people: 1 },
+                { shift: 'dinner', name: '收货', hours: 1.8, people: 1 },
+                { shift: 'dinner', name: '开档', hours: 2.2, people: 2 },
+                { shift: 'dinner', name: '传菜', hours: 4.0, people: 3 },
+                { shift: 'dinner', name: '收餐', hours: 2.2, people: 2 },
+                { shift: 'dinner', name: '洗碗', hours: 1.8, people: 1 }
+            ],
+            positions: [
+                { id: 'p1', shift: 'lunch', name: '前厅早班', suggest: 3, selected: ['张三', '王五'], type: 'full' },
+                { id: 'p3', shift: 'lunch', name: '后厨早班', suggest: 2, selected: ['赵六'], type: 'full' },
+                { id: 'p5', shift: 'lunch', name: '小时工-洗碗', suggest: 1, selected: [], type: 'pt' },
+                { id: 'p2', shift: 'dinner', name: '前厅晚班', suggest: 2, selected: ['李四'], type: 'full' },
+                { id: 'p4', shift: 'dinner', name: '后厨晚班', suggest: 1, selected: [], type: 'full' },
+                { id: 'p6', shift: 'dinner', name: '小时工-收货', suggest: 1, selected: [], type: 'pt' },
+                { id: 'p7', shift: 'dinner', name: '小时工-备菜', suggest: 1, selected: [], type: 'pt' }
+            ],
+            published: false,
+            currentFilter: 'all'
+        };
+        var allStaff = ['张三', '李四', '王五', '赵六', '钱七', '孙八', '周九', '吴十'];
+        var currentPositionId = null;
+
+        // ================================================================
+        // 薪资折叠（支持两种结构）
+        // ================================================================
+        function toggleSalaryDetail(el) {
+            var detail = el.nextElementSibling;
+            var arrow = el.querySelector('.arrow');
+            if (detail && detail.classList.contains('salary-detail-simple')) {
+                detail.classList.toggle('open');
+                if (arrow) arrow.classList.toggle('open');
+                return;
+            }
+            detail = el.querySelector('.salary-detail');
+            if (detail) {
+                detail.classList.toggle('open');
+                if (arrow) arrow.classList.toggle('open');
+            }
+        }
+
+        // ================================================================
+        // 员工/小时工 待办刷新
+        // ================================================================
+        function refreshEmployeeDayTasks() {
+            var container = document.getElementById('emp-day-tasks');
+            if (!container) return;
+            var tasks = globalTasks.filter(t => t.category === 'satisfaction');
+            var html = '';
+            tasks.forEach(task => {
+                html += `
+                    <div class="todo-item">
+                        <div class="todo-row">
+                            <input type="checkbox" id="emp_${task.id}" class="todo-checkbox">
+                            <span class="todo-text">${task.text}</span>
+                            <span class="badge" style="font-size:10px;">满意度</span>
+                            <div class="todo-actions">
+                                <button class="btn btn-sm" onclick="openSubmitCheck('${task.id}')">提交检查</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function refreshPtDayTasks() {
+            var container = document.getElementById('pt-day-tasks');
+            if (container) container.innerHTML = '';
+        }
+
+        // ================================================================
+        // 提交检查模态框
+        // ================================================================
+        var currentSubmitTaskId = null;
+
+        function openSubmitCheck(taskId) {
+            var task = globalTasks.find(t => t.id === taskId);
+            if (!task) return;
+            currentSubmitTaskId = taskId;
+            document.getElementById('submitTaskText').textContent = task.text;
+            document.getElementById('submitCheckDesc').value = '';
+            document.getElementById('submitFileName').textContent = '';
+            document.getElementById('submitFileInput').value = '';
+            document.getElementById('submitCheckModal').classList.add('open');
+        }
+
+        function closeSubmitCheck() {
+            document.getElementById('submitCheckModal').classList.remove('open');
+            currentSubmitTaskId = null;
+        }
+
+        function confirmSubmitCheck() {
+            var desc = document.getElementById('submitCheckDesc').value.trim();
+            var fileInput = document.getElementById('submitFileInput');
+            var fileName = fileInput.files.length > 0 ? fileInput.files[0].name : '';
+            if (!desc && !fileName) {
+                alert('请填写检查说明或上传文件');
+                return;
+            }
+            alert('检查已提交！\n任务：' + document.getElementById('submitTaskText').textContent +
+                '\n说明：' + (desc || '无') +
+                (fileName ? '\n附件：' + fileName : ''));
+            closeSubmitCheck();
+        }
+
+        document.getElementById('submitFileInput').addEventListener('change', function() {
+            var name = this.files.length > 0 ? this.files[0].name : '';
+            document.getElementById('submitFileName').textContent = name ? '已选：' + name : '';
+        });
+
+        // ================================================================
+        // 员工跳转培训
+        // ================================================================
+        function switchEmployeeTab(tab) {
+            var navItems = document.querySelectorAll('#phone-employee .bottom-nav .nav-item');
+            navItems.forEach(function(item) {
+                if (item.dataset.page === tab) item.click();
+            });
+        }
+
+        // ================================================================
+        // 干部储备折叠
+        // ================================================================
+        function toggleCadreDetail(type) {
+            var el = document.getElementById('cadre-' + type);
+            if (el) el.classList.toggle('hidden');
+        }
+
+        // ================================================================
+        // 激励发放
+        // ================================================================
+        var incentiveAllStaff = ['张三', '李四', '王五', '赵六', '钱七', '孙八', '周九', '吴十'];
+        var incentiveTotal = 12800;
+        var incentivePeople = 12;
+
+        function openIncentiveModal() {
+            var modal = document.getElementById('incentiveModal');
+            var select = document.getElementById('incentiveStaffSelect');
+            select.innerHTML = '<option value="">-- 请选择 --</option>';
+            incentiveAllStaff.forEach(function(name) {
+                var opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                select.appendChild(opt);
+            });
+            document.getElementById('incentiveAmount').value = '';
+            document.getElementById('incentiveReason').value = '';
+            modal.classList.add('open');
+        }
+
+        function closeIncentiveModal() {
+            document.getElementById('incentiveModal').classList.remove('open');
+        }
+
+        function confirmIncentive() {
+            var staff = document.getElementById('incentiveStaffSelect').value;
+            var amount = parseFloat(document.getElementById('incentiveAmount').value);
+            var reason = document.getElementById('incentiveReason').value.trim() || '无理由';
+            if (!staff) { alert('请选择员工'); return; }
+            if (!amount || amount <= 0) { alert('请输入有效金额'); return; }
+            incentiveTotal += amount;
+            incentivePeople += 1;
+            document.getElementById('totalIncentive').textContent = '¥' + incentiveTotal.toLocaleString();
+            document.getElementById('incentivePeople').textContent = incentivePeople + '人';
+            var avg = Math.round(incentiveTotal / incentivePeople);
+            document.getElementById('avgIncentive').textContent = '¥' + avg.toLocaleString();
+            alert('已向 ' + staff + ' 发放 ¥' + amount + ' 激励\n理由：' + reason);
+            closeIncentiveModal();
+        }
+
+        // ================================================================
+        // 底部导航绑定
+        // ================================================================
+        function setupEmployeeNav(phoneId, contentId) {
+            var navItems = document.querySelectorAll('#' + phoneId + ' .bottom-nav .nav-item');
+            var content = document.querySelector('#' + contentId);
+            if (!content) return;
+            navItems.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    navItems.forEach(function(n) { n.classList.remove('active'); });
+                    this.classList.add('active');
+                    var pageName = this.dataset.page;
+                    var pages = content.querySelectorAll('.emp-page, .pt-page');
+                    pages.forEach(function(p) { p.classList.add('hidden'); });
+                    var target = content.querySelector('.page-' + pageName);
+                    if (!target) {
+                        target = content.querySelector('.emp-page.page-' + pageName) ||
+                            content.querySelector('.pt-page.page-' + pageName);
+                    }
+                    if (target) target.classList.remove('hidden');
+                    var container = document.getElementById(phoneId);
+                    var h2 = container.querySelector('.app-header h2');
+                    var sub = container.querySelector('.app-header .sub');
+                    if (h2) h2.textContent = this.dataset.title || this.textContent.trim();
+                    if (sub) sub.textContent = container.dataset.store + ' · ' + container.dataset.name + ' · ' +
+                        container.dataset.rank;
+                    if (pageName === 'pt-train' || pageName === 'pt-home') {
+                        updatePartTimeUI();
+                    }
+                });
+            });
+        }
+
+        function setupManagerNav() {
+            var navItems = document.querySelectorAll('#phone-manager .bottom-nav .nav-item');
+            var content = document.querySelector('#mgr-content');
+            navItems.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    navItems.forEach(function(n) { n.classList.remove('active'); });
+                    this.classList.add('active');
+                    var pageName = this.dataset.page;
+                    var pages = content.querySelectorAll('.mgr-page');
+                    pages.forEach(function(p) { p.classList.add('hidden'); });
+                    var target = content.querySelector('.page-' + pageName);
+                    if (target) target.classList.remove('hidden');
+                    var container = document.getElementById('phone-manager');
+                    var h2 = container.querySelector('.app-header h2');
+                    var sub = container.querySelector('.app-header .sub');
+                    if (h2) h2.textContent = this.dataset.title || this.textContent.trim();
+                    if (sub) sub.textContent = '万象城店 · 王芳 · 资深店长';
+                });
+            });
+        }
+
+        function setupHrNav() {
+            var navItems = document.querySelectorAll('#phone-hr .bottom-nav .nav-item');
+            var content = document.querySelector('#hr-content');
+            navItems.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    navItems.forEach(function(n) { n.classList.remove('active'); });
+                    this.classList.add('active');
+                    var pageName = this.dataset.page;
+                    var pages = content.querySelectorAll('.hr-page');
+                    pages.forEach(function(p) { p.classList.add('hidden'); });
+                    var target = content.querySelector('.page-' + pageName);
+                    if (target) target.classList.remove('hidden');
+                    var container = document.getElementById('phone-hr');
+                    var h2 = container.querySelector('.app-header h2');
+                    var sub = container.querySelector('.app-header .sub');
+                    if (h2) h2.textContent = this.dataset.title || this.textContent.trim();
+                    if (sub) sub.textContent = container.dataset.store + ' · ' + container.dataset.name + ' · ' +
+                        container.dataset.rank;
+                });
+            });
+        }
+
+        function setupExecutiveNav() {
+            var navItems = document.querySelectorAll('#phone-executive .bottom-nav .nav-item');
+            navItems.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    navItems.forEach(function(n) { n.classList.remove('active'); });
+                    this.classList.add('active');
+                    var pageName = this.dataset.page;
+                    if (pageName === 'exec-eval') {
+                        renderExecutiveEval();
+                    } else if (pageName === 'exec-history') {
+                        document.querySelector('#exec-content').innerHTML =
+                            '<div class="card"><p style="color:var(--gray-400);text-align:center;">历史评价记录</p></div>';
+                    } else {
+                        document.querySelector('#exec-content').innerHTML =
+                            '<div class="card"><p style="color:var(--gray-400);text-align:center;">个人信息</p></div>';
+                    }
+                    var container = document.getElementById('phone-executive');
+                    var h2 = container.querySelector('.app-header h2');
+                    var sub = container.querySelector('.app-header .sub');
+                    if (h2) h2.textContent = this.dataset.title || this.textContent.trim();
+                    if (sub) sub.textContent = container.dataset.store + ' · ' + container.dataset.name + ' · ' +
+                        container.dataset.rank;
+                });
+            });
+        }
+
+        // ================================================================
+        // 店长内部 tabs
+        // ================================================================
+        function setupManagerTabs() {
+            document.querySelectorAll('#phone-manager .func-tabs').forEach(function(tabs) {
+                tabs.querySelectorAll('.tab-btn').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        var parent = this.closest('.func-tabs');
+                        parent.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+                        this.classList.add('active');
+                        var tabId = this.dataset.tab;
+                        var container = parent.closest('.mgr-page') || parent.closest('.tab-content')
+                            ?.parentElement;
+                        var contents = container.querySelectorAll('.tab-content, .subtab-content');
+                        contents.forEach(function(c) { c.classList.add('hidden'); });
+                        var target = container.querySelector('#' + tabId);
+                        if (target) target.classList.remove('hidden');
+                        if (tabId === 'ops-schedule') {
+                            renderSchedule();
+                        }
+                    });
+                });
+            });
+            document.querySelectorAll('#store-team .func-tabs .tab-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var parent = this.closest('.func-tabs');
+                    parent.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+                    this.classList.add('active');
+                    var tabId = this.dataset.subtab;
+                    var container = document.getElementById('store-team');
+                    var contents = container.querySelectorAll('.subtab-content');
+                    contents.forEach(function(c) { c.classList.add('hidden'); });
+                    var target = document.getElementById(tabId);
+                    if (target) target.classList.remove('hidden');
+                });
+            });
+
+            var trainingTabs = document.querySelectorAll('#store-training .func-tabs .tab-btn');
+            trainingTabs.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var parent = this.closest('.func-tabs');
+                    parent.querySelectorAll('.tab-btn').forEach(function(b) {
+                        b.classList.remove('active');
+                        b.style.background = '#fff';
+                        b.style.color = 'var(--gray-500)';
+                        b.style.borderColor = 'var(--border)';
+                    });
+                    this.classList.add('active');
+                    this.style.background = 'var(--primary)';
+                    this.style.color = '#fff';
+                    this.style.borderColor = 'var(--primary)';
+                    renderTraining(this.dataset.cat);
+                });
+            });
+        }
+
+        // ================================================================
+        // PDCA 页面（从第二个文件完整移植）
+        // ================================================================
+        function showPdca(goal) {
+            if (goal !== 'satisfaction') {
+                alert('暂只支持"提高客户满意度，减少差评"的PDCA');
+                return;
+            }
+            document.querySelectorAll('.mgr-page').forEach(function(p) { p.classList.add('hidden'); });
+            document.querySelector('.page-pdca').classList.remove('hidden');
+            document.getElementById('pdca-title').textContent = '提高客户满意度，减少差评';
+            var tasks = globalTasks.filter(function(t) { return t.category === 'satisfaction'; });
+            var html = '';
+            html += `
+                <div class="pdca-section">
+                    <div class="pdca-header" onclick="togglePdca(this)" style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);cursor:pointer;">
+                        <span style="font-weight:600;font-size:14px;">P - 计划</span>
+                        <span class="pdca-toggle" style="font-size:11px;color:var(--gray-400);">▼</span>
+                    </div>
+                    <div class="pdca-body" style="padding:6px 0;display:block;">
+                        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;border-bottom:1px solid #f5f5f5;">
+                            <span style="color:var(--gray-500);">本周差评数</span>
+                            <span style="font-weight:500;color:var(--primary);">当前 12 条 / 目标 10 条</span>
+                        </div>
+                        <div style="margin-top:8px;">
+                            <label style="font-size:12px;color:var(--gray-500);">根本原因：</label>
+                            <input type="text" placeholder="请输入根本原因..." style="width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px;" />
+                        </div>
+                        <div style="margin-top:6px;">
+                            <label style="font-size:12px;color:var(--gray-500);">计划措施：</label>
+                            <input type="text" placeholder="请输入计划措施..." style="width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px;" />
+                        </div>
+                    </div>
+                </div>
+            `;
+            html += `
+                <div class="pdca-section">
+                    <div class="pdca-header" onclick="togglePdca(this)" style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);cursor:pointer;">
+                        <span style="font-weight:600;font-size:14px;">执行 &amp; 检查</span>
+                        <span class="pdca-toggle" style="font-size:11px;color:var(--gray-400);">▼</span>
+                    </div>
+                    <div class="pdca-body" style="padding:6px 0;display:block;">
+            `;
+            tasks.forEach(function(task) {
+                html += `
+                    <div class="todo-item">
+                        <div class="todo-row">
+                            <input type="checkbox" id="pdca_${task.id}" class="todo-checkbox">
+                            <span class="todo-text">${task.text}</span>
+                            <span class="todo-at" style="font-size:11px;color:var(--gray-400);">@ ${task.at || ''}</span>
+                            <div class="todo-actions">
+                                <button class="btn btn-sm btn-outline" onclick="openCheckModal('${task.id}')">执行检查</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += `
+                        <div style="margin-top:4px;"><button class="btn btn-sm btn-outline" onclick="addNewTodo()">+ 添加待办</button></div>
+                    </div>
+                </div>
+            `;
+            html += `
+                <div class="pdca-section">
+                    <div class="pdca-header" onclick="togglePdca(this)" style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);cursor:pointer;">
+                        <span style="font-weight:600;font-size:14px;">A - 复盘</span>
+                        <span class="pdca-toggle" style="font-size:11px;color:var(--gray-400);">▼</span>
+                    </div>
+                    <div class="pdca-body" style="padding:6px 0;display:block;">
+                        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;border-bottom:1px solid #f5f5f5;">
+                            <span style="color:var(--gray-500);">差评数</span>
+                            <span style="font-weight:500;color:var(--primary);">12条（目标10条）</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;border-bottom:1px solid #f5f5f5;">
+                            <span style="color:var(--gray-500);">较上周</span>
+                            <span style="font-weight:500;color:var(--primary);">+3条</span>
+                        </div>
+                        <div style="margin-top:6px;">
+                            <label style="font-size:12px;color:var(--gray-500);">复盘内容：</label>
+                            <textarea rows="2" placeholder="请输入复盘..." style="width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:4px;font-size:12px;margin-top:2px;resize:vertical;"></textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+            var pdcaContainer = document.getElementById('pdca-content');
+            if (pdcaContainer) pdcaContainer.innerHTML = html;
+            document.querySelectorAll('#phone-manager .bottom-nav .nav-item').forEach(function(n) { n.classList.remove(
+                    'active'); });
+            document.querySelector('#phone-manager .bottom-nav .nav-item[data-page="store-mgmt"]').classList.add('active');
+            refreshDayTasks();
+        }
+
+        function togglePdca(header) {
+            var body = header.nextElementSibling;
+            var toggle = header.querySelector('.pdca-toggle');
+            if (body) {
+                body.style.display = body.style.display === 'none' ? 'block' : 'none';
+                if (toggle) toggle.textContent = body.style.display === 'none' ? '▶' : '▼';
+            }
+        }
+
+        // ================================================================
+        // 执行检查弹窗
+        // ================================================================
+        function openCheckModal(taskId) {
+            var task = globalTasks.find(function(t) { return t.id === taskId; });
+            if (!task) return;
+            var modal = document.getElementById('checkModal');
+            if (!modal) {
+                var overlay = document.createElement('div');
+                overlay.className = 'modal-overlay open';
+                overlay.id = 'checkModal';
+                overlay.innerHTML = `
+                    <div class="modal-box">
+                        <div class="modal-title"><span id="modal-task-title">执行检查</span><button class="close-btn" onclick="closeCheckModal()">×</button></div>
+                        <div id="modal-body"></div>
+                    </div>
+                `;
+                document.querySelector('.phone-wrapper').appendChild(overlay);
+                modal = overlay;
+            }
+            var title = document.getElementById('modal-task-title');
+            var body = document.getElementById('modal-body');
+            title.textContent = '执行检查：' + task.text;
+            var html = '';
+            html += `<div style="margin-bottom:12px;font-weight:500;font-size:14px;color:var(--text);">目标：${task.text}</div>`;
+            if (task.checkType === 'data') {
+                html += `<div style="font-size:13px;color:var(--gray-500);margin-bottom:8px;">检查结果：</div>`;
+                var data = task.checkData;
+                for (var key in data) {
+                    var val = data[key];
+                    html +=
+                        `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f0f0f0;font-size:13px;"><span style="color:var(--gray-500);">${key}</span><span style="font-weight:500;">${val}</span></div>`;
+                }
+                if (task.upload) {
+                    html += `
+                        <div style="margin-top:10px;padding:10px;background:#fafafa;border-radius:4px;border:1px solid #eee;">
+                            <div style="font-size:12px;color:var(--gray-500);margin-bottom:4px;">员工上传的差评分析：</div>
+                            <div style="background:#fff;padding:6px;border-radius:4px;border:1px solid #eee;font-size:12px;color:var(--text);">
+                                <div>分析内容：今日差评主要集中在上菜速度慢和口味偏咸，已反馈后厨。</div>
+                                <div style="margin-top:4px;font-size:11px;color:var(--gray-400);">—— 张三 提交于 08-27 14:30</div>
+                            </div>
+                            <div style="margin-top:4px;"><button class="btn btn-sm btn-outline" onclick="alert('上传新分析（模拟）')">上传分析</button></div>
+                        </div>
+                    `;
+                }
+            } else if (task.checkType === 'ai') {
+                html += `<div style="font-size:13px;color:var(--gray-500);margin-bottom:8px;">AI 检查结果：</div>`;
+                var data = task.checkData;
+                for (var key in data) {
+                    var val = data[key];
+                    html +=
+                        `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f0f0f0;font-size:13px;"><span style="color:var(--gray-500);">${key}</span><span style="font-weight:500;">${val}</span></div>`;
+                }
+            } else {
+                html += `
+                    <div style="font-size:13px;color:var(--gray-500);margin-bottom:8px;">员工自检</div>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+                        <button class="btn btn-sm btn-outline" onclick="alert('上传图片（模拟）')">上传图片</button>
+                        <button class="btn btn-sm btn-outline" onclick="alert('输入文字说明（模拟）')">文字说明</button>
+                    </div>
+                    <div style="font-size:12px;color:var(--gray-400);">请上传执行结果或输入文字说明</div>
+                `;
+            }
+            body.innerHTML = html;
+            modal.classList.add('open');
+        }
+
+        function closeCheckModal() {
+            var modal = document.getElementById('checkModal');
+            if (modal) modal.classList.remove('open');
+        }
+
+        // ================================================================
+        // 刷新店长一日和员工一日任务
+        // ================================================================
+        function refreshDayTasks() {
+            var mgrContainer = document.getElementById('manager-day-tasks');
+            if (mgrContainer) {
+                var tasks = globalTasks.filter(function(t) { return t.category === 'satisfaction'; });
+                var html = '';
+                if (tasks.length > 0) {
+                    html +=
+                        `<div style="font-weight:600;font-size:13px;margin-bottom:4px;color:var(--gray-500);">提高客户满意度</div>`;
+                    tasks.forEach(function(task) {
+                        html += `
+                            <div class="todo-item">
+                                <div class="todo-row">
+                                    <input type="checkbox" id="mgr_${task.id}" class="todo-checkbox">
+                                    <span class="todo-text">${task.text}</span>
+                                    <span class="todo-at" style="font-size:11px;color:var(--gray-400);">@ ${task.at || ''}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                mgrContainer.innerHTML = html;
+            }
+            var empContainer = document.getElementById('emp-day-tasks');
+            if (empContainer) {
+                var tasks = globalTasks.filter(function(t) { return t.category === 'satisfaction'; });
+                var html = '';
+                tasks.forEach(function(task) {
+                    html += `
+                        <div class="todo-item">
+                            <div class="todo-row">
+                                <input type="checkbox" id="emp_${task.id}" class="todo-checkbox">
+                                <span class="todo-text">${task.text}</span>
+                                <span class="badge" style="font-size:10px;">满意度</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                empContainer.innerHTML = html;
+            }
+        }
+
+        // ================================================================
+        // 店长 - 培训课程
+        // ================================================================
+        var trainingData = {
+            storefront: [
+                { name: '迎宾话术与服务礼仪培训', status: '未开始' },
+                { name: '爆款菜品视觉呈现与招牌推荐', status: '进行中' },
+                { name: '等位区服务体验与挽留技巧', status: '未开始' },
+                { name: '门头陈列与动线设计优化', status: '已完成' }
+            ],
+            delivery: [
+                { name: '外卖平台运营专员培训', status: '未开始' },
+                { name: '外卖专属套餐设计与定价策略', status: '进行中' },
+                { name: '外卖包装与出餐效率提升', status: '未开始' },
+                { name: '外卖动线优化与高峰期调度', status: '未开始' }
+            ],
+            satisfaction: [
+                { name: '客诉处理与情绪管理技巧', status: '已完成' },
+                { name: '菜品口味稳定性与出品标准', status: '未开始' },
+                { name: '会员关怀与个性化服务', status: '进行中' },
+                { name: '就餐环境与卫生标准升级', status: '未开始' }
+            ]
+        };
+
+        function renderTraining(category) {
+            var container = document.getElementById('trainingCourseList');
+            if (!container) return;
+            var courses = trainingData[category] || [];
+            var html = '';
+            courses.forEach(function(c) {
+                var cls = 'badge';
+                if (c.status === '已完成') cls = 'badge badge-green';
+                else if (c.status === '进行中') cls = 'badge badge-orange';
+                html +=
+                    `<div class="row" style="font-size:12px;padding:4px 0;"><span>${c.name}</span><span class="${cls}">${c.status}</span></div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        // ================================================================
+        // 店长 - 通用
+        // ================================================================
+        function switchManagerTab(tab) {
+            var btn = document.querySelector('#store-training .func-tabs .tab-btn[data-tab="' + tab + '"]');
+            if (btn) btn.click();
+        }
+
+        function addNewTodo() {
+            var text = prompt('输入待办内容：');
+            if (text && text.trim()) {
+                var newTask = {
+                    id: 't' + Date.now(),
+                    text: text.trim(),
+                    category: 'satisfaction',
+                    at: '',
+                    checkType: 'self',
+                    checkLabel: '员工自检',
+                    checkData: '请上传执行结果'
+                };
+                globalTasks.push(newTask);
+                refreshDayTasks();
+                alert('已添加待办: ' + text);
+            }
+        }
+
+        // ================================================================
+        // 人事切换
+        // ================================================================
+        function switchHrTab(tab) {
+            var map = { recruit: '招聘', 'salary-confirm': '薪资确认', approval: '审批' };
+            var title = map[tab];
+            if (title) {
+                var navs = document.querySelectorAll('#phone-hr .bottom-nav .nav-item');
+                navs.forEach(function(n) { if (n.textContent.trim() === title) n.click(); });
+            }
+            document.getElementById('hr-archive-container').classList.add('hidden');
+        }
+
+        function toggleHrArchive() {
+            var c = document.getElementById('hr-archive-container');
+            if (c) c.classList.toggle('hidden');
+        }
+
+        // ================================================================
+        // 员工/小时工 - 晋升展开
+        // ================================================================
+        function togglePromotion() {
+            document.getElementById('promotionDetail').classList.toggle('hidden');
+        }
+
+        function togglePtLevel() {
+            document.getElementById('ptLevelDetail').classList.toggle('hidden');
+        }
+
+        // ================================================================
+        // 小时工上岗资格检查
+        // ================================================================
+        function checkPartTimeEligibility() {
+            var required = ['食品安全认证', '前厅服务认证', '后厨基础认证'];
+            var missing = [];
+            var rows = document.querySelectorAll('#phone-parttime .page-pt-train .row');
+            var statusMap = {};
+            rows.forEach(function(row) {
+                var text = row.textContent.trim();
+                var badge = row.querySelector('.badge');
+                if (badge) {
+                    var label = text.replace(badge.textContent, '').trim();
+                    statusMap[label] = badge.textContent.trim();
+                }
+            });
+            for (var i = 0; i < required.length; i++) {
+                if (statusMap[required[i]] !== '已获得') {
+                    missing.push(required[i]);
+                }
+            }
+            return { isEligible: missing.length === 0, missing: missing };
+        }
+
+        function updatePartTimeUI() {
+            var result = checkPartTimeEligibility();
+            var btn = document.getElementById('pt-report-hours-btn');
+            var warningCard = document.getElementById('pt-training-warning');
+            var missingList = document.getElementById('pt-missing-training-list');
+            if (!result.isEligible) {
+                if (btn) {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.4';
+                }
+                if (warningCard) {
+                    warningCard.style.display = 'block';
+                    if (missingList) {
+                        missingList.innerHTML = result.missing.join('、');
+                    }
+                }
+            } else {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                }
+                if (warningCard) {
+                    warningCard.style.display = 'none';
+                }
+            }
+        }
+
+        function handlePartTimeReportHours() {
+            var result = checkPartTimeEligibility();
+            if (!result.isEligible) {
+                alert('您尚未完成上岗必备培训（' + result.missing.join('、') + '），无法上报工时。请先完成培训。');
+                return;
+            }
+            alert('工时上报成功！');
+        }
+
+        // ================================================================
+        // 高管 - 店长评价渲染
+        // ================================================================
+        function renderExecutiveEval() {
+            var container = document.getElementById('exec-content');
+            var total = managerEvalData.length;
+            var promotable = managerEvalData.filter(m => m.decision === '晋升推荐').length;
+            var atrisk = managerEvalData.filter(m => m.decision === '需辅导' || m.decision === '降级预警').length;
+
+            document.getElementById('exec-total').textContent = total;
+            document.getElementById('exec-promotable').textContent = promotable;
+            document.getElementById('exec-atrisk').textContent = atrisk;
+
+            var listHtml = '';
+            managerEvalData.forEach(function(m) {
+                var statusClass = m.decision === '晋升推荐' ? 'promote' :
+                    m.decision === '需辅导' ? 'warning' : 'danger';
+                var satRating = m.satisfaction.rating.toFixed(1);
+                listHtml += `
+                    <div class="manager-eval-item">
+                        <div class="header">
+                            <span class="name">${m.name}</span>
+                            <span class="tenure">在岗 ${m.tenure}</span>
+                        </div>
+                        <div class="total-score-badge">${m.totalScore.toFixed(1)} <span class="denominator">/ 10</span></div>
+                        <div class="scores-grid">
+                            <div class="s-item"><span class="s-label">销额同比</span><span class="s-value ${m.performance.salesYoY.startsWith('+') ? 'good' : 'bad'}">${m.performance.salesYoY}</span></div>
+                            <div class="s-item"><span class="s-label">销额环比</span><span class="s-value ${m.performance.salesMoM.startsWith('+') ? 'good' : 'bad'}">${m.performance.salesMoM}</span></div>
+                            <div class="s-item"><span class="s-label">招聘高级人才</span><span class="s-value">${m.hiredSenior} 人</span></div>
+                            <div class="s-item"><span class="s-label">点评分</span><span class="s-value ${satRating >= 4.5 ? 'good' : 'bad'}">${satRating} / 5</span></div>
+                            <div class="s-item"><span class="s-label">差评数</span><span class="s-value ${m.satisfaction.negativeReviews <= 5 ? 'good' : 'bad'}">${m.satisfaction.negativeReviews} 条</span></div>
+                            <div class="s-item"><span class="s-label">进店率</span><span class="s-value ${parseInt(m.satisfaction.visitRate) >= 60 ? 'good' : 'bad'}">${m.satisfaction.visitRate}</span></div>
+                            <div class="s-item"><span class="s-label">复购率</span><span class="s-value ${parseInt(m.satisfaction.repurchaseRate) >= 40 ? 'good' : 'bad'}">${m.satisfaction.repurchaseRate}</span></div>
+                            <div class="s-item" style="border-bottom:none;align-items:center;">
+                                <span class="s-label">决策</span>
+                                <span class="eval-status ${statusClass}">${m.decision}</span>
+                            </div>
+                        </div>
+                        <div class="action-row">
+                            <button class="btn btn-sm" onclick="performDecision('${m.id}','promote')">晋升</button>
+                            <button class="btn btn-sm btn-outline" onclick="performDecision('${m.id}','demote')">降级</button>
+                            <button class="btn btn-sm btn-outline" onclick="openEvalDetail('${m.id}')">详情</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = `
+                <div class="exec-summary">
+                    <div class="stat"><div class="num" id="exec-total">${total}</div><div class="label">总店长数</div></div>
+                    <div class="stat"><div class="num" id="exec-promotable">${promotable}</div><div class="label">可晋升</div></div>
+                    <div class="stat"><div class="num" id="exec-atrisk">${atrisk}</div><div class="label">需关注</div></div>
+                </div>
+                ${listHtml}
+            `;
+        }
+
+        function openEvalDetail(managerId) {
+            var m = managerEvalData.find(function(item) { return item.id === managerId; });
+            if (!m) return;
+            var satRating = m.satisfaction.rating.toFixed(1);
+            var statusClass = m.decision === '晋升推荐' ? 'promote' :
+                m.decision === '需辅导' ? 'warning' : 'danger';
+
+            var container = document.getElementById('exec-content');
+            var detailHtml = `
+                <div class="card" id="evalDetailCard" style="margin-bottom:12px;border-left:3px solid var(--primary);">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                        <span style="font-weight:600;font-size:16px;">${m.name} · 评分详情</span>
+                        <button class="btn btn-sm btn-outline" onclick="closeEvalDetail()">关闭</button>
+                    </div>
+                    <div style="font-size:12px;color:var(--gray-400);margin-bottom:8px;">${m.store} · 在岗 ${m.tenure}</div>
+                    <div style="font-size:24px;font-weight:700;color:var(--primary);margin-bottom:10px;">${m.totalScore.toFixed(1)} / 10</div>
+                    <div style="margin-bottom:8px;">
+                        <div style="font-weight:500;font-size:13px;margin-bottom:4px;color:var(--gray-500);">业绩指标</div>
+                        <div class="row" style="font-size:13px;"><span class="label">任期销额同比</span><span class="value ${m.performance.salesYoY.startsWith('+') ? 'good' : 'bad'}">${m.performance.salesYoY}</span></div>
+                        <div class="row" style="font-size:13px;"><span class="label">销额环比</span><span class="value ${m.performance.salesMoM.startsWith('+') ? 'good' : 'bad'}">${m.performance.salesMoM}</span></div>
+                    </div>
+                    <div style="margin-bottom:8px;">
+                        <div style="font-weight:500;font-size:13px;margin-bottom:4px;color:var(--gray-500);">人才招聘</div>
+                        <div class="row" style="font-size:13px;"><span class="label">招聘高级人才</span><span class="value">${m.hiredSenior} 人</span></div>
+                    </div>
+                    <div style="margin-bottom:8px;">
+                        <div style="font-weight:500;font-size:13px;margin-bottom:4px;color:var(--gray-500);">客户满意度</div>
+                        <div class="row" style="font-size:13px;"><span class="label">点评分</span><span class="value ${satRating >= 4.5 ? 'good' : 'bad'}">${satRating} / 5</span></div>
+                        <div style="height:4px;background:#f0f0f0;border-radius:2px;margin:2px 0 6px;"><div style="width:${(satRating/5)*100}%;height:4px;background:var(--primary);border-radius:2px;"></div></div>
+                        <div class="row" style="font-size:13px;"><span class="label">差评数</span><span class="value ${m.satisfaction.negativeReviews <= 5 ? 'good' : 'bad'}">${m.satisfaction.negativeReviews} 条</span></div>
+                        <div class="row" style="font-size:13px;"><span class="label">进店率</span><span class="value ${parseInt(m.satisfaction.visitRate) >= 60 ? 'good' : 'bad'}">${m.satisfaction.visitRate}</span></div>
+                        <div class="row" style="font-size:13px;"><span class="label">复购率</span><span class="value ${parseInt(m.satisfaction.repurchaseRate) >= 40 ? 'good' : 'bad'}">${m.satisfaction.repurchaseRate}</span></div>
+                    </div>
+                    <div style="border-top:2px solid var(--border);padding-top:10px;margin-top:6px;">
+                        <div style="font-weight:500;font-size:13px;margin-bottom:4px;">当前决策</div>
+                        <span class="eval-status ${statusClass}" style="font-size:12px;">${m.decision}</span>
+                        <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
+                            <button class="btn btn-sm" onclick="performDecision('${m.id}','promote');closeEvalDetail();">晋升</button>
+                            <button class="btn btn-sm btn-outline" onclick="performDecision('${m.id}','demote');closeEvalDetail();">降级</button>
+                            <button class="btn btn-sm btn-outline" onclick="closeEvalDetail()">返回列表</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            var oldDetail = document.getElementById('evalDetailCard');
+            if (oldDetail) oldDetail.remove();
+            var summary = container.querySelector('.exec-summary');
+            if (summary) {
+                var list = container.querySelectorAll('.manager-eval-item');
+                list.forEach(function(el) { el.remove(); });
+                summary.insertAdjacentHTML('afterend', detailHtml);
+                var listHtml = '';
+                managerEvalData.forEach(function(item) {
+                    if (item.id === managerId) return;
+                    var statusCls = item.decision === '晋升推荐' ? 'promote' :
+                        item.decision === '需辅导' ? 'warning' : 'danger';
+                    listHtml += `
+                        <div class="manager-eval-item" style="cursor:pointer;" onclick="openEvalDetail('${item.id}')">
+                            <div class="header">
+                                <span class="name">${item.name}</span>
+                                <span class="tenure">在岗 ${item.tenure}</span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:2px;">
+                                <span style="font-size:20px;font-weight:700;color:var(--primary);">${item.totalScore.toFixed(1)} / 10</span>
+                                <span class="eval-status ${statusCls}" style="font-size:10px;">${item.decision}</span>
+                            </div>
+                            <div style="font-size:11px;color:var(--gray-400);margin-top:4px;">点击查看详情</div>
+                        </div>
+                    `;
+                });
+                if (listHtml) {
+                    var detailCard = document.getElementById('evalDetailCard');
+                    if (detailCard) {
+                        detailCard.insertAdjacentHTML('afterend', listHtml);
+                    }
+                }
+            }
+        }
+
+        function closeEvalDetail() {
+            var detail = document.getElementById('evalDetailCard');
+            if (detail) detail.remove();
+            renderExecutiveEval();
+        }
+
+        function performDecision(managerId, action) {
+            var m = managerEvalData.find(function(item) { return item.id === managerId; });
+            if (!m) return;
+            var actionText = action === 'promote' ? '晋升' : '降级';
+            if (confirm('确认对 ' + m.name + ' 执行 ' + actionText + ' 操作吗？')) {
+                var newDecision = action === 'promote' ? '晋升推荐' : '降级预警';
+                m.decision = newDecision;
+                closeEvalDetail();
+                renderExecutiveEval();
+                alert('已对 ' + m.name + ' 执行 ' + actionText + ' 操作，当前状态：' + newDecision);
+            }
+        }
+
+        // ================================================================
+        // 排班管理函数
+        // ================================================================
+        function filterScheduleShift(shift) {
+            scheduleData.currentFilter = shift;
+            document.querySelectorAll('.shift-tab').forEach(function(tab) {
+                tab.classList.remove('active');
+                if (tab.dataset.shift === shift) {
+                    tab.classList.add('active');
+                    if (shift === 'all') {
+                        tab.style.background = 'var(--primary)';
+                        tab.style.color = '#fff';
+                        tab.style.border = 'none';
+                    } else if (shift === 'lunch') {
+                        tab.style.background = '#e8f5e9';
+                        tab.style.color = '#2e7d32';
+                        tab.style.border = '1px solid #a5d6a7';
+                    } else if (shift === 'dinner') {
+                        tab.style.background = '#fff3e0';
+                        tab.style.color = '#e65100';
+                        tab.style.border = '1px solid #ffcc80';
+                    }
+                } else {
+                    tab.style.background = '#fff';
+                    tab.style.color = 'var(--text-light)';
+                    tab.style.border = '1px solid var(--border)';
+                }
+            });
+            renderSchedule();
+        }
+
+        function renderSchedule() {
+            renderScheduleMetrics();
+            renderScheduleProcesses();
+            renderSchedulePositions();
+            renderPublishStatus();
+        }
+
+        function renderScheduleMetrics() {
+            var m = scheduleData.metrics;
+            document.getElementById('metricSales').textContent = '¥' + m.sales.toLocaleString();
+            document.getElementById('metricTotalHours').textContent = m.totalHours + 'h';
+            document.getElementById('metricLaborCost').textContent = '¥' + m.laborCost.toLocaleString();
+            document.getElementById('metricLaborRatio').textContent = m.laborRatio + '%';
+        }
+
+        function renderScheduleProcesses() {
+            var container = document.getElementById('scheduleProcessList');
+            var filter = scheduleData.currentFilter;
+            var filtered = scheduleData.processes;
+            if (filter !== 'all') {
+                filtered = scheduleData.processes.filter(function(p) { return p.shift === filter; });
+            }
+            var html = '';
+            var groups = {};
+            filtered.forEach(function(p) {
+                if (!groups[p.shift]) groups[p.shift] = [];
+                groups[p.shift].push(p);
+            });
+            var shiftNames = { lunch: '午市', dinner: '晚市' };
+            var shiftBadgeClasses = { lunch: 'lunch', dinner: 'dinner' };
+            for (var shiftKey in groups) {
+                var items = groups[shiftKey];
+                html += '<div class="shift-group-title">' +
+                    '<span>' + shiftNames[shiftKey] + '</span>' +
+                    '<span class="shift-badge ' + shiftBadgeClasses[shiftKey] + '">' + shiftKey + '</span>' +
+                    '</div>';
+                items.forEach(function(p) {
+                    html += '<div class="process-item"><span class="pname">' + p.name + '</span><span class="pvalue">' +
+                        p.hours + 'h / ' + p.people + '人</span></div>';
+                });
+            }
+            container.innerHTML = html;
+        }
+
+        function renderSchedulePositions() {
+            var container = document.getElementById('schedulePositions');
+            var filter = scheduleData.currentFilter;
+            var filtered = scheduleData.positions;
+            if (filter !== 'all') {
+                filtered = scheduleData.positions.filter(function(p) { return p.shift === filter; });
+            }
+            var html = '';
+            var groups = {};
+            filtered.forEach(function(p) {
+                if (!groups[p.shift]) groups[p.shift] = [];
+                groups[p.shift].push(p);
+            });
+            var shiftNames = { lunch: '午市', dinner: '晚市' };
+            var shiftBadgeClasses = { lunch: 'lunch', dinner: 'dinner' };
+            for (var shiftKey in groups) {
+                var items = groups[shiftKey];
+                html += '<div class="shift-group-title">' +
+                    '<span>' + shiftNames[shiftKey] + '</span>' +
+                    '<span class="shift-badge ' + shiftBadgeClasses[shiftKey] + '">' + shiftKey + '</span>' +
+                    '</div>';
+                items.forEach(function(pos) {
+                    var selectedHtml = '';
+                    if (pos.selected.length > 0) {
+                        pos.selected.forEach(function(name) {
+                            var cls = pos.type === 'pt' ? 'sel-tag pt' : 'sel-tag';
+                            selectedHtml += '<span class="' + cls + '">' + name + '</span>';
+                        });
+                    } else {
+                        selectedHtml = '<span class="sel-tag empty">未选</span>';
+                    }
+                    html += '<div class="pos-item" onclick="openStaffSelect(\'' + pos.id + '\')">' +
+                        '<div class="pos-info">' +
+                        '<span class="pos-name">' + pos.name + '</span>' +
+                        '<span class="pos-suggest">建议 ' + pos.suggest + '人</span>' +
+                        '</div>' +
+                        '<div class="pos-selected">' + selectedHtml + '</div>' +
+                        '<span class="pos-arrow">›</span>' +
+                        '</div>';
+                });
+            }
+            container.innerHTML = html;
+        }
+
+        function renderPublishStatus() {
+            var el = document.getElementById('publishStatusText');
+            var btn = document.getElementById('publishScheduleBtn');
+            if (scheduleData.published) {
+                el.innerHTML = '✅ 已发布 <span class="highlight">' + formatDate(scheduleData.date) + '</span>';
+                btn.textContent = '📤 已发布';
+                btn.style.opacity = '0.6';
+                btn.disabled = true;
+            } else {
+                el.innerHTML = '⏳ 未发布';
+                btn.textContent = '📤 发布排班';
+                btn.style.opacity = '1';
+                btn.disabled = false;
+            }
+        }
+
+        function formatDate(date) {
+            var d = new Date(date);
+            var year = d.getFullYear();
+            var month = String(d.getMonth() + 1).padStart(2, '0');
+            var day = String(d.getDate()).padStart(2, '0');
+            var weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+            return year + '-' + month + '-' + day + ' ' + weekdays[d.getDay()];
+        }
+
+        function changeScheduleDate(delta) {
+            var newDate = new Date(scheduleData.date);
+            newDate.setDate(newDate.getDate() + delta);
+            scheduleData.date = newDate;
+            document.getElementById('scheduleDateDisplay').textContent = formatDate(newDate);
+            scheduleData.published = false;
+            renderSchedule();
+        }
+
+        function openStaffSelect(positionId) {
+            currentPositionId = positionId;
+            var pos = scheduleData.positions.find(function(p) { return p.id === positionId; });
+            if (!pos) return;
+            var modal = document.getElementById('staffSelectModal');
+            document.getElementById('modalStaffTitle').textContent = '选择人员 - ' + pos.name;
+            var list = document.getElementById('staffSelectList');
+            var html = '';
+            allStaff.forEach(function(name) {
+                var checked = pos.selected.includes(name) ? 'checked' : '';
+                html += '<div class="staff-option" onclick="toggleStaffCheck(this, \'' + name + '\')">' +
+                    '<div class="s-avatar">' + name.charAt(0) + '</div>' +
+                    '<span class="s-name">' + name + '</span>' +
+                    '<input type="checkbox" class="s-check" ' + checked + ' data-name="' + name + '" />' +
+                    '</div>';
+            });
+            list.innerHTML = html;
+            modal.classList.add('open');
+        }
+
+        function toggleStaffCheck(el, name) {
+            var checkbox = el.querySelector('.s-check');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+            }
+        }
+
+        function confirmStaffSelect() {
+            if (!currentPositionId) return;
+            var pos = scheduleData.positions.find(function(p) { return p.id === currentPositionId; });
+            if (!pos) return;
+            var checkboxes = document.querySelectorAll('#staffSelectList .s-check');
+            var selected = [];
+            checkboxes.forEach(function(cb) {
+                if (cb.checked) {
+                    selected.push(cb.dataset.name);
+                }
+            });
+            pos.selected = selected;
+            closeStaffSelect();
+            renderSchedulePositions();
+        }
+
+        function closeStaffSelect() {
+            document.getElementById('staffSelectModal').classList.remove('open');
+            currentPositionId = null;
+        }
+
+        function publishSchedule() {
+            if (scheduleData.published) {
+                alert('该日排班已发布');
+                return;
+            }
+            var allSelected = true;
+            var emptyPositions = [];
+            scheduleData.positions.forEach(function(p) {
+                if (p.selected.length === 0) {
+                    allSelected = false;
+                    emptyPositions.push(p.name);
+                }
+            });
+            if (!allSelected) {
+                alert('以下岗位尚未选人，请完成人员配置：\n' + emptyPositions.join('、'));
+                return;
+            }
+            scheduleData.published = true;
+            renderPublishStatus();
+            alert('✅ 排班已发布！\n日期：' + formatDate(scheduleData.date) + '\n共配置 ' + scheduleData.positions.reduce(function(
+                acc, p) { return acc + p.selected.length; }, 0) + ' 人');
+        }
+
+        // ================================================================
+        // 通用 - 角色切换
+        // ================================================================
+        var roleBtns = document.querySelectorAll('.role-btn');
+        var rolePhones = {
+            employee: document.getElementById('phone-employee'),
+            manager: document.getElementById('phone-manager'),
+            hr: document.getElementById('phone-hr'),
+            parttime: document.getElementById('phone-parttime'),
+            executive: document.getElementById('phone-executive')
+        };
+
+        roleBtns.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                roleBtns.forEach(function(b) { b.classList.remove('active'); });
+                this.classList.add('active');
+                var role = this.dataset.role;
+                Object.values(rolePhones).forEach(function(p) { p.classList.remove('active'); });
+                var target = rolePhones[role];
+                if (target) {
+                    target.classList.add('active');
+                    var h2 = target.querySelector('.app-header h2');
+                    var sub = target.querySelector('.app-header .sub');
+                    var activeNav = target.querySelector('.bottom-nav .nav-item.active');
+                    if (h2 && activeNav) h2.textContent = activeNav.dataset.title || activeNav.textContent.trim();
+                    if (sub) sub.textContent = target.dataset.store + ' · ' + target.dataset.name + ' · ' + target
+                        .dataset.rank;
+                    if (role === 'executive') {
+                        renderExecutiveEval();
+                    }
+                    if (role === 'manager') {
+                        var scheduleTab = document.querySelector('#mgr-ops-tabs .tab-btn[data-tab="ops-schedule"]');
+                        if (scheduleTab && scheduleTab.classList.contains('active')) {
+                            renderSchedule();
+                        }
+                    }
+                }
+                if (role === 'manager') {
+                    renderArchive('mgr-archive-container', false);
+                }
+                if (role === 'hr') {
+                    document.getElementById('hr-archive-container').classList.add('hidden');
+                }
+                if (role === 'parttime') {
+                    updatePartTimeUI();
+                }
+                refreshDayTasks();
+            });
+        });
+
+        // ================================================================
+        // 人员档案（店长 & HR）
+        // ================================================================
+        var staffDB = [
+            { name: '王芳', position: '资深店长', status: '在职' },
+            { name: '张三', position: '高级服务员', status: '在职' },
+            { name: '李四', position: '中级小时工', status: '小时工' }
+        ];
+
+        function renderArchive(containerId, isHr) {
+            isHr = isHr || false;
+            var container = document.getElementById(containerId);
+            if (!container) return;
+            var html = `
+                <div class="archive-tabs">
+                    <button class="tab-btn active" data-filter="全部" onclick="filterArchive('全部',${isHr})">全部</button>
+                    <button class="tab-btn" data-filter="在职" onclick="filterArchive('在职',${isHr})">在职</button>
+                    <button class="tab-btn" data-filter="小时工" onclick="filterArchive('小时工',${isHr})">小时工</button>
+                </div>
+                <div id="${isHr ? 'hr-archive-list' : 'mgr-archive-list'}"></div>
+            `;
+            container.innerHTML = html;
+            renderArchiveList(isHr ? 'hr-archive-list' : 'mgr-archive-list', '全部', isHr);
+        }
+
+        function renderArchiveList(listId, filter, isHr) {
+            var container = document.getElementById(listId);
+            if (!container) return;
+            var filtered = staffDB;
+            if (filter !== '全部') filtered = staffDB.filter(function(s) { return s.status === filter; });
+            if (!filtered.length) {
+                container.innerHTML =
+                    '<div style="text-align:center;padding:12px 0;color:var(--gray-400);font-size:12px;">暂无人员</div>';
+                return;
+            }
+            var html = '';
+            filtered.forEach(function(p) {
+                var cls = p.status === '在职' ? 'badge-green' : p.status === '小时工' ? 'badge-orange' : '';
+                html += `
+                    <div class="staff-list-item" onclick="alert('查看 ${p.name} 档案')">
+                        <div class="avatar">${p.name.charAt(0)}</div>
+                        <div class="info"><div class="name">${p.name}</div><div class="sub">${p.position}</div></div>
+                        <span class="status-tag ${cls}">${p.status}</span>
+                        <span style="color:#ccc;font-size:11px;">▶</span>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function filterArchive(filter, isHr) {
+            var listId = isHr ? 'hr-archive-list' : 'mgr-archive-list';
+            var tabs = (isHr ? document.querySelector('#hr-archive-container .archive-tabs') : document.querySelector(
+                '#mgr-archive-container .archive-tabs'));
+            if (tabs) {
+                tabs.querySelectorAll('.tab-btn').forEach(function(b) {
+                    b.classList.toggle('active', b.dataset.filter === filter);
+                });
+            }
+            renderArchiveList(listId, filter, isHr);
+        }
+
+        // ================================================================
+        // 初始化
+        // ================================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEmployeeNav('phone-employee', 'emp-content');
+            setupEmployeeNav('phone-parttime', 'pt-content');
+            setupManagerNav();
+            setupHrNav();
+            setupExecutiveNav();
+            setupManagerTabs();
+
+            renderTraining('storefront');
+            var firstTab = document.querySelector('#store-training .func-tabs .tab-btn');
+            if (firstTab) {
+                firstTab.style.background = 'var(--primary)';
+                firstTab.style.color = '#fff';
+                firstTab.style.borderColor = 'var(--primary)';
+            }
+
+            renderArchive('mgr-archive-container', false);
+            document.getElementById('hr-archive-container').classList.add('hidden');
+            refreshDayTasks();
+            updatePartTimeUI();
+
+            document.getElementById('scheduleDateDisplay').textContent = formatDate(scheduleData.date);
+            document.querySelectorAll('.shift-tab').forEach(function(tab) {
+                if (tab.dataset.shift === 'all') {
+                    tab.style.background = 'var(--primary)';
+                    tab.style.color = '#fff';
+                    tab.style.border = 'none';
+                } else {
+                    tab.style.background = '#fff';
+                    tab.style.color = 'var(--text-light)';
+                    tab.style.border = '1px solid var(--border)';
+                }
+            });
+            renderSchedule();
+
+            var defaultPhone = document.getElementById('phone-employee');
+            if (defaultPhone) {
+                defaultPhone.classList.add('active');
+                var h2 = defaultPhone.querySelector('.app-header h2');
+                var sub = defaultPhone.querySelector('.app-header .sub');
+                var activeNav = defaultPhone.querySelector('.bottom-nav .nav-item.active');
+                if (h2 && activeNav) h2.textContent = activeNav.dataset.title || activeNav.textContent.trim();
+                if (sub) sub.textContent = defaultPhone.dataset.store + ' · ' + defaultPhone.dataset.name + ' · ' +
+                    defaultPhone.dataset.rank;
+            }
+
+            renderExecutiveEval();
+            console.log('✅ 系统已启动，店长页「一店一策-PDCA」已完整覆盖。');
+        });
+
+        // ================================================================
+        // 暴露全局函数
+        // ================================================================
+        window.togglePromotion = togglePromotion;
+        window.togglePtLevel = togglePtLevel;
+        window.switchEmployeeTab = switchEmployeeTab;
+        window.openSubmitCheck = openSubmitCheck;
+        window.closeSubmitCheck = closeSubmitCheck;
+        window.confirmSubmitCheck = confirmSubmitCheck;
+        window.toggleSalaryDetail = toggleSalaryDetail;
+        window.switchHrTab = switchHrTab;
+        window.toggleHrArchive = toggleHrArchive;
+        window.switchManagerTab = switchManagerTab;
+        window.showPdca = showPdca;
+        window.togglePdca = togglePdca;
+        window.closeCheckModal = closeCheckModal;
+        window.openCheckModal = openCheckModal;
+        window.addNewTodo = addNewTodo;
+        window.toggleCadreDetail = toggleCadreDetail;
+        window.openIncentiveModal = openIncentiveModal;
+        window.closeIncentiveModal = closeIncentiveModal;
+        window.confirmIncentive = confirmIncentive;
+        window.filterArchive = filterArchive;
+        window.renderArchive = renderArchive;
+        window.updatePartTimeUI = updatePartTimeUI;
+        window.handlePartTimeReportHours = handlePartTimeReportHours;
+        window.renderExecutiveEval = renderExecutiveEval;
+        window.openEvalDetail = openEvalDetail;
+        window.closeEvalDetail = closeEvalDetail;
+        window.performDecision = performDecision;
+        window.renderSchedule = renderSchedule;
+        window.filterScheduleShift = filterScheduleShift;
+        window.changeScheduleDate = changeScheduleDate;
+        window.openStaffSelect = openStaffSelect;
+        window.closeStaffSelect = closeStaffSelect;
+        window.confirmStaffSelect = confirmStaffSelect;
+        window.toggleStaffCheck = toggleStaffCheck;
+        window.publishSchedule = publishSchedule;
+    </script>
+</body>
+</html>
