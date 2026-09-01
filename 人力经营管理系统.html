@@ -1323,7 +1323,7 @@
             display: none;
         }
 
-        /* ===== PDCA 样式 ===== */
+        /* ===== PDCA 样式（从源文件复制） ===== */
         .pdca-section {
             margin-bottom: 12px;
             border: 1px solid var(--border);
@@ -1365,6 +1365,165 @@
             border-radius: 6px;
         }
 
+        /* 一店一策指标 */
+        .pdca-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .pdca-metric {
+            background: #fafafa;
+            border-radius: 4px;
+            padding: 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        .pdca-metric .metric-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .pdca-metric .metric-label {
+            font-size: 11px;
+            color: var(--gray-400);
+            margin-top: 2px;
+        }
+        .pdca-metric .metric-bar {
+            height: 4px;
+            background: #f0f0f0;
+            border-radius: 2px;
+            margin-top: 4px;
+        }
+        .pdca-metric .metric-bar .fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        .pdca-metric .pdca-link {
+            margin-top: 4px;
+        }
+
+        /* 检查执行弹窗（覆盖层） */
+        .check-modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            border-radius: 38px;
+            overflow: hidden;
+        }
+        .check-modal-overlay.open {
+            display: flex;
+        }
+        .check-modal {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px 16px;
+            width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        .check-modal .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .check-modal .modal-header .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--gray-400);
+        }
+        .check-modal .modal-body .check-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 13px;
+        }
+        .check-modal .modal-body .check-item:last-child {
+            border-bottom: none;
+        }
+        .check-modal .modal-body .check-item .label {
+            color: var(--text-light);
+        }
+        .check-modal .modal-body .check-item .value {
+            font-weight: 500;
+        }
+        .check-modal .modal-body .check-item .value.good {
+            color: #2e7d32;
+        }
+        .check-modal .modal-body .check-item .value.bad {
+            color: #c62828;
+        }
+
+        /* ===== 团队建设（从源文件复制） ===== */
+        .cadre-training-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 12px;
+        }
+        .cadre-training-item:last-child {
+            border-bottom: none;
+        }
+        .cadre-training-item .cadre-name {
+            font-weight: 500;
+            color: var(--text);
+        }
+        .cadre-training-item .cadre-progress {
+            color: var(--text-light);
+        }
+        .cadre-training-item .cadre-status {
+            font-size: 10px;
+            padding: 1px 8px;
+            border-radius: 10px;
+        }
+
+        .incentive-stat {
+            background: #fafafa;
+            border-radius: 4px;
+            padding: 8px 4px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        .incentive-stat .num {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .incentive-stat .label {
+            font-size: 10px;
+            color: var(--gray-400);
+            margin-top: 1px;
+        }
+
+        .training-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .training-header .title {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text);
+        }
+
         /* ===== 响应式 ===== */
         @media (max-width: 420px) {
             .phone-container {
@@ -1378,7 +1537,8 @@
                 border-radius: 0;
             }
             .modal-overlay,
-            .staff-select-modal {
+            .staff-select-modal,
+            .check-modal-overlay {
                 border-radius: 0;
             }
             body {
@@ -1584,20 +1744,41 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- ===== 一店一策（已从源文件完整复制） ===== -->
                         <div class="tab-content hidden" id="store-strategy">
+                            <!-- 月度建议 -->
                             <div class="card">
                                 <div style="font-weight:600;font-size:14px;margin-bottom:6px;">月度建议</div>
                                 <div style="font-size:13px;line-height:1.6;color:var(--text);">
                                     <div style="margin-bottom:6px;"><strong>1. 提高外卖销额</strong> 外卖销额同比低于同类门店，建议本月外卖销额提高至15万元，<span class="clickable" onclick="switchManagerTab('store-training')">查看最佳实践</span></div>
                                     <div><strong>2. 降租</strong> 当前1.2万元月租较高，建议降月租至1万元。</div>
                                 </div>
+                                <!-- 指标完成度 -->
+                                <div class="pdca-metrics">
+                                    <div class="pdca-metric">
+                                        <div class="metric-value">85%</div>
+                                        <div class="metric-label">外卖销额目标</div>
+                                        <div class="metric-bar"><div class="fill" style="width:85%;"></div></div>
+                                        <div class="pdca-link"><button class="btn btn-sm" onclick="showPdca('sales')">PDCA</button></div>
+                                    </div>
+                                    <div class="pdca-metric">
+                                        <div class="metric-value">60%</div>
+                                        <div class="metric-label">满意度提升</div>
+                                        <div class="metric-bar"><div class="fill" style="width:60%;"></div></div>
+                                        <div class="pdca-link"><button class="btn btn-sm" onclick="showPdca('satisfaction')">PDCA</button></div>
+                                    </div>
+                                </div>
                             </div>
+
+                            <!-- 每日建议 -->
                             <div class="card">
                                 <div style="font-weight:600;font-size:14px;margin-bottom:6px;">每日建议</div>
-                                <div class="goal-card">
-                                    <div style="font-weight:600;font-size:14px;color:var(--text);">提高客户满意度，减少差评</div>
-                                    <div style="font-size:12px;color:var(--gray-400);margin-top:2px;">差评目标: 10 条 | 实际: 12 条</div>
-                                    <div style="margin-top:6px;"><button class="btn btn-sm" onclick="showPdca('satisfaction')">查看 PDCA</button></div>
+                                <div class="goal-card" style="border-left-color: var(--primary); margin-bottom:0;">
+                                    <div class="goal-title">提高客户满意度，减少差评</div>
+                                    <div class="goal-sub">差评目标: 10 条 | 实际: 12 条</div>
+                                    <div class="goal-actions">
+                                        <button class="btn btn-sm" onclick="showPdca('satisfaction')">查看 PDCA</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1643,30 +1824,32 @@
                                     <div class="row" style="font-size:12px;padding:3px 0;">王五 · 后厨主管 <span class="badge badge-green">储备中</span></div>
                                 </div>
                             </div>
+                            <!-- 干部培训与晋升 -->
                             <div class="card">
                                 <div style="font-weight:600;font-size:14px;margin-bottom:6px;">干部培训与晋升</div>
-                                <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid #f5f5f5;font-size:12px;">
-                                    <span style="font-weight:500;">张三</span>
-                                    <span style="color:var(--gray-500);">培训 85% · 考试 70%</span>
-                                    <span class="badge badge-blue">晋升目标：值班经理</span>
+                                <div class="cadre-training-item">
+                                    <span class="cadre-name">张三</span>
+                                    <span class="cadre-progress">培训 85% · 考试 70%</span>
+                                    <span class="cadre-status badge badge-blue">晋升目标：值班经理</span>
                                 </div>
-                                <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid #f5f5f5;font-size:12px;">
-                                    <span style="font-weight:500;">李四</span>
-                                    <span style="color:var(--gray-500);">培训 60% · 考试 50%</span>
-                                    <span class="badge badge-orange">晋升目标：高级服务员</span>
+                                <div class="cadre-training-item">
+                                    <span class="cadre-name">李四</span>
+                                    <span class="cadre-progress">培训 60% · 考试 50%</span>
+                                    <span class="cadre-status badge badge-orange">晋升目标：高级服务员</span>
                                 </div>
-                                <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid #f5f5f5;font-size:12px;">
-                                    <span style="font-weight:500;">王五</span>
-                                    <span style="color:var(--gray-500);">培训 90% · 考试 80%</span>
-                                    <span class="badge badge-green">晋升目标：后厨主管</span>
+                                <div class="cadre-training-item">
+                                    <span class="cadre-name">王五</span>
+                                    <span class="cadre-progress">培训 90% · 考试 80%</span>
+                                    <span class="cadre-status badge badge-green">晋升目标：后厨主管</span>
                                 </div>
-                                <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:12px;">
-                                    <span style="font-weight:500;">赵六</span>
-                                    <span style="color:var(--gray-500);">培训 40% · 考试 35%</span>
-                                    <span class="badge">晋升目标：领班</span>
+                                <div class="cadre-training-item" style="border-bottom:none;">
+                                    <span class="cadre-name">赵六</span>
+                                    <span class="cadre-progress">培训 40% · 考试 35%</span>
+                                    <span class="cadre-status badge badge-gray">晋升目标：领班</span>
                                 </div>
                                 <div style="margin-top:6px;font-size:11px;color:var(--gray-400);text-align:right;">预计晋升周期：张三 2个月 · 李四 4个月 · 王五 1个月 · 赵六 6个月</div>
                             </div>
+                            <!-- 员工激励统计 -->
                             <div class="card">
                                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
                                     <span style="font-weight:600;font-size:14px;">员工激励</span>
@@ -1893,14 +2076,26 @@
                         <div class="tab-content hidden" id="my-docs"><div class="card"><p style="color:var(--gray-400);">文档管理</p></div></div>
                         <div class="tab-content hidden" id="my-profile"><div class="card"><p style="color:var(--gray-400);">个人档案</p></div></div>
                     </div>
-                    <!-- ===== PDCA 页面 ===== -->
+                    <!-- ===== PDCA 页面（从源文件完整复制） ===== -->
                     <div class="mgr-page page-pdca hidden">
                         <div class="card" style="margin-top:0;">
-                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                                <span style="font-weight:600;font-size:16px;" id="pdca-title">PDCA 循环</span>
-                                <button class="btn btn-sm btn-outline" onclick="switchManagerTab('store-strategy')">← 返回策略</button>
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                                <span style="font-weight:600;font-size:15px;" id="pdca-title">目标</span>
+                                <button class="btn btn-sm" onclick="hidePdca()">返回</button>
                             </div>
                             <div id="pdca-content"></div>
+                        </div>
+                    </div>
+                    <!-- ===== 检查执行弹窗（从源文件完整复制） ===== -->
+                    <div class="check-modal-overlay" id="checkModal">
+                        <div class="check-modal">
+                            <div class="modal-header">
+                                <span id="modal-task-title">执行检查</span>
+                                <button class="close-btn" onclick="closeCheckModal()">×</button>
+                            </div>
+                            <div class="modal-body" id="modal-body">
+                                <!-- 动态内容 -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2126,27 +2321,54 @@
         // ================================================================
         var globalTasks = [{
             id: 't1',
-            text: '差评申诉和分析',
-            category: 'satisfaction',
-            at: '张三',
+            text: '增加外卖营业时长',
+            category: 'sales',
             checkType: 'data',
-            checkData: { '今日差评': '3条', '已申诉': '1条', '申诉成功率': '33%' },
-            upload: true
+            checkLabel: '外卖差评申诉',
+            checkData: { '今日差评': '3条', '已申诉': '1条', '申诉成功率': '33%' }
         }, {
             id: 't2',
-            text: '开档流程优化',
-            category: 'satisfaction',
-            at: '李四',
-            checkType: 'self',
-            checkData: '请上传优化后的开档流程照片或文字说明'
+            text: '差评申诉',
+            category: 'sales',
+            checkType: 'data',
+            checkLabel: '外卖差评申诉',
+            checkData: { '今日差评': '3条', '已申诉': '1条', '申诉成功率': '33%' }
         }, {
             id: 't3',
+            text: '顾客小惊喜',
+            category: 'sales',
+            checkType: 'ai',
+            checkLabel: '桌桌寻台，慢菜提醒',
+            checkData: { '寻台率': '98%', '慢菜提醒覆盖率': '88%', '员工响应时长': '平均 12秒' }
+        }, {
+            id: 't4',
+            text: '提高出餐速度',
+            category: 'sales',
+            checkType: 'self',
+            checkLabel: '员工自检',
+            checkData: '请上传优化后的出餐流程照片或文字说明'
+        }, {
+            id: 't5',
+            text: '差评分析（由员工填写内容）',
+            category: 'satisfaction',
+            checkType: 'self',
+            checkLabel: '员工自检',
+            checkData: '请上传差评分析报告或输入文字'
+        }, {
+            id: 't6',
+            text: '针对性改善（如出餐慢）',
+            category: 'satisfaction',
+            checkType: 'data',
+            checkLabel: '外卖差评申诉',
+            checkData: { '今日差评': '3条', '已申诉': '1条', '申诉成功率': '33%' }
+        }, {
+            id: 't7',
             text: '桌桌寻台，慢菜提醒',
             category: 'satisfaction',
-            at: '王五',
             checkType: 'ai',
+            checkLabel: '桌桌寻台，慢菜提醒',
             checkData: { '寻台率': '95%', '慢菜提醒覆盖率': '88%', '员工响应时长': '平均 15秒' }
-        }];
+        }, ];
 
         // ================================================================
         // 高管 - 店长评价数据
@@ -2524,18 +2746,19 @@
         }
 
         // ================================================================
-        // PDCA 页面
+        // PDCA 页面（从源文件完整复制）
         // ================================================================
         function showPdca(goal) {
-            if (goal !== 'satisfaction') {
-                alert('暂只支持"提高客户满意度，减少差评"的PDCA');
-                return;
-            }
             document.querySelectorAll('.mgr-page').forEach(function(p) { p.classList.add('hidden'); });
             document.querySelector('.page-pdca').classList.remove('hidden');
-            document.getElementById('pdca-title').textContent = '提高客户满意度，减少差评';
-            var tasks = globalTasks.filter(function(t) { return t.category === 'satisfaction'; });
+            var title = goal === 'sales' ? '提高外卖销额' : '提高客户满意度，减少差评';
+            document.getElementById('pdca-title').textContent = title;
+            var tasks = globalTasks.filter(function(t) { return t.category === goal; });
             var html = '';
+
+            // P - 展示指标进度，用户填写根本原因和计划措施
+            var progress = goal === 'sales' ? 85 : 60;
+            var label = goal === 'sales' ? '外卖销额目标完成度' : '满意度提升目标完成度';
             html += `
                 <div class="pdca-section">
                     <div class="pdca-header" onclick="togglePdca(this)" style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);cursor:pointer;">
@@ -2543,9 +2766,10 @@
                         <span class="pdca-toggle" style="font-size:11px;color:var(--gray-400);">▼</span>
                     </div>
                     <div class="pdca-body" style="padding:6px 0;display:block;">
-                        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;border-bottom:1px solid #f5f5f5;">
-                            <span style="color:var(--gray-500);">本周差评数</span>
-                            <span style="font-weight:500;color:var(--primary);">当前 12 条 / 目标 10 条</span>
+                        <div style="margin-bottom:6px;">
+                            <div style="font-size:13px;color:var(--text-light);">${label}</div>
+                            <div style="font-size:20px;font-weight:600;color:var(--primary);">${progress}%</div>
+                            <div class="metric-bar" style="height:6px;background:#f0f0f0;border-radius:3px;margin-top:4px;"><div class="fill" style="width:${progress}%;background:var(--primary);height:6px;border-radius:3px;"></div></div>
                         </div>
                         <div style="margin-top:8px;">
                             <label style="font-size:12px;color:var(--gray-500);">根本原因：</label>
@@ -2558,6 +2782,8 @@
                     </div>
                 </div>
             `;
+
+            // D+C 合并 - 执行检查一体化
             html += `
                 <div class="pdca-section">
                     <div class="pdca-header" onclick="togglePdca(this)" style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);cursor:pointer;">
@@ -2568,13 +2794,13 @@
             `;
             tasks.forEach(function(task) {
                 html += `
-                    <div class="todo-item">
+                    <div class="todo-item" style="border-bottom:1px solid #f5f5f5; padding:6px 0;">
                         <div class="todo-row">
-                            <input type="checkbox" id="pdca_${task.id}" class="todo-checkbox">
+                            <input type="checkbox" id="pdca_${task.id}" class="todo-checkbox" onchange="updateTaskStatus('${task.id}')">
                             <span class="todo-text">${task.text}</span>
-                            <span class="todo-at" style="font-size:11px;color:var(--gray-400);">@ ${task.at || ''}</span>
                             <div class="todo-actions">
-                                <button class="btn btn-sm btn-outline" onclick="openCheckModal('${task.id}')">执行检查</button>
+                                <button class="btn btn-sm btn-outline" onclick="publishTask('${task.id}')">发布任务</button>
+                                <button class="btn btn-sm btn-outline" onclick="openCheckModal('${task.id}')">检查执行</button>
                             </div>
                         </div>
                     </div>
@@ -2585,6 +2811,8 @@
                     </div>
                 </div>
             `;
+
+            // A - 只展示指标数据，用户填写复盘
             html += `
                 <div class="pdca-section">
                     <div class="pdca-header" onclick="togglePdca(this)" style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);cursor:pointer;">
@@ -2593,12 +2821,12 @@
                     </div>
                     <div class="pdca-body" style="padding:6px 0;display:block;">
                         <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;border-bottom:1px solid #f5f5f5;">
-                            <span style="color:var(--gray-500);">差评数</span>
-                            <span style="font-weight:500;color:var(--primary);">12条（目标10条）</span>
+                            <span style="color:var(--gray-500);">${goal === 'sales' ? '外卖销额' : '差评数'}</span>
+                            <span style="font-weight:500;color:var(--primary);">${goal === 'sales' ? '12.8万（目标15万）' : '12条（目标10条）'}</span>
                         </div>
                         <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;border-bottom:1px solid #f5f5f5;">
                             <span style="color:var(--gray-500);">较上周</span>
-                            <span style="font-weight:500;color:var(--primary);">+3条</span>
+                            <span style="font-weight:500;color:var(--primary);">${goal === 'sales' ? '-5%' : '+3条'}</span>
                         </div>
                         <div style="margin-top:6px;">
                             <label style="font-size:12px;color:var(--gray-500);">复盘内容：</label>
@@ -2615,6 +2843,18 @@
             refreshDayTasks();
         }
 
+        function hidePdca() {
+            document.querySelectorAll('.mgr-page').forEach(function(p) { p.classList.add('hidden'); });
+            document.querySelector('.page-store-mgmt').classList.remove('hidden');
+            var tabs = document.querySelectorAll('#mgr-store-tabs .tab-btn');
+            tabs.forEach(function(t) { t.classList.remove('active'); });
+            document.querySelector('#mgr-store-tabs .tab-btn[data-tab="store-strategy"]').classList.add('active');
+            document.querySelectorAll('#store-strategy').forEach(function(el) { el.classList.remove('hidden'); });
+            document.querySelectorAll('#phone-manager .bottom-nav .nav-item').forEach(function(n) { n.classList.remove(
+                    'active'); });
+            document.querySelector('#phone-manager .bottom-nav .nav-item[data-page="store-mgmt"]').classList.add('active');
+        }
+
         function togglePdca(header) {
             var body = header.nextElementSibling;
             var toggle = header.querySelector('.pdca-toggle');
@@ -2625,75 +2865,66 @@
         }
 
         // ================================================================
-        // 执行检查弹窗
+        // 执行检查弹窗（从源文件完整复制）
         // ================================================================
         function openCheckModal(taskId) {
             var task = globalTasks.find(function(t) { return t.id === taskId; });
             if (!task) return;
             var modal = document.getElementById('checkModal');
-            if (!modal) {
-                var overlay = document.createElement('div');
-                overlay.className = 'modal-overlay open';
-                overlay.id = 'checkModal';
-                overlay.innerHTML = `
-                    <div class="modal-box">
-                        <div class="modal-title"><span id="modal-task-title">执行检查</span><button class="close-btn" onclick="closeCheckModal()">×</button></div>
-                        <div id="modal-body"></div>
-                    </div>
-                `;
-                document.querySelector('.phone-wrapper').appendChild(overlay);
-                modal = overlay;
-            }
             var title = document.getElementById('modal-task-title');
             var body = document.getElementById('modal-body');
             title.textContent = '执行检查：' + task.text;
             var html = '';
             html += `<div style="margin-bottom:12px;font-weight:500;font-size:14px;color:var(--text);">目标：${task.text}</div>`;
+
             if (task.checkType === 'data') {
                 html += `<div style="font-size:13px;color:var(--gray-500);margin-bottom:8px;">检查结果：</div>`;
                 var data = task.checkData;
                 for (var key in data) {
                     var val = data[key];
-                    html +=
-                        `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f0f0f0;font-size:13px;"><span style="color:var(--gray-500);">${key}</span><span style="font-weight:500;">${val}</span></div>`;
-                }
-                if (task.upload) {
-                    html += `
-                        <div style="margin-top:10px;padding:10px;background:#fafafa;border-radius:4px;border:1px solid #eee;">
-                            <div style="font-size:12px;color:var(--gray-500);margin-bottom:4px;">员工上传的差评分析：</div>
-                            <div style="background:#fff;padding:6px;border-radius:4px;border:1px solid #eee;font-size:12px;color:var(--text);">
-                                <div>分析内容：今日差评主要集中在上菜速度慢和口味偏咸，已反馈后厨。</div>
-                                <div style="margin-top:4px;font-size:11px;color:var(--gray-400);">—— 张三 提交于 08-27 14:30</div>
-                            </div>
-                            <div style="margin-top:4px;"><button class="btn btn-sm btn-outline" onclick="alert('上传新分析（模拟）')">上传分析</button></div>
-                        </div>
-                    `;
+                    var cls = (key.includes('成功率') || key.includes('率')) ? 'good' : '';
+                    html += `<div class="check-item"><span class="label">${key}</span><span class="value ${cls}">${val}</span></div>`;
                 }
             } else if (task.checkType === 'ai') {
                 html += `<div style="font-size:13px;color:var(--gray-500);margin-bottom:8px;">AI 检查结果：</div>`;
                 var data = task.checkData;
                 for (var key in data) {
                     var val = data[key];
-                    html +=
-                        `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f0f0f0;font-size:13px;"><span style="color:var(--gray-500);">${key}</span><span style="font-weight:500;">${val}</span></div>`;
+                    var cls = (key.includes('率') || key.includes('时长')) ? 'good' : '';
+                    html += `<div class="check-item"><span class="label">${key}</span><span class="value ${cls}">${val}</span></div>`;
                 }
             } else {
                 html += `
                     <div style="font-size:13px;color:var(--gray-500);margin-bottom:8px;">员工自检</div>
                     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-                        <button class="btn btn-sm btn-outline" onclick="alert('上传图片（模拟）')">上传图片</button>
-                        <button class="btn btn-sm btn-outline" onclick="alert('输入文字说明（模拟）')">文字说明</button>
+                        <button class="btn btn-sm btn-outline" onclick="alert('上传图片（模拟）')">📷 上传图片</button>
+                        <button class="btn btn-sm btn-outline" onclick="alert('输入文字说明（模拟）')">✏️ 文字说明</button>
                     </div>
                     <div style="font-size:12px;color:var(--gray-400);">请上传执行结果或输入文字说明</div>
                 `;
             }
+
             body.innerHTML = html;
             modal.classList.add('open');
         }
 
         function closeCheckModal() {
-            var modal = document.getElementById('checkModal');
-            if (modal) modal.classList.remove('open');
+            document.getElementById('checkModal').classList.remove('open');
+        }
+
+        // ================================================================
+        // 发布任务（选人）
+        // ================================================================
+        function publishTask(taskId) {
+            var task = globalTasks.find(function(t) { return t.id === taskId; });
+            if (!task) return;
+            var staff = ['张三', '李四', '王芳', '赵六', '钱七'];
+            var selected = prompt('选择发布任务给谁？\n请输入员工姓名（可选：' + staff.join('、') + '）', '张三');
+            if (selected && selected.trim()) {
+                alert('已发布任务 "' + task.text + '" 给 ' + selected.trim());
+            } else {
+                alert('已取消发布');
+            }
         }
 
         // ================================================================
@@ -2702,44 +2933,67 @@
         function refreshDayTasks() {
             var mgrContainer = document.getElementById('manager-day-tasks');
             if (mgrContainer) {
-                var tasks = globalTasks.filter(function(t) { return t.category === 'satisfaction'; });
+                var categories = [
+                    { key: 'sales', label: '提高外卖销额' },
+                    { key: 'satisfaction', label: '提高客户满意度' }
+                ];
                 var html = '';
-                if (tasks.length > 0) {
-                    html +=
-                        `<div style="font-weight:600;font-size:13px;margin-bottom:4px;color:var(--gray-500);">提高客户满意度</div>`;
-                    tasks.forEach(function(task) {
-                        html += `
-                            <div class="todo-item">
-                                <div class="todo-row">
-                                    <input type="checkbox" id="mgr_${task.id}" class="todo-checkbox">
-                                    <span class="todo-text">${task.text}</span>
-                                    <span class="todo-at" style="font-size:11px;color:var(--gray-400);">@ ${task.at || ''}</span>
-                                    <div class="todo-actions">
-                                        <button class="btn btn-sm btn-outline" onclick="openCheckModal('${task.id}')">执行检查</button>
+                categories.forEach(function(cat) {
+                    var tasks = globalTasks.filter(function(t) { return t.category === cat.key; });
+                    if (tasks.length > 0) {
+                        html +=
+                            `<div style="font-weight:600;font-size:13px;margin-top:8px;margin-bottom:4px;color:var(--gray-500);">${cat.label}</div>`;
+                        tasks.forEach(function(task) {
+                            html += `
+                                <div class="todo-item" style="border-bottom:1px solid #f5f5f5; padding:6px 0;">
+                                    <div class="todo-row">
+                                        <input type="checkbox" id="mgr_${task.id}" class="todo-checkbox">
+                                        <span class="todo-text">${task.text}</span>
+                                        <div class="todo-actions">
+                                            <button class="btn btn-sm btn-outline" onclick="publishTask('${task.id}')">发布任务</button>
+                                            <button class="btn btn-sm btn-outline" onclick="openCheckModal('${task.id}')">检查执行</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        `;
-                    });
-                }
+                            `;
+                        });
+                    }
+                });
                 mgrContainer.innerHTML = html;
             }
+
             var empContainer = document.getElementById('emp-day-tasks');
             if (empContainer) {
-                var tasks = globalTasks.filter(function(t) { return t.category === 'satisfaction'; });
                 var html = '';
-                tasks.forEach(function(task) {
+                globalTasks.forEach(function(task) {
                     html += `
-                        <div class="todo-item">
+                        <div class="todo-item" style="border-bottom:1px solid #f5f5f5; padding:6px 0;">
                             <div class="todo-row">
                                 <input type="checkbox" id="emp_${task.id}" class="todo-checkbox">
                                 <span class="todo-text">${task.text}</span>
-                                <span class="badge" style="font-size:10px;">满意度</span>
+                                <span class="badge" style="font-size:10px;">${task.category === 'sales' ? '外卖' : '满意度'}</span>
                             </div>
                         </div>
                     `;
                 });
                 empContainer.innerHTML = html;
+            }
+
+            var ptContainer = document.getElementById('pt-day-tasks');
+            if (ptContainer) {
+                var html = '';
+                globalTasks.forEach(function(task) {
+                    html += `
+                        <div class="todo-item" style="border-bottom:1px solid #f5f5f5; padding:6px 0;">
+                            <div class="todo-row">
+                                <input type="checkbox" id="pt_${task.id}" class="todo-checkbox">
+                                <span class="todo-text">${task.text}</span>
+                                <span class="badge" style="font-size:10px;">${task.category === 'sales' ? '外卖' : '满意度'}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                ptContainer.innerHTML = html;
             }
         }
 
@@ -2796,16 +3050,53 @@
                 var newTask = {
                     id: 't' + Date.now(),
                     text: text.trim(),
-                    category: 'satisfaction',
-                    at: '',
+                    category: 'custom',
                     checkType: 'self',
                     checkLabel: '员工自检',
                     checkData: '请上传执行结果'
                 };
                 globalTasks.push(newTask);
                 refreshDayTasks();
+                var pdcaContent = document.getElementById('pdca-content');
+                if (pdcaContent && !pdcaContent.closest('.hidden')) {
+                    var currentGoal = document.getElementById('pdca-title').textContent;
+                    if (currentGoal.includes('外卖')) showPdca('sales');
+                    else if (currentGoal.includes('满意度')) showPdca('satisfaction');
+                }
                 alert('已添加待办: ' + text);
             }
+        }
+
+        // ================================================================
+        // 销售预测 - 展开/折叠详情
+        // ================================================================
+        function toggleForecastDetail(detailId) {
+            var detail = document.getElementById(detailId);
+            if (detail) {
+                detail.classList.toggle('open');
+                var parent = detail.previousElementSibling;
+                if (parent && parent.classList.contains('forecast-item')) {
+                    var arrow = parent.querySelector('.expand-icon');
+                    if (arrow) arrow.textContent = detail.classList.contains('open') ? '▲' : '▼';
+                }
+            }
+        }
+
+        // ================================================================
+        // 跳转到排班管理（销售预测中“去排班”按钮）
+        // ================================================================
+        function switchToSchedule() {
+            var navItems = document.querySelectorAll('#phone-manager .bottom-nav .nav-item');
+            navItems.forEach(function(n) {
+                if (n.dataset.page === 'ops-tools') n.click();
+            });
+            setTimeout(function() {
+                var opsTabs = document.querySelectorAll('#mgr-ops-tabs .tab-btn');
+                opsTabs.forEach(function(t) {
+                    if (t.dataset.tab === 'ops-schedule') t.click();
+                });
+                renderSchedule();
+            }, 100);
         }
 
         // ================================================================
@@ -2903,8 +3194,9 @@
         function renderExecutiveEval() {
             var container = document.getElementById('exec-content');
             var total = managerEvalData.length;
-            var promotable = managerEvalData.filter(m => m.decision === '晋升推荐').length;
-            var atrisk = managerEvalData.filter(m => m.decision === '需辅导' || m.decision === '降级预警').length;
+            var promotable = managerEvalData.filter(function(m) { return m.decision === '晋升推荐'; }).length;
+            var atrisk = managerEvalData.filter(function(m) { return m.decision === '需辅导' || m.decision === '降级预警'; })
+                .length;
 
             document.getElementById('exec-total').textContent = total;
             document.getElementById('exec-promotable').textContent = promotable;
@@ -3276,38 +3568,6 @@
         }
 
         // ================================================================
-        // 销售预测 - 展开/折叠详情（新增）
-        // ================================================================
-        function toggleForecastDetail(detailId) {
-            var detail = document.getElementById(detailId);
-            if (detail) {
-                detail.classList.toggle('open');
-                var parent = detail.previousElementSibling;
-                if (parent && parent.classList.contains('forecast-item')) {
-                    var arrow = parent.querySelector('.expand-icon');
-                    if (arrow) arrow.textContent = detail.classList.contains('open') ? '▲' : '▼';
-                }
-            }
-        }
-
-        // ================================================================
-        // 跳转到排班管理（销售预测中“去排班”按钮）
-        // ================================================================
-        function switchToSchedule() {
-            var navItems = document.querySelectorAll('#phone-manager .bottom-nav .nav-item');
-            navItems.forEach(function(n) {
-                if (n.dataset.page === 'ops-tools') n.click();
-            });
-            setTimeout(function() {
-                var opsTabs = document.querySelectorAll('#mgr-ops-tabs .tab-btn');
-                opsTabs.forEach(function(t) {
-                    if (t.dataset.tab === 'ops-schedule') t.click();
-                });
-                renderSchedule();
-            }, 100);
-        }
-
-        // ================================================================
         // 通用 - 角色切换
         // ================================================================
         var roleBtns = document.querySelectorAll('.role-btn');
@@ -3472,7 +3732,7 @@
             }
 
             renderExecutiveEval();
-            console.log('✅ 系统已启动，店长页「店长一日」和「销售预测」已完整合并。');
+            console.log('✅ 系统已启动，店长页「一店一策」和「PDCA」已从源文件完整合并。');
         });
 
         // ================================================================
@@ -3489,6 +3749,7 @@
         window.toggleHrArchive = toggleHrArchive;
         window.switchManagerTab = switchManagerTab;
         window.showPdca = showPdca;
+        window.hidePdca = hidePdca;
         window.togglePdca = togglePdca;
         window.closeCheckModal = closeCheckModal;
         window.openCheckModal = openCheckModal;
@@ -3516,6 +3777,7 @@
         window.toggleForecastDetail = toggleForecastDetail;
         window.switchToSchedule = switchToSchedule;
         window.refreshDayTasks = refreshDayTasks;
+        window.publishTask = publishTask;
     </script>
 </body>
 </html>
